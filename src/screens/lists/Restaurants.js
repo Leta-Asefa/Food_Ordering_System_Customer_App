@@ -1,64 +1,97 @@
 import React, { useState } from 'react'
-import { ImageBackground, Keyboard, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { FlatList, Image, ImageBackground, Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import backgroud from '../../assets/background.png'
 
-export default function Restaurants({navigation}) {
+export default function Restaurants({ navigation }) {
 
-    const [isPhoneFocused, setIsPhoneFocused] = useState(false)
-    const [isNameFocused, setIsNameFocused] = useState(false)
+    const [restaurantsList, setRestaurantsList] = useState([{
+        id: 'promo1',
+        imageUrl: require('../../assets/background.png'),
+        title: '50% Off on Your First Order',
+        description: 'Enjoy a huge discount on your first order from select restaurants.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant1'
+    },
+    {
+        id: 'promo2',
+        imageUrl: require('../../assets/login.jpg'),
+        title: 'Free Delivery',
+        description: 'Get free delivery on all orders above $20.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant2'
+    },
+    {
+        id: 'promo3',
+        imageUrl: require('../../assets/background.png'),
+        title: 'Buy One Get One Free',
+        description: 'Order from participating restaurants and get a second item free.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant3'
+    },
+    {
+        id: 'promo4',
+        imageUrl: require('../../assets/login.jpg'),
+        title: '20% Off on Desserts',
+        description: 'Satisfy your sweet tooth with a 20% discount on all desserts.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant4'
+    },
+    {
+        id: 'promo5',
+        imageUrl: require('../../assets/background.png'),
+        title: 'Free Drink with Any Meal',
+        description: 'Get a free drink with any meal purchase at select restaurants.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant5'
+    },
+    {
+        id: 'promo6',
+        imageUrl: require('../../assets/login.jpg'),
+        title: 'Happy Hour Specials',
+        description: 'Enjoy exclusive happy hour specials from 4 PM to 6 PM.',
+        retaurantName:'ABC Restaurant',restaurantId: 'restaurant6'
+    }])
+
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity className='w-80 rounded-lg m-2 border-2 border-black'>
+            <ImageBackground source={item.imageUrl} className='h-32 w-80'>
+                <View className=' h-32 flex flex-col justify-between'>
+                    <Text className='bg-white text-red-600 text-lg text-center font-bold rounded-lg  w-80 mx-auto'>{item.title}</Text>
+                    <Text className='text-center text-2xl text-red-600'>{item.retaurantName}</Text>
+                    <Text className='text-center text-xs bg-white text-red-600'>{item.description}</Text>
+                </View>
+            </ImageBackground>
+        </TouchableOpacity>
+    );
 
 
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View>
+            {/* Header -> search bar */}
 
-            <ImageBackground
-                source={backgroud}
-                className='w-full h-full'
-            >
-                <View className=' flex-1 flex-col items-center justify-between'>
-                    <Text
-                        className='text-black font-bold text-2xl text-center mt-5'>Welcome To
-                        <Text className='text-orange-500'>Let's Eat </Text>Delivery
-                    </Text>
+            <View  className='flex flex-row justify-center p-1'>
+                <TextInput placeholder='search restaurants, food ...' className='w-60 bg-white rounded-lg' />
+                <TouchableOpacity>
+                    <Text className='text-xl'>Search</Text>
+                </TouchableOpacity>
+            </View>
 
-                    <View className='bg-white opacity-90 rounded-3xl'>
-                        <View className='p-5'>
-
-                            <Text className=' text-orange-500 text-xl font-bold text-center'> Sign up </Text>
-
-                            <Text className='mt-3 mb-1 text-orange-500 font-bold'>Phone Number</Text>
-                            <TextInput className={`rounded-md  ${isPhoneFocused ? 'border-orange-600' : 'border-orange-300'}   border-b-2 text-black p-3'`}
-                                placeholder='E.g 091245678'
-                                placeholderTextColor={'#b1b5bb'}
-                                keyboardType='phone-pad'
-                                onFocus={() => setIsPhoneFocused(true)}
-                                onBlur={() => setIsPhoneFocused(false)}
-                            />
+            {/* Promotion Banner (Discounts ...) Restarurants */}
+            <View className='bg-gray-50'>
+                <FlatList
+                    data={restaurantsList}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                    horizontal
+                    className=''
+                />
+            </View>
 
 
-                            <Text className='mt-3 mb-1 text-orange-500 font-bold'>Full Name</Text>
-                            <TextInput className={`rounded-md ${isNameFocused ? 'border-orange-600' : 'border-orange-300'} border-b-2 text-black p-3`}
-                                placeholder='Full Name'
-                                placeholderTextColor={'#b1b5bb'}
-                                onFocus={() => setIsNameFocused(true)}
-                                onBlur={() => setIsNameFocused(false)}
-                            />
+            {/*Restaurant filter tap options ( nearby , popular, new )  */}
 
 
 
-                            <TouchableOpacity className='w-40 mx-auto bg-orange-500 mt-3 rounded-lg p-1'>
-                                <Text className='text-center text-white text-2xl font-bold'>Send SMS </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('login')}>
-                                <Text className='text-orange-950 underline text-center mt-2'>Go to Login Screen</Text>
-                            </TouchableOpacity>
 
-                        </View>
-                    </View>
 
-                </View>
-            </ImageBackground>
-        </TouchableWithoutFeedback>
+
+        </View>
     )
 
 }
