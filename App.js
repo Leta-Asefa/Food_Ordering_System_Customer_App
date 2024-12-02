@@ -5,6 +5,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import Signup from './src/screens/auths/signup';
 import Login from './src/screens/auths/login';
 import Restaurants from './src/screens/lists/HomeScreenRestaurants';
+import RestaurantDetails from './src/screens/lists/RestaurantDetails';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
@@ -18,7 +19,8 @@ const App = () => {
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'grey',
           tabBarActiveBackgroundColor:'darkgray',
-          tabBarInactiveBackgroundColor:'#eeeeee'
+          tabBarInactiveBackgroundColor:'#eeeeee',
+          animation:'shift'
         }}
 
         
@@ -28,15 +30,14 @@ const App = () => {
 <Tab.Screen 
           name='restaurants_list' 
           component={Restaurants} 
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Fontisto name="player-settings" size={size} color={color} />
-            ),
-            tabBarBadge:3,
-            tabBarBadgeStyle:{backgroundColor:'green',color:'white',fontSize:10,padding:0 /*you can set the style to deafult value*/}
-          }} 
+        
         />
 
+<Tab.Screen 
+          name='restaurant_detail' 
+          component={RestaurantDetails} 
+        
+        />
 
 
         <Tab.Screen 
@@ -51,13 +52,7 @@ const App = () => {
         <Tab.Screen 
           name='signup' 
           component={Signup} 
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Fontisto name="player-settings" size={size} color={color} />
-            ),
-            tabBarBadge:3,
-            tabBarBadgeStyle:{backgroundColor:'green',color:'white',fontSize:10,padding:0 /*you can set the style to deafult value*/}
-          }} 
+        
         />
        
 

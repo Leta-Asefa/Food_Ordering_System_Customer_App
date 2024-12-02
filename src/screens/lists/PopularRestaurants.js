@@ -1,17 +1,22 @@
-import { ScrollView } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 import RestaurantListCard from "./RestaurantListCard";
 import { restaurants } from "../../utilities_and_constants/constants";// to be fetched from api
 
-const PopularRestaurants = () => {
+const PopularRestaurants = ({navigation}) => {
+
+    const renderRestaurants = ({ item }) => (
+        <RestaurantListCard restaurant={item} navigation={navigation}/>
+    );
 
 
     return (
-        <ScrollView>
-            {/* change to flat list :) */}
-            {restaurants.map((restaurant,index) => {
-                return <RestaurantListCard key={index} restaurant={restaurant} />
-            })}
-        </ScrollView>
+      
+        <FlatList
+        data={restaurants}
+        renderItem={renderRestaurants}
+        keyExtractor={(item) => item.id}
+        className=''
+    />
     );
 };
 

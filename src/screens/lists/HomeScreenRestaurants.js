@@ -6,6 +6,7 @@ import PopularRestaurants from './PopularRestaurants';
 import { foodList, promotionList } from '../../utilities_and_constants/constants';
 import PromotionListCard from './PromotionListCard';
 import FoodListCard from './FoodListCard';
+import RestaurantDetails from './RestaurantDetails';
 
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -20,19 +21,22 @@ export default function Restaurants({ navigation }) {
     const [routes] = useState([
         { key: 'nearby', title: 'Nearby' },
         { key: 'popular', title: 'Popular' },
+        {key:'favourite',title:'Favorites'}
     ]);
 
     const renderScene = SceneMap({
         nearby: NearByRestaurants,
         popular: PopularRestaurants,
+        favourite:RestaurantDetails
+
     });
 
     const renderPromotionItems = ({ item }) => (
-        <PromotionListCard promotion={item} />
+        <PromotionListCard promotion={item} navigation={navigation}/>
     );
 
     const renderFoodItems = ({ item }) => (
-        <FoodListCard food={item} />
+        <FoodListCard food={item} navigation={navigation}/>
     );
 
 
@@ -48,7 +52,7 @@ export default function Restaurants({ navigation }) {
             </View>
 
             {/* Promotion Banner (Discounts ...) Restarurants */}
-            <View className='bg-gray-50'>
+            <View className='bg-gray-300'>
                 <FlatList
                     data={promotionList}
                     renderItem={renderPromotionItems}
@@ -60,6 +64,7 @@ export default function Restaurants({ navigation }) {
             {/* Our own foods specially burgures */}
 
             <View className='bg-gray-50'>
+                <Text className='text-right text-xs pr-2'>scroll to left</Text>
                 <FlatList
                     data={foodList}
                     renderItem={renderFoodItems}
@@ -85,6 +90,7 @@ export default function Restaurants({ navigation }) {
                         labelStyle={styles.label}
                         activeColor='#000'
                         inactiveColor='#666'
+                        
                         
                     />
                 )}
@@ -125,5 +131,6 @@ const styles = StyleSheet.create({
     label: {
         color: '#fff',
         fontWeight: 'bold',
+        
     },
 });

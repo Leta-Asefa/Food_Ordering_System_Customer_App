@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import BackgroundImage from '../../assets/background.png'
 import time from '../../assets/time.png'
 import rating from '../../assets/rating.png'
@@ -9,14 +9,14 @@ import call from '../../assets/call.png'
 
 
 
-const RestaurantListCard = ({ restaurant }) => {
+const RestaurantListCard = ({ restaurant,navigation }) => {
 
 
 
     return (
 
-        <View className='flex flex-row justify-between items-center m-2 py-1 px-2  bg-gray-200 rounded-xl'>
-            <Image source={BackgroundImage} className='w-24 h-24' />
+        <View className='flex flex-row justify-between items-center mx-2 my-1 py-1 px-2  bg-gray-200 rounded-xl'>
+            <Image source={restaurant.image} className='w-24 h-24' />
             <View>
                 <Text className='text-sm font-bold w-40' numberOfLines={1} >{restaurant.name}</Text>
                 <View >
@@ -36,8 +36,12 @@ const RestaurantListCard = ({ restaurant }) => {
                 </View>
             </View>
             <View className='space-y-2'>
-                <Text className='text-white font-bold text-center rounded-lg bg-red-600 p-1 text-xs'>Order here</Text>
-                <Text className='text-white font-bold text-center rounded-lg bg-green-600 p-1 text-xs'>Call</Text>
+                <Text className='text-white font-bold text-center rounded-lg bg-red-600 px-1 text-xs'>Order here</Text>
+                <Text className='text-white font-bold text-center rounded-lg bg-green-600 px-1 text-xs'>Call</Text>
+                <TouchableOpacity onPress={()=>navigation.navigate('restaurant_details')}>
+                    <Text className='text-white font-bold text-center rounded-lg bg-blue-600 px-1 text-xs'>About</Text>
+                </TouchableOpacity>
+
             </View>
         </View>
 
