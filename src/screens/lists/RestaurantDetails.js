@@ -7,6 +7,7 @@ import NearByRestaurants from "./NearByRestaurants";
 import PopularRestaurants from "./PopularRestaurants";
 import ImageViewing from 'react-native-image-viewing';
 import FoodList from "./FoodList";
+import DrinkList from "./DrinkList";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -44,7 +45,7 @@ const RestaurantDetails = () => {
 
     const renderScene = SceneMap({
         food: FoodList,
-        drink: PopularRestaurants,
+        drink: DrinkList,
         catering: NearByRestaurants
 
     });
@@ -55,7 +56,7 @@ const RestaurantDetails = () => {
         <View className='flex-1'>
 
             <Text className='text-center text-2xl mt-2 font-bold '>Restaurant Name</Text>
-            <TouchableOpacity onPress={() => openViewer(0)}>
+            <TouchableOpacity onPress={() => openViewer(0)} className='relative'>
                 <Image source={images[2]} className='w-full h-auto max-h-56' />
                 <Text className='text-xs text-right absolute bottom-0'>More Images . . .</Text>
             </TouchableOpacity>

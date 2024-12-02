@@ -16,7 +16,7 @@ export const restaurants = [
         "name": "Sushi Delight",
         "distance": "3.1 km",
         "opened": true,
-        "image":require('../assets/reslog2.png'),
+        "image": require('../assets/reslog2.png'),
         "rating": 4.8,
         "cuisine": "Japanese",
         "priceRange": "$$$",
@@ -167,58 +167,122 @@ export const promotionList = [{
 
 
 export const foodList = [
-    { id:'1',
-        name:'Burger',
+    {
+        id: '1',
+        name: 'Burger',
         price: '400 ETB',
         image: require('../assets/burger.png')
 
     }
-,
-{id:'2',
-    name:'Salad',
-    price: '550 ETB',
-    image: require('../assets/food1.jpeg')
+    ,
+    {
+        id: '2',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/food1.jpeg')
 
-}
-,
-{id:'3',
-    name:'Chicken Fry',
-    price: '650 ETB',
-    image: require('../assets/food3.jpeg')
+    }
+    ,
+    {
+        id: '3',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/food3.jpeg')
 
-}
-,
-{id:'4',
-    name:'Salad',
-    price: '550 ETB',
-    image: require('../assets/food4.jpeg')
+    }
+    ,
+    {
+        id: '4',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/food4.jpeg')
 
-}
-,
-{id:'5',
-    name:'Chicken Fry',
-    price: '650 ETB',
-    image: require('../assets/food5.jpeg')
+    }
+    ,
+    {
+        id: '5',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/food5.jpeg')
 
-}
-,{id:'6',
-    name:'Salad',
-    price: '550 ETB',
-    image: require('../assets/food6.jpeg')
+    }
+    , {
+        id: '6',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/food6.jpeg')
 
-}
-,
-{id:'7',
-    name:'Chicken Fry',
-    price: '650 ETB',
-    image: require('../assets/food7.jpeg')
+    }
+    ,
+    {
+        id: '7',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/food7.jpeg')
 
-}
-,
+    }
+    ,
 
 ]
 
+export const drinkList = [
+    {
+        id: '1',
+        name: 'Coca Cola',
+        price: '100 ETB',
+        image: require('../assets/drink1.jpg')
 
+    }
+    ,
+    {
+        id: '2',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/drink2.jpeg')
+
+    }
+    ,
+    {
+        id: '3',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/drink3.jpeg')
+
+    }
+    ,
+    {
+        id: '4',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/drink4.jpeg')
+
+    }
+    ,
+    {
+        id: '5',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/drink5.jpeg')
+
+    }
+    , {
+        id: '6',
+        name: 'Salad',
+        price: '550 ETB',
+        image: require('../assets/drink6.jpeg')
+
+    }
+    ,
+    {
+        id: '7',
+        name: 'Chicken Fry',
+        price: '650 ETB',
+        image: require('../assets/drink7.jpeg')
+
+    }
+    ,
+
+]
 
 
 
