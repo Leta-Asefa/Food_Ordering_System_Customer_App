@@ -6,6 +6,7 @@ import { useState } from "react";
 import NearByRestaurants from "./NearByRestaurants";
 import PopularRestaurants from "./PopularRestaurants";
 import ImageViewing from 'react-native-image-viewing';
+import FoodList from "./FoodList";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -36,28 +37,28 @@ const RestaurantDetails = () => {
     };
 
     const [routes] = useState([
-        { key: 'nearby', title: 'Food' },
-        { key: 'popular', title: 'Drink' },
+        { key: 'food', title: 'Food' },
+        { key: 'drink', title: 'Drink' },
         { key: 'catering', title: 'Catering' }
     ]);
 
     const renderScene = SceneMap({
-        nearby: NearByRestaurants,
-        popular: PopularRestaurants,
+        food: FoodList,
+        drink: PopularRestaurants,
         catering: NearByRestaurants
 
     });
 
-  
+
 
     return (
         <View className='flex-1'>
 
             <Text className='text-center text-2xl mt-2 font-bold '>Restaurant Name</Text>
-         <TouchableOpacity onPress={()=> openViewer(0)}>
-            <Image source={images[2]} className='w-full h-auto'/>
-            <Text className='text-xs text-right'>More Images . . .</Text>
-         </TouchableOpacity>
+            <TouchableOpacity onPress={() => openViewer(0)}>
+                <Image source={images[2]} className='w-full h-auto max-h-56' />
+                <Text className='text-xs text-right absolute bottom-0'>More Images . . .</Text>
+            </TouchableOpacity>
             <ImageViewing
                 images={images}
                 imageIndex={currentIndex}
@@ -65,7 +66,7 @@ const RestaurantDetails = () => {
                 onRequestClose={() => setVisible(false)}
                 onImageIndexChange={(index) => setCurrentIndex(index)}
                 FooterComponent={({ imageIndex }) => (
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+                    <View className='flex flex-row justify-between p-5'>
                         <TouchableOpacity onPress={onPrevious} disabled={imageIndex === 0}>
                             <Text style={{ color: imageIndex === 0 ? '#ccc' : '#fff' }}>Previous</Text>
                         </TouchableOpacity>
@@ -84,7 +85,7 @@ const RestaurantDetails = () => {
             </View>
 
             {/* top tab view for (food, drinks, ) */}
-
+            <Text className='text-center font-bold text-xl bg-gray-200 mx-2 rounded-md'>Menu</Text>
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}

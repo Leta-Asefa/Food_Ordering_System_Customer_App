@@ -167,48 +167,48 @@ export const promotionList = [{
 
 
 export const foodList = [
-    {
+    { id:'1',
         name:'Burger',
         price: '400 ETB',
         image: require('../assets/burger.png')
 
     }
 ,
-{
+{id:'2',
     name:'Salad',
     price: '550 ETB',
     image: require('../assets/food1.jpeg')
 
 }
 ,
-{
+{id:'3',
     name:'Chicken Fry',
     price: '650 ETB',
     image: require('../assets/food3.jpeg')
 
 }
 ,
-{
+{id:'4',
     name:'Salad',
     price: '550 ETB',
     image: require('../assets/food4.jpeg')
 
 }
 ,
-{
+{id:'5',
     name:'Chicken Fry',
     price: '650 ETB',
     image: require('../assets/food5.jpeg')
 
 }
-,{
+,{id:'6',
     name:'Salad',
     price: '550 ETB',
     image: require('../assets/food6.jpeg')
 
 }
 ,
-{
+{id:'7',
     name:'Chicken Fry',
     price: '650 ETB',
     image: require('../assets/food7.jpeg')

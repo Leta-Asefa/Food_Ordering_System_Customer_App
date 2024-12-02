@@ -1,6 +1,6 @@
 import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
-const FoodListCard = ({ food }) => {
+const HomeFoodListCard = ({ food }) => {
 
 
 
@@ -17,4 +17,4 @@ const FoodListCard = ({ food }) => {
     );
 };
 
-export default FoodListCard;
+export default HomeFoodListCard;

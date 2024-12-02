@@ -5,8 +5,9 @@ import NearByRestaurants from './NearByRestaurants';
 import PopularRestaurants from './PopularRestaurants';
 import { foodList, promotionList } from '../../utilities_and_constants/constants';
 import PromotionListCard from './PromotionListCard';
-import FoodListCard from './FoodListCard';
+import FoodListCard from './HomeFoodListCard';
 import RestaurantDetails from './RestaurantDetails';
+import HomeFoodListCard from './HomeFoodListCard';
 
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -36,7 +37,7 @@ export default function Restaurants({ navigation }) {
     );
 
     const renderFoodItems = ({ item }) => (
-        <FoodListCard food={item} navigation={navigation}/>
+        <HomeFoodListCard food={item} navigation={navigation}/>
     );
 
 
