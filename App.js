@@ -6,58 +6,62 @@ import Signup from './src/screens/auths/signup';
 import Login from './src/screens/auths/login';
 import Restaurants from './src/screens/lists/HomeScreenRestaurants';
 import RestaurantDetails from './src/screens/lists/RestaurantDetails';
+import Cart from './src/screens/cart/Cart';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
 
   return (
     <NavigationContainer>
-      <Tab.Navigator 
+      <Tab.Navigator
         screenOptions={{
-          headerShown:false,
+          headerShown: false,
           tabBarShowLabel: true,
           tabBarActiveTintColor: 'black',
           tabBarInactiveTintColor: 'grey',
-          tabBarActiveBackgroundColor:'darkgray',
-          tabBarInactiveBackgroundColor:'#eeeeee',
-          animation:'shift'
+          tabBarActiveBackgroundColor: 'darkgray',
+          tabBarInactiveBackgroundColor: '#eeeeee',
+          animation: 'shift'
         }}
 
-        
+
       >
 
 
-<Tab.Screen 
-          name='restaurants_list' 
-          component={Restaurants} 
+        <Tab.Screen
+          name='restaurants_list'
+          component={Restaurants}
+
+        />
+
+        <Tab.Screen
+          name='cart'
+          component={Cart}
+
+        />
         
+        <Tab.Screen
+          name='restaurant_detail'
+          component={RestaurantDetails}
+
         />
 
-<Tab.Screen 
-          name='restaurant_detail' 
-          component={RestaurantDetails} 
-        
+
+        <Tab.Screen
+          name='login'
+          component={Login}
+
+        />
+        <Tab.Screen
+          name='signup'
+          component={Signup}
+
         />
 
 
-        <Tab.Screen 
-          name='login' 
-          component={Login} 
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Fontisto name="home" size={size} color={color} />
-            ),
-          }} 
-        />
-        <Tab.Screen 
-          name='signup' 
-          component={Signup} 
-        
-        />
-       
 
 
-     
+
 
 
 

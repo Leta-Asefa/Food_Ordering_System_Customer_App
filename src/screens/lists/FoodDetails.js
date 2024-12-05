@@ -6,7 +6,7 @@ const FoodDetails = () => {
         "name": "Classic Cheeseburger",
         "price": 8.99,
         "description": "A juicy beef patty topped with melted cheddar cheese, fresh lettuce, tomatoes, onions, pickles, and our special sauce, all served on a toasted sesame seed bun.",
-        "image":require('../../assets/food1.jpeg'),
+        "image": require('../../assets/food1.jpeg'),
         "reviews": {
             "rating": 4.5,
             "reviewCount": 120
@@ -71,30 +71,30 @@ const FoodDetails = () => {
     return (
         <View className='px-5 flex-1'>
             <Text className='text-center font-bold text-lg'>{food.name} ( {food.price} ETB )</Text>
-            <Image source={food.image} className=' h-auto max-h-60 mx-auto rounded-md'/>
+            <Image source={food.image} className=' h-auto max-h-60 mx-auto rounded-md' />
             <Text className='text-center mb-2'>{food.description}</Text>
 
             <ScrollView>
-                
 
-            <Text className=''> <Text className='font-bold'>Preparaton Time : </Text>{food.preparation_time}</Text>
-            <Text className=''><Text className='font-bold'>Allergy Information : </Text>It contains {food.allergens_information.map(allergy => allergy + " , ")}</Text>
 
-            <Text className='font-bold text-center mt-3'>Nutritional Information (per 100g)</Text>
-            <Text><Text className='font-bold'>Protien : </Text>{food.nutritional_information.protein}</Text>
-            <Text><Text className='font-bold'>Carbohydrate : </Text>{food.nutritional_information.totalCarbohydrates}</Text>
-            <Text><Text className='font-bold'>Fat : </Text>{food.nutritional_information.totalFat}</Text>
+                <Text key="a" className=''> <Text className='font-bold'>Preparaton Time : </Text>{food.preparation_time}</Text>
+                <Text key='b' className=''><Text className='font-bold'>Allergy Information : </Text>It contains {food.allergens_information.map(allergy => allergy + " , ")}</Text>
 
-<Text className='font-bold text-center'>Comments</Text>
+                <Text key="c" className='font-bold text-center mt-3'>Nutritional Information (per 100g)</Text>
+                <Text key="d"><Text className='font-bold'>Protien : </Text>{food.nutritional_information.protein}</Text>
+                <Text key="e"><Text className='font-bold'>Carbohydrate : </Text>{food.nutritional_information.totalCarbohydrates}</Text>
+                <Text key='f'><Text className='font-bold'>Fat : </Text>{food.nutritional_information.totalFat}</Text>
 
-{
-    food.reviews.map(review=>{
-        return <View  className='bg-gray-200 mb-2 p-1 rounded-md'>
-            <Text className='text-center '>{review.comment}</Text>
-            <Text className='text-center text-xs font-bold'>{review.author}</Text>
-        </View>
-    })
-}
+                <Text className='font-bold text-center'>Customer's Comments</Text>
+
+                {
+                    food.reviews.map((review,index) => {
+                        return <View key={index.toString()} className='bg-gray-200 mb-2 p-1 rounded-md'>
+                            <Text className='text-center '>{review.comment}</Text>
+                            <Text className='text-center text-xs font-bold'>{review.author}</Text>
+                        </View>
+                    })
+                }
 
 
             </ScrollView>

@@ -1,29 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FoodDetails from "./FoodDetails";
 
-const MenuFoodListCard = ({ food }) => {
+const MenuFoodListCard = ({ food, addToTemporaryCart }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [isOnCart, setIsOnCart] = useState(false)
 
 
     return (
-        <TouchableOpacity className='bg-gray-200 mx-2' >
+        <View className='bg-gray-200 mx-2' >
             <View className=' h-auto flex flex-row justify-between items-center bg-gray-50 mx-2 my-1 rounded-lg'>
+
                 <Image source={food.image} resizeMode="center" className='w-14 h-14 flex-none ' />
+
                 <View className='flex-grow pl-4'>
                     <Text className='text-xs font-bold '>{food.name}</Text>
                     <Text className='text-xs'>{food.price}</Text>
-                    <Text className='text-xs text-green-600 font-bold'>20 min to prepare</Text>
+                    <Text className='text-xs text-green-600 font-bold'>20 min(s) to prepare</Text>
                 </View>
-                <View className='flex flex-col space-y-3'>
-                    <TouchableOpacity className='bg-red-600 flex flex-row justify-center items-center px-2 text-xs rounded-md'>
-                        <FontAwesome name="plus" size={15} color="#fff" />
-                        <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>
+
+                <View className='flex flex-col space-y-1'>
+
+                    <TouchableOpacity
+                        className={`${isOnCart ? 'bg-red-600' : 'bg-green-600'} flex flex-row justify-center items-center px-2 py-1 text-xs rounded-md`}
+                        onPress={() => setIsOnCart(addToTemporaryCart(food))}
+                    >
+                        {isOnCart ? <FontAwesome name="remove" size={15} color="#fff" /> : <FontAwesome name="plus" size={15} color="#fff" />}
+                        {isOnCart ? <Text className=' text-white text-xs ml-1 font-bold'>Remove</Text> : <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>}
+
                     </TouchableOpacity>
+
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        <Text className='text-center bg-blue-600 text-white text-xs rounded-md font-bold'>Detail . . .</Text>
+                        <Text className='text-center bg-blue-600 text-white text-xs rounded-md font-bold py-1'>Detail . . .</Text>
                         <Modal
                             animationType="slide" // Slide animation
                             transparent={false} // Makes background behind modal dimmed
@@ -42,7 +52,7 @@ const MenuFoodListCard = ({ food }) => {
 
             </View>
 
-        </TouchableOpacity>
+        </View>
 
     );
 };
