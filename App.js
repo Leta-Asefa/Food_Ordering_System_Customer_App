@@ -6,7 +6,8 @@ import Signup from './src/screens/auths/signup';
 import Login from './src/screens/auths/login';
 import Restaurants from './src/screens/lists/HomeScreenRestaurants';
 import RestaurantDetails from './src/screens/lists/RestaurantDetails';
-import Cart from './src/screens/cart/Cart';
+import Cart from './src/screens/checkout/Cart';
+import DeliveryAddress from './src/screens/checkout/DeliveryAddress';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
@@ -39,7 +40,13 @@ const App = () => {
           component={Cart}
 
         />
-        
+
+        <Tab.Screen
+          name='deliveryaddress'
+          component={DeliveryAddress}
+
+        />
+
         <Tab.Screen
           name='restaurant_detail'
           component={RestaurantDetails}
