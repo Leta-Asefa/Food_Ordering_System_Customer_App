@@ -7,6 +7,7 @@ const FoodDetails = () => {
         "price": 8.99,
         "description": "A juicy beef patty topped with melted cheddar cheese, fresh lettuce, tomatoes, onions, pickles, and our special sauce, all served on a toasted sesame seed bun.",
         "image": require('../../assets/food1.jpeg'),
+        "isFasting":'Yes',
         "reviews": {
             "rating": 4.5,
             "reviewCount": 120
@@ -78,14 +79,15 @@ const FoodDetails = () => {
 
 
                 <Text key="a" className=''> <Text className='font-bold'>Preparaton Time : </Text>{food.preparation_time}</Text>
+                <Text key="g" className=''> <Text className='font-bold'>Is it Fasting Food : </Text>{food.isFasting}</Text>
                 <Text key='b' className=''><Text className='font-bold'>Allergy Information : </Text>It contains {food.allergens_information.map(allergy => allergy + " , ")}</Text>
 
-                <Text key="c" className='font-bold text-center mt-3'>Nutritional Information (per 100g)</Text>
+                <Text key="c" className='font-bold text-center mt-3 underline'>Nutritional Information (per 100g)</Text>
                 <Text key="d"><Text className='font-bold'>Protien : </Text>{food.nutritional_information.protein}</Text>
                 <Text key="e"><Text className='font-bold'>Carbohydrate : </Text>{food.nutritional_information.totalCarbohydrates}</Text>
                 <Text key='f'><Text className='font-bold'>Fat : </Text>{food.nutritional_information.totalFat}</Text>
 
-                <Text className='font-bold text-center'>Customer's Comments</Text>
+                <Text className='font-bold text-center underline mb-1'>Customer's Comments</Text>
 
                 {
                     food.reviews.map((review,index) => {

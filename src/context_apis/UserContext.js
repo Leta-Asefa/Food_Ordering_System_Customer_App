@@ -1,0 +1,21 @@
+import React, { createContext, useState } from 'react';
+
+
+const UserContext = createContext();
+
+
+const UserProvider = ({ children }) => {
+
+  const [user, setUser] = useState({
+    data: {name: "Leta",phone:'0987654321'},
+    isAuthenticated: false,
+  });
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export { UserContext, UserProvider };

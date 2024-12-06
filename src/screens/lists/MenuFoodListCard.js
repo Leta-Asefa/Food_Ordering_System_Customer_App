@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FoodDetails from "./FoodDetails";
+import { UserContext } from "../../context_apis/UserContext";
+import { CartContext } from "../../context_apis/CartContext";
 
-const MenuFoodListCard = ({ food, addToTemporaryCart }) => {
+const MenuFoodListCard = ({ food }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [isOnCart, setIsOnCart] = useState(false)
-
+    // const { addToCart } = useContext(CartContext)
 
     return (
         <View className='bg-gray-200 mx-2' >
@@ -25,7 +27,7 @@ const MenuFoodListCard = ({ food, addToTemporaryCart }) => {
 
                     <TouchableOpacity
                         className={`${isOnCart ? 'bg-red-600' : 'bg-green-600'} flex flex-row justify-center items-center px-2 py-1 text-xs rounded-md`}
-                        onPress={() => setIsOnCart(addToTemporaryCart(food))}
+                        onPress={() => setIsOnCart(true)}
                     >
                         {isOnCart ? <FontAwesome name="remove" size={15} color="#fff" /> : <FontAwesome name="plus" size={15} color="#fff" />}
                         {isOnCart ? <Text className=' text-white text-xs ml-1 font-bold'>Remove</Text> : <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>}

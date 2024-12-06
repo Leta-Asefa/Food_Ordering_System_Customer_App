@@ -38,13 +38,15 @@ const RestaurantDetails = () => {
     };
 
     const [routes] = useState([
-        { key: 'food', title: 'Food' },
+        { key: 'non_fasting_food', title: 'Non Fasting' },
+        { key: 'fasting_food', title: 'Fasting' },
         { key: 'drink', title: 'Drink' },
         { key: 'catering', title: 'Catering' }
     ]);
 
     const renderScene = SceneMap({
-        food: FoodList,
+        non_fasting_food:FoodList,
+        fasting_food: FoodList,
         drink: DrinkList,
         catering: NearByRestaurants
 

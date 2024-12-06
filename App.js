@@ -9,11 +9,13 @@ import RestaurantDetails from './src/screens/lists/RestaurantDetails';
 import Cart from './src/screens/checkout/Cart';
 import DeliveryAddress from './src/screens/checkout/DeliveryAddress';
 import Payment from './src/screens/checkout/Payment';
+import {  UserProvider } from './src/context_apis/UserContext';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
 
   return (
+    <UserProvider>
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
@@ -42,7 +44,7 @@ const App = () => {
 
         />
 
-<Tab.Screen
+        <Tab.Screen
           name='payment'
           component={Payment}
 
@@ -81,6 +83,9 @@ const App = () => {
 
       </Tab.Navigator>
     </NavigationContainer>
+
+      
+    </UserProvider>
   );
 };
 
