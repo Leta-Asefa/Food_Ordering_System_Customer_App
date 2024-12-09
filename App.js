@@ -10,6 +10,7 @@ import Cart from './src/screens/checkout/Cart';
 import DeliveryAddress from './src/screens/checkout/DeliveryAddress';
 import Payment from './src/screens/checkout/Payment';
 import {  UserProvider } from './src/context_apis/UserContext';
+import OrderTracking from './src/screens/checkout/OrderTracking';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
@@ -53,6 +54,12 @@ const App = () => {
         <Tab.Screen
           name='deliveryaddress'
           component={DeliveryAddress}
+
+        />
+
+<Tab.Screen
+          name='order_tracking'
+          component={OrderTracking}
 
         />
 
