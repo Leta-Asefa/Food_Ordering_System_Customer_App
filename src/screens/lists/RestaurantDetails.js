@@ -8,6 +8,7 @@ import PopularRestaurants from "./PopularRestaurants";
 import ImageViewing from 'react-native-image-viewing';
 import FoodList from "./FoodList";
 import DrinkList from "./DrinkList";
+import { CartProvider } from "../../context_apis/CartContext";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -55,6 +56,7 @@ const RestaurantDetails = () => {
 
 
     return (
+        <CartProvider>
         <View className='flex-1'>
 
             <Text className='text-center text-2xl mt-2 font-bold '>Restaurant Name</Text>
@@ -112,6 +114,9 @@ const RestaurantDetails = () => {
 
 
         </View>
+
+            
+        </CartProvider>
     )
 
 }

@@ -9,7 +9,8 @@ const MenuFoodListCard = ({ food }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [isOnCart, setIsOnCart] = useState(false)
-    // const { addToCart } = useContext(CartContext)
+     const { addToCart } = useContext(CartContext)
+     const cleaned=null
 
     return (
         <View className='bg-gray-200 mx-2' >
@@ -27,7 +28,7 @@ const MenuFoodListCard = ({ food }) => {
 
                     <TouchableOpacity
                         className={`${isOnCart ? 'bg-red-600' : 'bg-green-600'} flex flex-row justify-center items-center px-2 py-1 text-xs rounded-md`}
-                        onPress={() => setIsOnCart(true)}
+                        onPress={() => setIsOnCart(addToCart(food))}
                     >
                         {isOnCart ? <FontAwesome name="remove" size={15} color="#fff" /> : <FontAwesome name="plus" size={15} color="#fff" />}
                         {isOnCart ? <Text className=' text-white text-xs ml-1 font-bold'>Remove</Text> : <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>}

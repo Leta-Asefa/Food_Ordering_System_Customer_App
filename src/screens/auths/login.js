@@ -41,8 +41,13 @@ export default function Login({ navigation }) {
       //  do the login here
     }
     else {
-      ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.TOP)
+
+      // ToastAndroid.showWithGravity(error, ToastAndroid.LONG, ToastAndroid.TOP)
+
     }
+
+
+    navigation.navigate('bottomTabs')
   }
 
 
@@ -98,7 +103,7 @@ export default function Login({ navigation }) {
               </TouchableOpacity>
 
               
-                <TouchableOpacity onPress={() => navigation.navigate('restaurants_list')}>
+                <TouchableOpacity onPress={() => navigation.navigate('signup')}>
                   <Text className={footer}>create new account ?</Text>
                 </TouchableOpacity>
 

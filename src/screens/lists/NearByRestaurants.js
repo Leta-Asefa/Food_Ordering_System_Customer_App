@@ -1,22 +1,43 @@
 import { FlatList, ScrollView } from "react-native";
 import RestaurantListCard from "./RestaurantListCard";
-import { restaurants } from "../../utilities_and_constants/constants";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const NearByRestaurants = ({navigation}) => {
+const NearByRestaurants = ({ navigation }) => {
+
+    const [restaurants, setRestaurants] = useState([])
+
+    useEffect(() => {
+        async function get() {
+            const response = await axios.get(`http://localhost:4000/restaurant/all`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+            setRestaurants(response.data)
+
+        }
+
+        get()
+
+
+    }, [])
 
     const renderRestaurants = ({ item }) => (
-        <RestaurantListCard restaurant={item} navigation={navigation}/>
+        <RestaurantListCard restaurant={item} navigation={navigation} />
     );
 
 
     return (
-      
+
         <FlatList
-        data={restaurants}
-        renderItem={renderRestaurants}
-        keyExtractor={(item) => item.id}
-        className=''
-    />
+            data={restaurants}
+            renderItem={renderRestaurants}
+            keyExtractor={(item) => item._id}
+            className='bg-gray-400'
+        />
     );
 };
 

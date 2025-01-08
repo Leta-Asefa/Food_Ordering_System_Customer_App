@@ -25,12 +25,19 @@ export default function Restaurants({ navigation }) {
         {key:'favourite',title:'Favorites'}
     ]);
 
-    const renderScene = SceneMap({
-        nearby: NearByRestaurants,
-        popular: PopularRestaurants,
-        favourite:RestaurantDetails
-
-    });
+    const renderScene = ({ route }) => {
+        switch (route.key) {
+            case 'nearby':
+                return <NearByRestaurants navigation={navigation} />;
+            case 'popular':
+                return <PopularRestaurants navigation={navigation} />;
+            case 'favourite':
+                return <RestaurantDetails navigation={navigation} />;
+            default:
+                return null;
+        }
+    };
+    
 
     const renderPromotionItems = ({ item }) => (
         <PromotionListCard promotion={item} navigation={navigation}/>
