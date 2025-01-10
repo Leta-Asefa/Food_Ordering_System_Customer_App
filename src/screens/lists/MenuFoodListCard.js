@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FoodDetails from "./FoodDetails";
-import { UserContext } from "../../context_apis/UserContext";
 import { CartContext } from "../../context_apis/CartContext";
 
 const MenuFoodListCard = ({ food }) => {

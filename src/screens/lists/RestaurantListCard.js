@@ -15,7 +15,6 @@ const RestaurantListCard = ({ navigation, restaurant }) => {
                 style={{ width: 96, height: 96 }}
                 resizeMode="cover"
             />
-            <Image source={restaurant.image} className='w-20 h-20' />
             <View>
                 <Text className='text-sm font-bold w-40' numberOfLines={1} >{restaurant.name}</Text>
                 <View >

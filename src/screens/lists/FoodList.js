@@ -4,7 +4,6 @@ import { foodList } from "../../utilities_and_constants/constants";// to be fetc
 import FoodListCard from "./HomeFoodListCard";
 import MenuFoodListCard from "./MenuFoodListCard";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context_apis/UserContext";
 
 const FoodList = ({navigation}) => {
 

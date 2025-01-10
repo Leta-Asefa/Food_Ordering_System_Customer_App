@@ -1,15 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { UserProvider } from './src/context_apis/UserContext';
 import Navigation from './src/Navigation';
+import { AuthUserContextProvider } from './src/context_apis/AuthUserContext';
 
 const App = () => {
   const Tab = createBottomTabNavigator();
 
   return (
-    <UserProvider>
+    <AuthUserContextProvider>
       <Navigation />
-    </UserProvider>
+    </AuthUserContextProvider>
   );
 };
 
