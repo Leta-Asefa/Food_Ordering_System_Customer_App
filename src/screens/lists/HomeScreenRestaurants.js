@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { Dimensions, FlatList, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, FlatList, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import NearByRestaurants from './NearByRestaurants';
 import PopularRestaurants from './PopularRestaurants';
-import { foodList, promotionList } from '../../utilities_and_constants/constants';
+import { foodList } from '../../utilities_and_constants/constants';
 import PromotionListCard from './PromotionListCard';
 import FoodListCard from './HomeFoodListCard';
 import RestaurantDetails from './RestaurantDetails';
 import HomeFoodListCard from './HomeFoodListCard';
+import axios from 'axios';
 
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -18,12 +19,33 @@ const initialLayout = { width: Dimensions.get('window').width };
 export default function Restaurants({ navigation }) {
 
     const [index, setIndex] = useState(0);
-
+    const [promotionList, setPromotionList] = useState([])
     const [routes] = useState([
         { key: 'nearby', title: 'Nearby' },
         { key: 'popular', title: 'Popular' },
-        {key:'favourite',title:'Favorites'}
+        { key: 'favourite', title: 'Favorites' }
     ]);
+
+    useEffect(() => {
+        // Sync authUser to async storage whenever it changes
+        const loadUser = async () => {
+            console.log("running use effect ")
+            const response = await axios.get(`http://localhost:4000/promotion/get`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+
+            console.log(response)
+            setPromotionList(response.data)
+
+        }
+
+
+        loadUser()
+    }, [])
 
     const renderScene = ({ route }) => {
         switch (route.key) {
@@ -37,41 +59,51 @@ export default function Restaurants({ navigation }) {
                 return null;
         }
     };
-    
+
 
     const renderPromotionItems = ({ item }) => (
-        <PromotionListCard promotion={item} navigation={navigation}/>
+        <PromotionListCard promotion={item} navigation={navigation} />
     );
 
     const renderFoodItems = ({ item }) => (
-        <HomeFoodListCard food={item} navigation={navigation}/>
+        <HomeFoodListCard food={item} navigation={navigation} />
     );
 
 
-    return (
-        <View className='flex-1'>
-            {/* Header -> search bar */}
+    const handleTextInputChange = (value) => {
+        console.log(value)
+    }
 
-            <View className='flex flex-row justify-center p-1'>
-                <TextInput placeholder='search restaurants, food ...' className='w-60 bg-white rounded-lg' />
-                <TouchableOpacity>
-                    <Text className='text-xl'>Search</Text>
-                </TouchableOpacity>
+
+    return (
+        <View className='flex-1 bg-white'>
+            {/* display the customer's current locatoin */}
+            <View className='flex flex-row px-10 items-start justify-center space-x-2 bg-orange-600 h-auto'>
+                <Image source={require('../../assets/location.jpeg')} className='w-5 h-5 rounded-xl' />
+                <Text className='text-white'>Location : </Text>
+                <Text className='text-white'>Addis Ababa, Bole</Text>
             </View>
 
-            {/* Promotion Banner (Discounts ...) Restarurants */}
-            <View className='bg-gray-300'>
+            {/* Header -> search bar */}
+
+            <View className='flex flex-row justify-center px-5 py-1'>
+                <TextInput placeholder='search restaurants, food ...' className='w-full rounded-lg text-black px-3 border-gray-300  border-b-2 ' placeholderTextColor={"#888"} onChangeText={(value) => handleTextInputChange(value)} />
+
+            </View>
+
+            {/* Promotion Banner (Discounts ...) Restarurants*/}
+            <View className='bg-white'>
                 <FlatList
                     data={promotionList}
                     renderItem={renderPromotionItems}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item._id}
                     horizontal
                     className=''
                 />
             </View>
             {/* Our own foods specially burgures */}
 
-            <View className='bg-gray-50'>
+            <View className='bg-white'>
                 <Text className='text-right text-xs pr-2'>scroll to left</Text>
                 <FlatList
                     data={foodList}
@@ -82,7 +114,7 @@ export default function Restaurants({ navigation }) {
                 />
             </View>
 
-            {/*Restaurant filter tap options ( nearby , popular, new )  */}
+            {/*Restaurant filter tap options ( nearby , popular, new ) */}
 
 
             <TabView
@@ -98,8 +130,8 @@ export default function Restaurants({ navigation }) {
                         labelStyle={styles.label}
                         activeColor='#000'
                         inactiveColor='#666'
-                        
-                        
+
+
                     />
                 )}
             />
@@ -134,11 +166,11 @@ const styles = StyleSheet.create({
     },
     indicator: {
         backgroundColor: '#555',
-        
+
     },
     label: {
         color: '#fff',
         fontWeight: 'bold',
-        
+
     },
 });

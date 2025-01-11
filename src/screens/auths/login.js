@@ -38,7 +38,6 @@ export default function Login({ navigation }) {
 
 
   const handleSubmit = async () => {
-    console.log('logging in ..........')
     const isValid = await validateInputs({ username, password })
     if (isValid) {
       const formData = { username, password }
@@ -49,9 +48,9 @@ export default function Login({ navigation }) {
         withCredentials: true,
       });
       if (response.data._id) {
-        await AsyncStorage.setItem('authUser', JSON.stringify( response.data))
+        await AsyncStorage.setItem('authUser', JSON.stringify(response.data))
         navigation.navigate('bottomTabs')
-      }else{
+      } else {
         console.log('response got an error')
       }
 

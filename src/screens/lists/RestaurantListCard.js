@@ -6,13 +6,12 @@ import distance from '../../assets/distance.png'
 import call from '../../assets/call.png'
 
 const RestaurantListCard = ({ navigation, restaurant }) => {
-    console.log(restaurant.image)
     return (
 
         <View className='flex flex-row justify-between items-center mx-2 my-1 py-1 px-2  bg-gray-200 rounded-xl'>
             <Image
                 source={{ uri: String(restaurant.image) }}
-                style={{ width: 96, height: 96 }}
+               className='w-24 h-24 rounded-lg'
                 resizeMode="cover"
             />
             <View>
@@ -25,7 +24,7 @@ const RestaurantListCard = ({ navigation, restaurant }) => {
                     </View>
                     <View className='flex flex-row items-center'>
                         <Image source={rating} className='w-4 h-4 mr-1 rounded-lg' />
-                        <Text className='text-xs'>Rating : 5</Text>
+                        <Text className='text-xs'>Rating : {restaurant.rating}</Text>
                     </View>
                 </View>
                 <View className='flex flex-row items-center'>
