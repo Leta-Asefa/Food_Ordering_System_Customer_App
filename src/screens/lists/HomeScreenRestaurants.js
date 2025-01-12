@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, FlatList, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, View,Platform, PermissionsAndroid } from 'react-native'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import NearByRestaurants from './NearByRestaurants';
 import PopularRestaurants from './PopularRestaurants';
@@ -9,6 +9,7 @@ import FoodListCard from './HomeFoodListCard';
 import RestaurantDetails from './RestaurantDetails';
 import HomeFoodListCard from './HomeFoodListCard';
 import axios from 'axios';
+import Geolocation from 'react-native-geolocation-service';
 
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -20,11 +21,54 @@ export default function Restaurants({ navigation }) {
 
     const [index, setIndex] = useState(0);
     const [promotionList, setPromotionList] = useState([])
+    const [location, setLocation] = useState(null);
+    const [error, setError] = useState(null);
     const [routes] = useState([
         { key: 'nearby', title: 'Nearby' },
         { key: 'popular', title: 'Popular' },
         { key: 'favourite', title: 'Favorites' }
     ]);
+
+    const [address, setAddress] = useState('');
+
+    useEffect(() => {
+      let watchId = null;
+  
+      const getLocation = async () => {
+        watchId = Geolocation.watchPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+  
+            // Call HERE Maps Reverse Geocoding API
+            const apiKey = 'vNw_RmL_TFApW6kTtIGUNItPw1CCdjoA-l0Qn_1Crtk';
+            const response = await axios.get(
+              `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${apiKey}`
+            );
+
+            console.log(`https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${apiKey}`)
+  
+            if (response.data.items.length > 0) {
+              const address = response.data.items[0].address.label;
+              setAddress(address);
+            }
+          },
+          (error) => {
+            console.error(error);
+          },
+          { enableHighAccuracy: true, distanceFilter: 10 }
+        );
+      };
+  
+      getLocation();
+  
+      return () => {
+        if (watchId !== null) {
+          Geolocation.clearWatch(watchId);
+        }
+      };
+    }, []);
+
 
     useEffect(() => {
         // Sync authUser to async storage whenever it changes
@@ -80,8 +124,7 @@ export default function Restaurants({ navigation }) {
             {/* display the customer's current locatoin */}
             <View className='flex flex-row px-10 items-start justify-center space-x-2 bg-orange-600 h-auto'>
                 <Image source={require('../../assets/location.jpeg')} className='w-5 h-5 rounded-xl' />
-                <Text className='text-white'>Location : </Text>
-                <Text className='text-white'>Addis Ababa, Bole</Text>
+                <Text className='text-white'>{address} {location? `(${location.latitude.toFixed(2)} , ${location.longitude.toFixed(2)})`:"null location"}</Text>
             </View>
 
             {/* Header -> search bar */}
