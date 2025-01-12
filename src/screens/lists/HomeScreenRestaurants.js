@@ -10,6 +10,7 @@ import RestaurantDetails from './RestaurantDetails';
 import HomeFoodListCard from './HomeFoodListCard';
 import axios from 'axios';
 import Geolocation from 'react-native-geolocation-service';
+import { useLocationContext } from '../../context_apis/Location';
 
 
 const initialLayout = { width: Dimensions.get('window').width };
@@ -21,53 +22,13 @@ export default function Restaurants({ navigation }) {
 
     const [index, setIndex] = useState(0);
     const [promotionList, setPromotionList] = useState([])
-    const [location, setLocation] = useState(null);
-    const [error, setError] = useState(null);
+    const{latitude,longitude,address}=useLocationContext()
     const [routes] = useState([
         { key: 'nearby', title: 'Nearby' },
         { key: 'popular', title: 'Popular' },
         { key: 'favourite', title: 'Favorites' }
     ]);
 
-    const [address, setAddress] = useState('');
-
-    useEffect(() => {
-      let watchId = null;
-  
-      const getLocation = async () => {
-        watchId = Geolocation.watchPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
-            setLocation({ latitude, longitude });
-  
-            // Call HERE Maps Reverse Geocoding API
-            const apiKey = 'vNw_RmL_TFApW6kTtIGUNItPw1CCdjoA-l0Qn_1Crtk';
-            const response = await axios.get(
-              `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${apiKey}`
-            );
-
-            console.log(`https://revgeocode.search.hereapi.com/v1/revgeocode?at=${latitude},${longitude}&apiKey=${apiKey}`)
-  
-            if (response.data.items.length > 0) {
-              const address = response.data.items[0].address.label;
-              setAddress(address);
-            }
-          },
-          (error) => {
-            console.error(error);
-          },
-          { enableHighAccuracy: true, distanceFilter: 10 }
-        );
-      };
-  
-      getLocation();
-  
-      return () => {
-        if (watchId !== null) {
-          Geolocation.clearWatch(watchId);
-        }
-      };
-    }, []);
 
 
     useEffect(() => {
@@ -122,9 +83,9 @@ export default function Restaurants({ navigation }) {
     return (
         <View className='flex-1 bg-white'>
             {/* display the customer's current locatoin */}
-            <View className='flex flex-row px-10 items-start justify-center space-x-2 bg-orange-600 h-auto'>
-                <Image source={require('../../assets/location.jpeg')} className='w-5 h-5 rounded-xl' />
-                <Text className='text-white'>{address} {location? `(${location.latitude.toFixed(2)} , ${location.longitude.toFixed(2)})`:"null location"}</Text>
+            <View className='flex flex-row px-3 py-0.5 items-center justify-center space-x-2 bg-orange-600 h-auto'>
+                <Image source={require('../../assets/location.jpeg')} className='w-4 h-4 rounded-xl' />
+                <Text numberOfLines={1} className='text-white text-xs text-ellipsis'>{address} ({longitude.toFixed(2)} , {latitude.toFixed(2)})</Text>
             </View>
 
             {/* Header -> search bar */}

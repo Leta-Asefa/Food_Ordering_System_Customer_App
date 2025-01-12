@@ -2,14 +2,16 @@ import { FlatList, ScrollView } from "react-native";
 import RestaurantListCard from "./RestaurantListCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocationContext } from "../../context_apis/Location";
 
 const NearByRestaurants = ({ navigation }) => {
 
     const [restaurants, setRestaurants] = useState([])
+    const{latitude,longitude}=useLocationContext()
 
     useEffect(() => {
         async function get() {
-            const response = await axios.get(`http://localhost:4000/restaurant/all`, {
+            const response = await axios.get(`http://localhost:4000/restaurant/all/near/${longitude}/${latitude}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
