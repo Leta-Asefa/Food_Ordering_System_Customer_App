@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocationContext } from "../../context_apis/Location";
 
+
+
+
 const NearByRestaurants = ({ navigation }) => {
 
     const [restaurants, setRestaurants] = useState([])
-    const{latitude,longitude}=useLocationContext()
+    const { latitude, longitude } = useLocationContext()
 
     useEffect(() => {
         async function get() {
@@ -18,6 +21,7 @@ const NearByRestaurants = ({ navigation }) => {
                 withCredentials: true,
             });
 
+            console.log(response.data)
             setRestaurants(response.data)
 
         }
@@ -28,7 +32,7 @@ const NearByRestaurants = ({ navigation }) => {
     }, [])
 
     const renderRestaurants = ({ item }) => (
-        <RestaurantListCard restaurant={item} navigation={navigation} />
+        <RestaurantListCard restaurant={item.restaurant} distance={item.distance} duration={item.duration} navigation={navigation} />
     );
 
 
@@ -37,7 +41,7 @@ const NearByRestaurants = ({ navigation }) => {
         <FlatList
             data={restaurants}
             renderItem={renderRestaurants}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.restaurant._id}
             className='bg-gray-400'
         />
     );

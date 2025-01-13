@@ -2,10 +2,10 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import BackgroundImage from '../../assets/background.png'
 import time from '../../assets/time.png'
 import rating from '../../assets/rating.png'
-import distance from '../../assets/distance.png'
+import distanceImage from '../../assets/distance.png'
 import call from '../../assets/call.png'
 
-const RestaurantListCard = ({ navigation, restaurant }) => {
+const RestaurantListCard = ({ navigation, restaurant,distance,duration }) => {
     return (
 
         <View className='flex flex-row justify-between items-center mx-2 my-1 py-1 px-2  bg-gray-200 rounded-xl'>
@@ -17,10 +17,10 @@ const RestaurantListCard = ({ navigation, restaurant }) => {
             <View>
                 <Text className='text-sm font-bold w-40' numberOfLines={1} >{restaurant.name}</Text>
                 <View >
-                    <Text className='text-green-600 font-bold text-xs'>{restaurant.opened}</Text>
+                    <Text className='text-green-600 font-bold text-xs'>{restaurant.opened?"opened":"closed"}</Text>
                     <View className='flex flex-row items-center'>
-                        <Image source={distance} className='w-4 h-4 mr-1 rounded-lg' />
-                        <Text className='text-xs'>distance</Text>
+                        <Image source={distanceImage} className='w-4 h-4 mr-1 rounded-lg' />
+                        <Text className='text-xs'>{distance}</Text>
                     </View>
                     <View className='flex flex-row items-center'>
                         <Image source={rating} className='w-4 h-4 mr-1 rounded-lg' />
@@ -29,7 +29,7 @@ const RestaurantListCard = ({ navigation, restaurant }) => {
                 </View>
                 <View className='flex flex-row items-center'>
                     <Image source={time} className='w-4 h-4 mr-1 rounded-lg' />
-                    <Text className='text-xs'>Delivery time: ~ 50min</Text>
+                    <Text className='text-xs'>{duration}</Text>
                 </View>
             </View>
             <View className='space-y-2'>

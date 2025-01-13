@@ -43,7 +43,6 @@ export default function Restaurants({ navigation }) {
             });
 
 
-            console.log(response)
             setPromotionList(response.data)
 
         }

@@ -77,7 +77,7 @@ export const LocationContextProvider = ({ children }) => {
         (error) => {
           console.error('Geolocation error:', error);
         },
-        { enableHighAccuracy: true, distanceFilter: 10 }
+        { enableHighAccuracy: true, distanceFilter: 10,interval:200000 }
       );
     };
 
