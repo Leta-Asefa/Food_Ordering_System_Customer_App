@@ -35,7 +35,7 @@ const RestaurantListCard = ({ navigation, restaurant,distance,duration }) => {
             <View className='space-y-2'>
                 <Text className='text-white font-bold text-center rounded-lg bg-red-600 px-1 text-xs'>Order here</Text>
                 <Text className='text-white font-bold text-center rounded-lg bg-green-600 px-1 text-xs'>Call</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('restaurant_detail')}>
+                <TouchableOpacity onPress={() => navigation.navigate('restaurant_detail',{restaurant})}>
                     <Text className='text-white font-bold text-center rounded-lg bg-blue-600 px-1 text-xs'>About</Text>
                 </TouchableOpacity>
 

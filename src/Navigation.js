@@ -55,15 +55,24 @@ const TabNavigation = () => {
                 animation: 'shift'
             }}
         >
-            <Tab.Screen name='restaurants_list' component={Restaurants} />
+            <Tab.Screen name='restaurants_list' component={RestaurantsStackNavigator} />
             <Tab.Screen name='cart' component={Cart} />
             <Tab.Screen name='payment' component={Payment} />
             <Tab.Screen name='deliveryaddress' component={DeliveryAddress} />
             <Tab.Screen name='order_tracking' component={OrderTracking} />
-            <Tab.Screen name='restaurant_detail' component={RestaurantDetails} />
 
         </Tab.Navigator>
 
+    );
+};
+
+
+const RestaurantsStackNavigator = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="restaurants" component={Restaurants} />
+            <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
+        </Stack.Navigator>
     );
 };
 

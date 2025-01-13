@@ -84,7 +84,7 @@ export default function Restaurants({ navigation }) {
             {/* display the customer's current locatoin */}
             <View className='flex flex-row px-3 py-0.5 items-center justify-center space-x-2 bg-orange-600 h-auto'>
                 <Image source={require('../../assets/location.jpeg')} className='w-4 h-4 rounded-xl' />
-                <Text numberOfLines={1} className='text-white text-xs text-ellipsis'>{address} ({longitude.toFixed(2)} , {latitude.toFixed(2)})</Text>
+                <Text numberOfLines={1} className='text-white text-xs text-ellipsis'>{address} ({longitude.toFixed(4)} , {latitude.toFixed(4)})</Text>
             </View>
 
             {/* Header -> search bar */}

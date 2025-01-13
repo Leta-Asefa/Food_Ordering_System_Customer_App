@@ -12,14 +12,20 @@ import { CartProvider } from "../../context_apis/CartContext";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
-const RestaurantDetails = () => {
+const RestaurantDetails = ({ navigation, route }) => {
 
     const [index, setIndex] = useState(0);
     const [visible, setVisible] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const images = [require('../../assets/reslog1.jpeg'), require('../../assets/reslog2.png'), require('../../assets/reslog3.jpeg'), require('../../assets/reslog4.jpeg')]
+    const { restaurant, distance, duration } = route?.params || {};
 
-
+    if (!restaurant) {
+        return (
+            <View className="flex-1 justify-center items-center">
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
 
     const openViewer = (index) => {
         setCurrentIndex(index);
@@ -46,7 +52,7 @@ const RestaurantDetails = () => {
     ]);
 
     const renderScene = SceneMap({
-        non_fasting_food:FoodList,
+        non_fasting_food: FoodList,
         fasting_food: FoodList,
         drink: DrinkList,
         catering: NearByRestaurants
@@ -57,65 +63,65 @@ const RestaurantDetails = () => {
 
     return (
         <CartProvider>
-        <View className='flex-1'>
+            <View className='flex-1'>
 
-            <Text className='text-center text-2xl mt-2 font-bold '>Restaurant Name</Text>
-            <TouchableOpacity onPress={() => openViewer(0)} className='relative'>
-                <Image source={images[2]} className='w-full h-auto max-h-56' />
-                <Text className='text-xs text-right absolute bottom-0'>More Images . . .</Text>
-            </TouchableOpacity>
-            <ImageViewing
-                images={images}
-                imageIndex={currentIndex}
-                visible={visible}
-                onRequestClose={() => setVisible(false)}
-                onImageIndexChange={(index) => setCurrentIndex(index)}
-                FooterComponent={({ imageIndex }) => (
-                    <View className='flex flex-row justify-between p-5'>
-                        <TouchableOpacity onPress={onPrevious} disabled={imageIndex === 0}>
-                            <Text style={{ color: imageIndex === 0 ? '#ccc' : '#fff' }}>Previous</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={onNext} disabled={imageIndex === images.length - 1}>
-                            <Text style={{ color: imageIndex === images.length - 1 ? '#ccc' : '#fff' }}>Next</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
+                <Text className='text-center text-2xl mt-2 font-bold '>{restaurant.name}</Text>
+                <TouchableOpacity onPress={() => openViewer(0)} className='relative'>
+                    <Image source={{uri:String(restaurant.image)}} className='w-full h-auto max-h-56' />
+                    <Text className='text-xs text-right absolute bottom-0'>More Images . . .</Text>
+                </TouchableOpacity>
+                <ImageViewing
+                    images={[{uri:restaurant.image}]}
+                    imageIndex={currentIndex}
+                    visible={visible}
+                    onRequestClose={() => setVisible(false)}
+                    onImageIndexChange={(index) => setCurrentIndex(index)}
+                    FooterComponent={({ imageIndex }) => (
+                        <View className='flex flex-row justify-between p-5'>
+                            <TouchableOpacity onPress={onPrevious} disabled={imageIndex === 0}>
+                                <Text style={{ color: imageIndex === 0 ? '#ccc' : '#fff' }}>Previous</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={onNext} disabled={imageIndex === images.length - 1}>
+                                <Text style={{ color: imageIndex === images.length - 1 ? '#ccc' : '#fff' }}>Next</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                />
 
 
 
-            <View className=' flex flex-row justify-center'>
-                <Image source={require('../../assets/rating.png')} className='w-5 h-5' />
-                <Text className='w-40'>Customer's Review : 4.5</Text>
+                <View className=' flex flex-row justify-center'>
+                    <Image source={require('../../assets/rating.png')} className='w-5 h-5' />
+                    <Text className='w-40'>Customer's Rating : {restaurant.rating}</Text>
+                </View>
+
+                {/* top tab view for (food, drinks, ) */}
+                <Text className='text-center font-bold text-xl bg-gray-200 mx-2 rounded-md'>Menu</Text>
+                <TabView
+                    navigationState={{ index, routes }}
+                    renderScene={renderScene}
+                    onIndexChange={() => setIndex(index)}
+                    initialLayout={initialLayout}
+                    renderTabBar={props => (
+                        <TabBar
+                            {...props}
+                            indicatorStyle={styles.indicator}
+                            style={styles.tabBar}
+                            labelStyle={styles.label}
+                            activeColor='#000'
+                            inactiveColor='#666'
+
+
+                        />
+                    )}
+                />
+
+
+
+
             </View>
 
-            {/* top tab view for (food, drinks, ) */}
-            <Text className='text-center font-bold text-xl bg-gray-200 mx-2 rounded-md'>Menu</Text>
-            <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={() => setIndex(index)}
-                initialLayout={initialLayout}
-                renderTabBar={props => (
-                    <TabBar
-                        {...props}
-                        indicatorStyle={styles.indicator}
-                        style={styles.tabBar}
-                        labelStyle={styles.label}
-                        activeColor='#000'
-                        inactiveColor='#666'
 
-
-                    />
-                )}
-            />
-
-
-
-
-        </View>
-
-            
         </CartProvider>
     )
 
