@@ -14,7 +14,7 @@ const PromotionListCard = ({ promotion }) => {
                 </View>
             </ImageBackground>
         </TouchableOpacity>
-//
+
     );
 
 };

@@ -2,13 +2,16 @@ import { Button, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, Touc
 import RestaurantListCard from "./RestaurantListCard";
 import { restaurants } from "../../utilities_and_constants/constants";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NearByRestaurants from "./NearByRestaurants";
 import PopularRestaurants from "./PopularRestaurants";
 import ImageViewing from 'react-native-image-viewing';
 import FoodList from "./FoodList";
 import DrinkList from "./DrinkList";
 import { CartProvider } from "../../context_apis/CartContext";
+import axios from "axios";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -17,7 +20,36 @@ const RestaurantDetails = ({ navigation, route }) => {
     const [index, setIndex] = useState(0);
     const [visible, setVisible] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const { restaurant, distance, duration } = route?.params || {};
+    const [images, setImages] = useState([])
+    const { distance, duration } = route?.params || {};
+    const [restaurant, setRestaurant] = useState(route?.params?.restaurant || {});  // Store restaurant in state
+
+
+    useEffect(() => {
+        const getPictures = async () => {
+            console.log("use effect running", `http://localhost:4000/restaurant/${restaurant._id}/pictures`)
+            const response = await axios.get(`http://localhost:4000/restaurant/${restaurant._id}/pictures`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+            // Map images into the required format for ImageViewing
+            const formattedImages = response.data.pictures.map(pictureUrl => ({
+                uri: pictureUrl
+            }));
+
+            setImages(formattedImages);
+
+        }
+
+        if (restaurant._id) {
+            console.log(distance,duration,"Duration ..........")
+            getPictures();
+        }
+        // 
+    }, [restaurant])
 
     if (!restaurant) {
         return (
@@ -26,6 +58,7 @@ const RestaurantDetails = ({ navigation, route }) => {
             </View>
         );
     }
+
 
     const openViewer = (index) => {
         setCurrentIndex(index);
@@ -67,11 +100,15 @@ const RestaurantDetails = ({ navigation, route }) => {
 
                 <Text className='text-center text-2xl mt-2 font-bold '>{restaurant.name}</Text>
                 <TouchableOpacity onPress={() => openViewer(0)} className='relative'>
-                    <Image source={{uri:String(restaurant.image)}} className='w-full h-auto max-h-56' />
-                    <Text className='text-xs text-right absolute bottom-0'>More Images . . .</Text>
+                    <Image
+                        source={{ uri: String(restaurant.image) }}
+                        className='w-full h-40 max-h-56 rounded-lg'
+                        resizeMode="cover"
+                    />
+
                 </TouchableOpacity>
                 <ImageViewing
-                    images={[{uri:restaurant.image}]}
+                    images={images}
                     imageIndex={currentIndex}
                     visible={visible}
                     onRequestClose={() => setVisible(false)}
@@ -90,9 +127,37 @@ const RestaurantDetails = ({ navigation, route }) => {
 
 
 
-                <View className=' flex flex-row justify-center'>
-                    <Image source={require('../../assets/rating.png')} className='w-5 h-5' />
-                    <Text className='w-40'>Customer's Rating : {restaurant.rating}</Text>
+                <View className=' flex flex-row justify-center items-center'>
+                    <View className=' flex flex-row justify-center items-center'>
+                        <Icon
+                            name="access-time"  // Use the icon name here
+                            size={24}
+                            color="orange"
+                            className="w-5 h-5"
+                        />
+                        <Text className='w-auto'> {duration}</Text>
+                    </View>
+
+                    <View className=' flex flex-row justify-center items-center'>
+                        <Icon
+                            name="star-rate"  // Use the icon name here
+                            size={24}
+                            color="orange"
+                            className="w-5 h-5"
+                        />
+                        <Text className='w-auto'>Customer's Rating : {restaurant.rating}</Text>
+                    </View>
+
+                    <View className=' flex flex-row justify-center items-center'>
+                        <Icon
+                            name="map"  // Use the icon name here
+                            size={24}
+                            color="orange"
+                            className="w-5 h-5"
+                        />
+                        <Text className='w-auto'> {distance}</Text>
+                    </View>
+
                 </View>
 
                 {/* top tab view for (food, drinks, ) */}

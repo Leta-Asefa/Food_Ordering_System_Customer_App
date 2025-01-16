@@ -34,7 +34,6 @@ export default function Restaurants({ navigation }) {
     useEffect(() => {
         // Sync authUser to async storage whenever it changes
         const loadUser = async () => {
-            console.log("running use effect ")
             const response = await axios.get(`http://localhost:4000/promotion/get`, {
                 headers: {
                     'Content-Type': 'application/json',

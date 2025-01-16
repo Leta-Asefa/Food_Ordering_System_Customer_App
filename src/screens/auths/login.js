@@ -47,7 +47,7 @@ export default function Login({ navigation }) {
         },
         withCredentials: true,
       });
-      if (response.data._id) {
+      if (response.data.user._id) {
         await AsyncStorage.setItem('authUser', JSON.stringify(response.data))
         navigation.navigate('bottomTabs')
       } else {

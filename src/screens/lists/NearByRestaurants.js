@@ -1,49 +1,61 @@
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, Text, View } from "react-native"; // Added Text import for loading message
 import RestaurantListCard from "./RestaurantListCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocationContext } from "../../context_apis/Location";
 
-
-
-
 const NearByRestaurants = ({ navigation }) => {
-
-    const [restaurants, setRestaurants] = useState([])
-    const { latitude, longitude } = useLocationContext()
+    const [restaurants, setRestaurants] = useState([]);
+    const { latitude, longitude } = useLocationContext();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function get() {
-            const response = await axios.get(`http://localhost:4000/restaurant/all/near/${longitude}/${latitude}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            });
+            try {
+                const response = await axios.get(`http://localhost:4000/restaurant/all/near/${longitude}/${latitude}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                });
 
-            console.log(response.data)
-            setRestaurants(response.data)
-
+                setRestaurants(response.data); // Update state with fetched restaurants
+            } catch (error) {
+                console.error("Error fetching nearby restaurants: ", error);
+            } finally {
+                setIsLoading(false); // Set loading to false when data is fetched or error occurs
+            }
         }
 
-        get()
+        get(); // Call the function to fetch data
 
-
-    }, [])
+    }, [latitude, longitude]); // Dependencies: re-run when latitude or longitude changes
 
     const renderRestaurants = ({ item }) => (
-        <RestaurantListCard restaurant={item.restaurant} distance={item.distance} duration={item.duration} navigation={navigation} />
+        <RestaurantListCard
+            restaurant={item.restaurant}
+            distance={item.distance}
+            duration={item.duration}
+            navigation={navigation}
+        />
     );
 
-
     return (
+        <>
+            {isLoading ? (
+                <View>
+                    <Text>Loading...</Text> // Display loading message
 
-        <FlatList
-            data={restaurants}
-            renderItem={renderRestaurants}
-            keyExtractor={(item) => item.restaurant._id}
-            className='bg-gray-400'
-        />
+                </View>
+            ) : (
+                <FlatList
+                    data={restaurants}
+                    renderItem={renderRestaurants}
+                    keyExtractor={(item) => item.restaurant._id}
+                    className="bg-gray-400"
+                />
+            )}
+        </>
     );
 };
 
