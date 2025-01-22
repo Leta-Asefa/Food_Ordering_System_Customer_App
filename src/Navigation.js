@@ -11,13 +11,14 @@ import DeliveryAddress from './screens/checkout/DeliveryAddress';
 import Payment from './screens/checkout/Payment';
 import OrderTracking from './screens/checkout/OrderTracking';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ConfirmOrder from "./screens/checkout/ConfirmOrder";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
-    
-    
+
+
 
 
 
@@ -25,9 +26,9 @@ const Navigation = () => {
         <NavigationContainer>
 
             <Stack.Navigator>
-                <Stack.Screen name='login' component={Login} options={{ headerShown: false }}/>
-                <Stack.Screen name='signup' component={Signup} options={{ headerShown: false }}/>
-                <Stack.Screen name='bottomTabs' component={TabNavigation} options={{ headerShown: false }}/>
+                <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
+                <Stack.Screen name='signup' component={Signup} options={{ headerShown: false }} />
+                <Stack.Screen name='bottomTabs' component={TabNavigation} options={{ headerShown: false }} />
             </Stack.Navigator>
 
         </NavigationContainer>
@@ -56,10 +57,9 @@ const TabNavigation = () => {
             }}
         >
             <Tab.Screen name='restaurants_list' component={RestaurantsStackNavigator} />
-            <Tab.Screen name='cart' component={Cart} />
-            <Tab.Screen name='payment' component={Payment} />
-            <Tab.Screen name='deliveryaddress' component={DeliveryAddress} />
             <Tab.Screen name='order_tracking' component={OrderTracking} />
+            <Stack.Screen name='deliveryaddress' component={DeliveryAddress} />
+            <Stack.Screen name='confirmorder' component={ConfirmOrder} />
 
         </Tab.Navigator>
 
@@ -72,6 +72,8 @@ const RestaurantsStackNavigator = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="restaurants" component={Restaurants} />
             <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
+            <Stack.Screen name='cart' component={Cart} />
+            <Stack.Screen name='payment' component={Payment} />
         </Stack.Navigator>
     );
 };

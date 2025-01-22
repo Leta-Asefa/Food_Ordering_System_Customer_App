@@ -29,9 +29,12 @@ const NearByRestaurants = ({ navigation }) => {
 
         get(); // Call the function to fetch data
 
+        console.log("Restaurants",restaurants)
+
     }, [latitude, longitude]); // Dependencies: re-run when latitude or longitude changes
 
     const renderRestaurants = ({ item }) => (
+
         <RestaurantListCard
             restaurant={item.restaurant}
             distance={item.distance}
@@ -43,10 +46,7 @@ const NearByRestaurants = ({ navigation }) => {
     return (
         <>
             {isLoading ? (
-                <View>
-                    <Text>Loading...</Text> // Display loading message
-
-                </View>
+                <Text className='text-center text-2xl text-blue-600 font-semibold'>Loading...</Text>
             ) : (
                 <FlatList
                     data={restaurants}

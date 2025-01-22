@@ -4,10 +4,10 @@ import { drinkList, foodList } from "../../utilities_and_constants/constants";//
 import FoodListCard from "./HomeFoodListCard";
 import MenuFoodListCard from "./MenuFoodListCard";
 
-const DrinkList = ({navigation}) => {
+const DrinkList = ({navigation,item}) => {
 
     const renderDrink = ({ item }) => (
-        <MenuFoodListCard food={item} navigation={navigation}/>
+        <MenuFoodListCard item={item} navigation={navigation}/>
     );
 
 
@@ -15,9 +15,9 @@ const DrinkList = ({navigation}) => {
       <View>
 
         <FlatList
-        data={drinkList}
+        data={item}
         renderItem={renderDrink}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         className=''
         />
 

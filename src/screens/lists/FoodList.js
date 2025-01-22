@@ -5,11 +5,10 @@ import FoodListCard from "./HomeFoodListCard";
 import MenuFoodListCard from "./MenuFoodListCard";
 import { useContext, useEffect, useState } from "react";
 
-const FoodList = ({navigation}) => {
-
+const FoodList = ({navigation,item}) => {
 
     const renderFood = ({ item }) => (
-        <MenuFoodListCard food={item} navigation={navigation} />
+        <MenuFoodListCard item={item} navigation={navigation} />
     );
 
 
@@ -17,9 +16,9 @@ const FoodList = ({navigation}) => {
       <View>
 
         <FlatList
-        data={foodList}
+        data={item}
         renderItem={renderFood}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         className=''
         />
 
