@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Text, View, ActivityIndicator } from "react-native";
+import { Text, View, ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import { CartContext, useCartContext } from "../../context_apis/CartContext";
 import { useLocationContext } from "../../context_apis/Location";
@@ -11,8 +11,10 @@ const ConfirmOrder = ({ navigation, route }) => {
     const [orderResponse, setOrderResponse] = useState(null); // State to handle API response or errors
 
     const { authUser } = useAuthUserContext();
-    const { cart,selectedRestaurant } = useCartContext()
+    const { cart, selectedRestaurant } = useCartContext()
     const { longitude, latitude, address } = useLocationContext();
+    const [longestPreparationTime, setLongestPreparationTime] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
 
 
     if (!deliveryaddress) {
@@ -32,18 +34,28 @@ const ConfirmOrder = ({ navigation, route }) => {
 
         const registerAnOrder = async () => {
             setIsLoading(true); // Start loading
-            const cartItems = cart.map((i) => ({
-                item: i.item._id,
-                quantity: i.quantity,
-            }));
+            let longestPreparationTime = 0
+            let totalPrice = 0
+            const cartItems = cart.map((i) => {
+                longestPreparationTime = Math.max(i.item.preparationTime, longestPreparationTime);
+                totalPrice += i.item.price * i.quantity;
 
+                return {
+                    item: i.item._id,
+                    quantity: i.quantity,
+                }
+            }
+            );
+
+            setTotalPrice(totalPrice)
+            setLongestPreparationTime(longestPreparationTime + Number(selectedRestaurant.durationValue))
             const formData = {
                 items: cartItems,
                 shippingAddress: deliveryaddress,
                 userId: authUser.user._id,
-                restaurantId:selectedRestaurant.restaurant._id
+                restaurantId: selectedRestaurant.restaurant._id
             };
-            console.log("Form data to be sent ",formData)
+            console.log("Form data to be sent ", formData)
 
             try {
                 console.log("Registering an order with formData: ", formData);
@@ -68,9 +80,78 @@ const ConfirmOrder = ({ navigation, route }) => {
 
     }, [deliveryaddress]);
 
+
+
+    const handlePayment = (method) => {
+
+    }
+    const handleCancel = (method) => {
+
+    }
+
+
+
+    const renderItem = ({ item }) => (
+        <View className="flex-row justify-between py-3 px-4 bg-white shadow-md rounded-lg mb-2">
+            <Text className="text-sm font-medium text-gray-700">{item.item.name}  ({item.quantity}X)</Text>
+            <Text className="text-sm text-gray-700 font-semibold">${(item.item.price * item.quantity).toFixed(2)}</Text>
+        </View>
+    );
+
+
+
     return (
-        <View className="flex-1 justify-center items-center">
-        <Text> order confirmation</Text>
+        <View className="flex-1 p-4 bg-gray-50">
+            <Text className="text-2xl font-bold text-gray-800 mb-4">Order Confirmation</Text>
+
+            {orderResponse?.message ? (
+                <View className="bg-white p-5 rounded-lg shadow-lg">
+                    <Text className="text-xs text-gray-800 font-semibold mb-2">Order ID: {orderResponse?.orderId}</Text>
+                    <Text className="text-md text-gray-600 mb-4">Status : {orderResponse?.orderStatus}</Text>
+                    <Text className="text-md text-gray-600 mb-2">Customer: {authUser.user.username}</Text>
+                    <Text className="text-md text-gray-600 mb-2">Delivery Address: {deliveryaddress?.address}</Text>
+
+
+                    <Text className="text-lg text-gray-800 font-semibold mt-5 mb-3">Items:</Text>
+                    <FlatList
+                        data={cart}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.item._id.toString()}
+                        className='h-56'
+                    />
+
+                    <View className="border-t border-gray-200 mt-4 pt-4">
+                        <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {longestPreparationTime} minutes</Text>
+                        <Text className="text-md text-gray-600 mb-2">Total Price: ${totalPrice.toFixed(2)}</Text>
+                    </View>
+                    <View className="mt-6 flex-row justify-between">
+                        <TouchableOpacity
+                            className="bg-blue-600 px-3 py-2 rounded-lg shadow-md"
+                            onPress={() => handlePayment("payNow")}
+                        >
+                            <Text className="text-white text-center font-semibold">Pay Now</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            className="bg-gray-300 px-3 py-2 rounded-lg shadow-md"
+                            onPress={() => handlePayment("payLater")}
+                        >
+                            <Text className="text-gray-800 text-center font-semibold">Pay Later</Text>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity
+                            className="bg-red-600  px-3 py-2 rounded-lg shadow-md"
+                            onPress={() => handleCancel("payLater")}
+                        >
+                            <Text className="text-white text-center font-semibold">Cancel Order</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+            ) : (
+                <Text className="text-red-600 text-center">{orderResponse?.error || "Failed to confirm order"}</Text>
+            )}
         </View>
     );
 };
