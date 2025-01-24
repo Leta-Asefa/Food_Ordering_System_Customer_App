@@ -29,19 +29,17 @@ const NearByRestaurants = ({ navigation }) => {
 
         get(); // Call the function to fetch data
 
-        console.log("Restaurants",restaurants)
+        console.log("Restaurants", restaurants)
 
     }, [latitude, longitude]); // Dependencies: re-run when latitude or longitude changes
 
-    const renderRestaurants = ({ item }) => (
+    const renderRestaurants = ({ item }) => {
 
-        <RestaurantListCard
-            restaurant={item.restaurant}
-            distance={item.distance}
-            duration={item.duration}
-            navigation={navigation}
-        />
-    );
+        return (
+            <RestaurantListCard navigation={navigation} item={item} />
+        );
+    };
+
 
     return (
         <>

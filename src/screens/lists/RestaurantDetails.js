@@ -1,14 +1,10 @@
-import { Button, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import RestaurantListCard from "./RestaurantListCard";
-import { restaurants } from "../../utilities_and_constants/constants";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import {  useEffect, useState } from "react";
-import NearByRestaurants from "./NearByRestaurants";
-import PopularRestaurants from "./PopularRestaurants";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { TabBar, TabView } from "react-native-tab-view";
+import { useEffect, useState } from "react";
 import ImageViewing from 'react-native-image-viewing';
 import FoodList from "./FoodList";
 import DrinkList from "./DrinkList";
-import { CartContext, CartProvider, useCartContext } from "../../context_apis/CartContext";
+import { useCartContext } from "../../context_apis/CartContext";
 import axios from "axios";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -22,9 +18,21 @@ const RestaurantDetails = ({ navigation, route }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [images, setImages] = useState([])
     const [menu, setMenu] = useState([])
-    const { distance, duration } = route?.params || {};
-    const [restaurant, setRestaurant] = useState(route?.params?.restaurant || {});  // Store restaurant in state
-    const { setRestaurantId } = useCartContext()
+    const [restaurant, setRestaurant] = useState(route?.params?.restaurant);  // Store restaurant in state
+    console.log("Route : ", route)
+    console.log("Item : ", restaurant)
+
+
+    if (!restaurant) {
+        console.log("Delivery address is not set yet");
+        return (
+            <View className="flex-1 justify-center items-center">
+                <Text>Loading Restaurant...</Text>
+            </View>
+        );
+    }
+    const { duration, distance } = route?.params //guess what would happen if you take this line above the if(!restaurant) conidition :)
+
 
     useEffect(() => {
         const getPictures = async () => {
@@ -42,7 +50,6 @@ const RestaurantDetails = ({ navigation, route }) => {
             }));
 
             setImages(formattedImages);
-            setRestaurantId(restaurant._id)
         }
 
         const getMenu = async () => {
@@ -66,13 +73,6 @@ const RestaurantDetails = ({ navigation, route }) => {
         // 
     }, [restaurant])
 
-    if (!restaurant) {
-        return (
-            <View className="flex-1 justify-center items-center">
-                <Text>Loading...</Text>
-            </View>
-        );
-    }
 
 
     const openViewer = (index) => {

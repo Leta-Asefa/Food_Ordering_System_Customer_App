@@ -11,8 +11,9 @@ const ConfirmOrder = ({ navigation, route }) => {
     const [orderResponse, setOrderResponse] = useState(null); // State to handle API response or errors
 
     const { authUser } = useAuthUserContext();
-    const { cart,restaurantId } = useCartContext()
+    const { cart,selectedRestaurant } = useCartContext()
     const { longitude, latitude, address } = useLocationContext();
+
 
     if (!deliveryaddress) {
         console.log("Delivery address is not set yet");
@@ -40,7 +41,7 @@ const ConfirmOrder = ({ navigation, route }) => {
                 items: cartItems,
                 shippingAddress: deliveryaddress,
                 userId: authUser.user._id,
-                restaurantId
+                restaurantId:selectedRestaurant.restaurant._id
             };
             console.log("Form data to be sent ",formData)
 
@@ -62,7 +63,9 @@ const ConfirmOrder = ({ navigation, route }) => {
             }
         };
 
+
         registerAnOrder();
+
     }, [deliveryaddress]);
 
     return (

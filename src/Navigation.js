@@ -58,8 +58,6 @@ const TabNavigation = () => {
         >
             <Tab.Screen name='restaurants_list' component={RestaurantsStackNavigator} />
             <Tab.Screen name='order_tracking' component={OrderTracking} />
-            <Stack.Screen name='deliveryaddress' component={DeliveryAddress} />
-            <Stack.Screen name='confirmorder' component={ConfirmOrder} />
 
         </Tab.Navigator>
 
@@ -74,6 +72,8 @@ const RestaurantsStackNavigator = () => {
             <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
             <Stack.Screen name='cart' component={Cart} />
             <Stack.Screen name='payment' component={Payment} />
+            <Stack.Screen name='deliveryaddress' component={DeliveryAddress} />
+            <Stack.Screen name='confirmorder' component={ConfirmOrder} />
         </Stack.Navigator>
     );
 };

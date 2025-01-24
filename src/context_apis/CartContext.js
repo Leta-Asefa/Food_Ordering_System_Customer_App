@@ -12,7 +12,7 @@ export const useCartContext = () => {
 const CartProvider = ({ children }) => {
 
   const [cart, setCart] = useState([]);
-  const [restaurantId,setRestaurantId]=useState('')
+  const [selectedRestaurant,setSelectedRestaurant]=useState({})
 
   const addToCart = (item) => {
     console.log("add to cart is called ! ", item)
@@ -62,7 +62,7 @@ const CartProvider = ({ children }) => {
 
 
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, clearCart,updateCartItem,isOnCart,restaurantId,setRestaurantId }}>
+    <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, clearCart,updateCartItem,isOnCart,selectedRestaurant,setSelectedRestaurant }}>
       {children}
     </CartContext.Provider>
   );
