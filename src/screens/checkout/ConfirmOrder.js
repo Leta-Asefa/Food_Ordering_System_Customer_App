@@ -4,6 +4,7 @@ import { Text, View, ActivityIndicator, FlatList, TouchableOpacity } from "react
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import { CartContext, useCartContext } from "../../context_apis/CartContext";
 import { useLocationContext } from "../../context_apis/Location";
+import QRCode from "react-native-qrcode-svg";
 
 const ConfirmOrder = ({ navigation, route }) => {
     const [deliveryaddress, setDeliveryAddress] = useState(route?.params?.deliveryaddress || {});
@@ -102,11 +103,19 @@ const ConfirmOrder = ({ navigation, route }) => {
 
     return (
         <View className="flex-1 p-4 bg-gray-50">
-            <Text className="text-2xl font-bold text-gray-800 mb-4">Order Confirmation</Text>
+            <Text className="text-2xl text-center font-bold text-gray-800 mb-4">Order Confirmation</Text>
 
             {orderResponse?.message ? (
                 <View className="bg-white p-5 rounded-lg shadow-lg">
                     <Text className="text-xs text-gray-800 font-semibold mb-2">Order ID: {orderResponse?.orderId}</Text>
+                    <View className='flex flex-row justify-center'>
+                        <QRCode
+                            value={orderResponse?.orderId}
+                            size={100}
+                            color="black"
+                            backgroundColor="white"
+                        />
+                    </View>
                     <Text className="text-md text-gray-600 mb-4">Status : {orderResponse?.orderStatus}</Text>
                     <Text className="text-md text-gray-600 mb-2">Customer: {authUser.user.username}</Text>
                     <Text className="text-md text-gray-600 mb-2">Delivery Address: {deliveryaddress?.address}</Text>
@@ -117,7 +126,7 @@ const ConfirmOrder = ({ navigation, route }) => {
                         data={cart}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.item._id.toString()}
-                        className='h-56'
+                        className='h-auto max-h-56'
                     />
 
                     <View className="border-t border-gray-200 mt-4 pt-4">

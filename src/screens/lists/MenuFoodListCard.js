@@ -43,7 +43,7 @@ const MenuFoodListCard = ({ item }) => {
                         }}
                     >
                         {isOnCart(item._id) ? <FontAwesome name="remove" size={15} color="#fff" /> : <FontAwesome name="plus" size={15} color="#fff" />}
-                        {isOnCart(item.id) ? <Text className=' text-white text-xs ml-1 font-bold'>Remove</Text> : <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>}
+                        {isOnCart(item._id) ? <Text className=' text-white text-xs ml-1 font-bold'>Remove</Text> : <Text className=' text-white text-xs ml-1 font-bold'>Add To Cart</Text>}
 
                     </TouchableOpacity>
 
