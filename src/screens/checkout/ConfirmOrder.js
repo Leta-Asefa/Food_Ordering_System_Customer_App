@@ -56,7 +56,6 @@ const ConfirmOrder = ({ navigation, route }) => {
                 userId: authUser.user._id,
                 restaurantId: selectedRestaurant.restaurant._id
             };
-            console.log("Form data to be sent ", formData)
 
             try {
                 console.log("Registering an order with formData: ", formData);
@@ -66,7 +65,6 @@ const ConfirmOrder = ({ navigation, route }) => {
                     },
                     withCredentials: true,
                 });
-                console.log("Order Confirmation Response >>>> ", response.data);
                 setOrderResponse(response.data); // Handle response
             } catch (error) {
                 console.error("Error placing order: ", error.response || error.message);
@@ -83,7 +81,27 @@ const ConfirmOrder = ({ navigation, route }) => {
 
 
 
-    const handlePayment = (method) => {
+    const handlePayment = async (method) => {
+        console.log("handle payment is called ")
+        if (method === "payNow") {
+
+            const formData = { amount:totalPrice,firstName:authUser.user.username , phoneNumber:authUser.user.phoneNumber }
+            const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              withCredentials: true,
+            });
+
+            console.log("payment url : " ,response)
+
+            navigation.navigate('payment',{checkouturl:response.data.checkout_url})
+
+        }
+        else if(method==='payLater'){
+            navigation.navigate('restaurants')
+
+        }
 
     }
     const handleCancel = (method) => {

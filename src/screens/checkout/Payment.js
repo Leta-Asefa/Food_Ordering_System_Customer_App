@@ -5,35 +5,20 @@ import { CartContext, useCartContext } from "../../context_apis/CartContext";
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import axios from "axios";
 
-const Payment = ({ navigation }) => {
+const Payment = ({ navigation,route }) => {
 
-  const { cart, updateCartItem } = useCartContext()
-  const { authUser } = useAuthUserContext()
-  const [checkoutUrl, setCheckoutUrl] = useState('')
+  const [checkoutUrl, setCheckoutUrl] = useState(route?.params?.checkouturl || null)
   const [loading, setLoading] = useState(true);
 
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + (item.item.price * item.quantity), 0);
-  }
-
-  useEffect(() => {
-    async function getCheckoutUrl() {
-      console.log("entered get checkouturl .... ")
-      const formData = { phoneNumber: authUser.phoneNumber, amount: getTotalPrice(), firstName: authUser.username }
-      const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
-
-      console.log("URL .......", response)
-      setCheckoutUrl(response.data.checkout_url)
-    }
-
-    getCheckoutUrl()
-  }, [])
+  if (!checkoutUrl) {
+    console.log("Delivery address is not set yet");
+    return (
+        <View className="flex-1 justify-center items-center">
+            <Text>Loading payment method...</Text>
+        </View>
+    );
+}
 
 
 
