@@ -12,6 +12,7 @@ import Payment from './screens/checkout/Payment';
 import OrderTracking from './screens/checkout/OrderTracking';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ConfirmOrder from "./screens/checkout/ConfirmOrder";
+import OrderHistory from "./screens/order_history/OrderHistory";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,7 @@ const TabNavigation = () => {
         >
             <Tab.Screen name='restaurants_list' component={RestaurantsStackNavigator} />
             <Tab.Screen name='order_tracking' component={OrderTracking} />
+            <Tab.Screen name='order_history' component={OrderHistory} />
 
         </Tab.Navigator>
 
