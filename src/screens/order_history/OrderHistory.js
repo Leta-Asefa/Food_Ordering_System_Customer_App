@@ -17,7 +17,7 @@ const OrderHistory = ({ navigation }) => {
 
             try {
                 setIsLoading(true); // Start loading
-                const response = await axios.get(`http://localhost:4000/order/user/${authUser.user._id}`, {
+                const response = await axios.get(`http://localhost:4000/order/user/${authUser?.user?._id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -33,15 +33,23 @@ const OrderHistory = ({ navigation }) => {
         }
 
         getOrderHistory();
-    });
+    },[]);
 
     const renderItem = ({ item }) => {
         const [date, time] = new Date(item.createdAt).toISOString().split("T");
-        return <OrderHistoryCard  order={item._id} date={date} time={time.split(".")[0]} />;
+        const formattedTime = new Date(item.createdAt).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+        return <OrderHistoryCard  order={item} date={date} time={formattedTime} navigation={navigation}/>;
     };
 
+    
+
     return (
-        <View className='flex-1 '>
+        <View className='flex-1 p-3'>
+            <Text className='text-center py-3 text-xl font-bold'>Your order history</Text>
             {isLoading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
