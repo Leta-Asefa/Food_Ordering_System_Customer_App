@@ -12,7 +12,7 @@ const ConfirmOrder = ({ navigation, route }) => {
     const [orderResponse, setOrderResponse] = useState(null); // State to handle API response or errors
 
     const { authUser } = useAuthUserContext();
-    const { cart, selectedRestaurant } = useCartContext()
+    const { cart, selectedRestaurant, clearCart, setSelectedRestaurant } = useCartContext()
     const { longitude, latitude, address } = useLocationContext();
     const [longestPreparationTime, setLongestPreparationTime] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
@@ -84,19 +84,21 @@ const ConfirmOrder = ({ navigation, route }) => {
     const handlePayment = async (method) => {
         if (method === "payNow") {
 
-            const formData = { amount:totalPrice,firstName:authUser.user.username , phoneNumber:authUser.user.phoneNumber }
+            const formData = { amount: totalPrice, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
             const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
             });
 
 
-            navigation.navigate('payment',{checkouturl:response.data.checkout_url})
+            navigation.navigate('payment', { checkouturl: response.data.checkout_url })
 
         }
-        else if(method==='payLater'){
+        else if (method === 'payLater') {
+            clearCart()
+            setSelectedRestaurant('')
             navigation.navigate('restaurants')
 
         }

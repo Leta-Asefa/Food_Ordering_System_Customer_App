@@ -74,9 +74,9 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
         <>
             {/* Order Card */}
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <View className="bg-gray-50 p-2 rounded-md">
-                    <Text>
-                        Order ID: <Text className="font-semibold">{order._id}</Text>
+                <View className="bg-gray-50 p-2 rounded-md mb-2 border border-gray-300">
+                    <Text className='text-center'>
+                        Order ID: <Text className="font-semibold text-xs">{order._id}</Text>
                     </Text>
 
                     <View className="flex flex-row justify-between">
