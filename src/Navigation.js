@@ -29,6 +29,7 @@ const Navigation = () => {
             <Stack.Navigator>
                 <Stack.Screen name='login' component={Login} options={{ headerShown: false }} />
                 <Stack.Screen name='signup' component={Signup} options={{ headerShown: false }} />
+                <Stack.Screen name='payment' component={Payment} />
                 <Stack.Screen name='bottomTabs' component={TabNavigation} options={{ headerShown: false }} />
             </Stack.Navigator>
 
@@ -73,7 +74,6 @@ const RestaurantsStackNavigator = () => {
             <Stack.Screen name="restaurants" component={Restaurants} />
             <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
             <Stack.Screen name='cart' component={Cart} />
-            <Stack.Screen name='payment' component={Payment} />
             <Stack.Screen name='deliveryaddress' component={DeliveryAddress} />
             <Stack.Screen name='confirmorder' component={ConfirmOrder} />
         </Stack.Navigator>

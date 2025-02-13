@@ -82,7 +82,6 @@ const ConfirmOrder = ({ navigation, route }) => {
 
 
     const handlePayment = async (method) => {
-        console.log("handle payment is called ")
         if (method === "payNow") {
 
             const formData = { amount:totalPrice,firstName:authUser.user.username , phoneNumber:authUser.user.phoneNumber }
@@ -93,7 +92,6 @@ const ConfirmOrder = ({ navigation, route }) => {
               withCredentials: true,
             });
 
-            console.log("payment url : " ,response)
 
             navigation.navigate('payment',{checkouturl:response.data.checkout_url})
 
