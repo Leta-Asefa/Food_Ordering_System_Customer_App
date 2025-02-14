@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Modal, FlatList, ToastAndroid } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -13,7 +13,6 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
     const { authUser } = useAuthUserContext()
 
     const handlePayment = async (method) => {
-        console.log("handle payment is called ")
         if (method === "payNow") {
 
             const formData = { amount: order.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
@@ -29,18 +28,31 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
 
         }
         else if (method === 'payLater') {
-            navigation.navigate('restaurants')
-
+            setModalVisible(false)
         }
 
     }
     const handleCancel = async (method) => {
-        const response = await axios.put(`http://localhost:4000/order/${order._id}/status`, { status: 'Cancelled' }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        });
+        try {
+            const response = await axios.put(`http://localhost:4000/order/${order._id}/status`, { status: 'Cancelled' }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+
+            if (response.data.message) {
+                ToastAndroid.showWithGravity("Order Cancelled Successfully", ToastAndroid.LONG, ToastAndroid.TOP)
+            } else {
+                ToastAndroid.showWithGravity("Preparing your order is started. You can't cancel.", ToastAndroid.LONG, ToastAndroid.TOP)
+            }
+
+            setModalVisible(false)
+
+        } catch (error) {
+            console.log(error)
+        }
+
 
     }
 
@@ -82,14 +94,11 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
         <>
             {/* Order Card */}
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <View className="bg-gray-50 p-2 rounded-md mb-2 border border-gray-300">
-                   
-                   <View className='flex-row justify-between mb-1'>
-                    <Text className=''>
-                        Order ID: <Text className="font-semibold text-xs">{order._id}</Text>
+                <View className="bg-gray-300 px-8 py-2 rounded-md mb-2 border border-gray-300">
+
+                    <Text className='text-center'>
+                        Order Id: <Text className="font-semibold text-xs text-center">{order._id}</Text>
                     </Text>
-                    <Text className='text-xs'>{order.status}</Text>
-                   </View>
 
                     <View className="flex flex-row justify-between">
                         <View>
@@ -150,6 +159,8 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                             <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {order.eta} minutes</Text>
                             <Text className="text-md text-gray-600 mb-2">Total Price: ETB {order.totalAmount}</Text>
                         </View>
+
+
                         <View className="mt-6  gap-2 flex-row justify-between">
                             <TouchableOpacity
                                 className="bg-blue-600 px-3 py-2 rounded-lg shadow-md"

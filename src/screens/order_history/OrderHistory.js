@@ -3,15 +3,15 @@ import { View, ActivityIndicator, Text, FlatList, TouchableOpacity } from "react
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import axios from "axios";
 import OrderHistoryCard from "./OrderHistoryCard";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import OrderHistoryHeader from "./OrderHistoryHeader";
 
 
 const OrderHistory = ({ navigation }) => {
     const [orders, setOrders] = useState([]);
-    const [displayedOrderGroup,setDisplayedOrderGroup]=useState('active')
+    const [displayedOrderGroup, setDisplayedOrderGroup] = useState({})
     const { authUser } = useAuthUserContext();
     const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
         console.log("in order history use effect");
@@ -29,6 +29,7 @@ const OrderHistory = ({ navigation }) => {
                 });
                 console.log('Order History:', response.data.cancelled);
                 setOrders(response.data); // Handle response
+                setDisplayedOrderGroup({ orders: response.data.processing, status: "processing" })
             } catch (error) {
                 console.error("Error on fetching order history", error);
             } finally {
@@ -50,57 +51,34 @@ const OrderHistory = ({ navigation }) => {
     };
 
 
+    const handleHeaderPress = (status) => {
+        if (status === 'pending')
+            setDisplayedOrderGroup({ orders: orders.pending, status: 'pending' })
+        else if (status === 'processing')
+            setDisplayedOrderGroup({ orders: orders.processing, status: 'processing' })
+        else if (status === 'delivered')
+            setDisplayedOrderGroup({ orders: orders.delivered, status: 'delivered' })
+        else if (status === 'cancelled')
+            setDisplayedOrderGroup({ orders: orders.cancelled, status: 'cancelled' })
+
+
+    }
+
 
 
     return (
-        <View className='flex-1 p-2'>
+        <View className='flex-1 p-2 bg-white'>
             <Text className='text-center py-3 text-xl font-bold'>Your order history</Text>
 
-
-            <View className='flex-row flex-wrap justify-center items-center gap-1 mb-5'>
-
-                <TouchableOpacity className='bg-yellow-500 rounded-md flex-row items-center px-2'>
-                    <MaterialIcons
-                        name="pending"
-                        size={13}
-                        color={'#fff'} />
-                    <Text className='p-1 text-center text-xs  w-auto  text-white flex-row items-center font-semibold'>Pending</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity className='bg-blue-500 rounded-md flex-row items-center px-2'>
-                    <MaterialCommunityIcons
-                        name="chef-hat"
-                        size={13}
-                        color={'#fff'} />
-                    <Text className='p-1 text-center text-xs  w-auto  text-white flex-row items-center font-semibold'>Active</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity className='bg-green-500 rounded-md flex-row items-center px-2'>
-                    <MaterialCommunityIcons
-                        name="truck-delivery"
-                        size={13}
-                        color={'#fff'} />
-                    <Text className='p-1 text-center text-xs  w-auto  text-white flex-row items-center font-semibold'>Delivered</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity className='bg-red-500 rounded-md flex-row items-center px-2'>
-                    <MaterialCommunityIcons
-                        name="cancel"
-                        size={13}
-                        color={'#fff'} />
-                    <Text className='p-1 text-center text-xs  w-auto  text-white flex-row items-center font-semibold'>Cancelled</Text>
-                </TouchableOpacity>
-
-
-            </View>
+            <OrderHistoryHeader handleHeaderPress={handleHeaderPress} status={displayedOrderGroup.status} />
 
 
             {isLoading ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-                orders?.cancelled?.length > 0 ? (
+                displayedOrderGroup?.orders?.length > 0 ? (
                     <FlatList
-                        data={orders.cancelled}
+                        data={displayedOrderGroup.orders}
                         renderItem={renderItem}
                         keyExtractor={(item) => item._id}
                     />
