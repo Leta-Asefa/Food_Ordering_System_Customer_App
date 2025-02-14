@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, Pressable, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
 import QRCode from "react-native-qrcode-svg";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useCartContext } from "../../context_apis/CartContext";
 import axios from "axios";
@@ -33,9 +34,16 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
         }
 
     }
-    const handleCancel = (method) => {
+    const handleCancel = async (method) => {
+        const response = await axios.put(`http://localhost:4000/order/${order._id}/status`, { status: 'Cancelled' }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
 
     }
+
 
     useEffect(() => {
         console.log("use effect is called ")
@@ -64,7 +72,7 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
     }, [modalVisible])
 
     const renderItem = ({ item }) => (
-        <View className="flex-row justify-between py-3 px-4 bg-white shadow-md rounded-lg mb-2">
+        <View className="flex-row justify-between py-2 px-4 bg-white shadow-md rounded-lg">
             <Text className="text-sm font-medium text-gray-700">{item.item.name}  ({item.quantity}X)</Text>
             <Text className="text-sm text-gray-700 font-semibold">${(item.item.price * item.quantity).toFixed(2)}</Text>
         </View>
@@ -75,9 +83,13 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
             {/* Order Card */}
             <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <View className="bg-gray-50 p-2 rounded-md mb-2 border border-gray-300">
-                    <Text className='text-center'>
+                   
+                   <View className='flex-row justify-between mb-1'>
+                    <Text className=''>
                         Order ID: <Text className="font-semibold text-xs">{order._id}</Text>
                     </Text>
+                    <Text className='text-xs'>{order.status}</Text>
+                   </View>
 
                     <View className="flex flex-row justify-between">
                         <View>
@@ -86,18 +98,18 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                                 <Text className="text-xs">{order.restaurantId.name}</Text>
                             </View>
                             <View className="flex-row gap-2 items-center">
-                                <MaterialIcons
-                                    name="circle"
+                                <FontAwesome
+                                    name="money"
                                     size={15}
-                                    color={order.status === "Pending" ? "#0f0" : "#000"}
+                                    color={"#000"}
                                 />
-                                <Text className="text-xs">{order.status}</Text>
+                                <Text className="text-xs">{order.totalAmount} ETB</Text>
                             </View>
                         </View>
 
                         <View>
-                            <Text className="text-xs">Date: {date}</Text>
-                            <Text className="text-xs">Time: {time}</Text>
+                            <Text className="text-xs text-right">Date: {date}</Text>
+                            <Text className="text-xs text-right">Time: {time}</Text>
                         </View>
                     </View>
                 </View>
@@ -121,8 +133,9 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                                 backgroundColor="white"
                             />
                         </View>
-                        <Text className="text-md text-gray-600 mb-4">Status : {order.status}</Text>
-                        <Text className="text-md text-gray-600 mb-2">Delivery Address: {order.shippingAddress.address}</Text>
+                        <Text className="text-xs text-gray-600 mb-2">Status : {order.status}</Text>
+                        <Text className="text-xs text-gray-600 mb-2">Delivery Address: {order.shippingAddress.address}</Text>
+                        <Text className="text-xs text-gray-600 mb-2">Time Stamp : {date} {time}</Text>
 
 
                         <Text className="text-lg text-gray-800 font-semibold mt-5 mb-3">Items:</Text>
@@ -130,11 +143,11 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                             data={order.items}
                             renderItem={renderItem}
                             keyExtractor={(item) => item._id}
-                            className='h-auto max-h-56'
+                            className='h-auto max-h-44'
                         />
 
                         <View className="border-t border-gray-200 mt-4 pt-4">
-                            <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {longestPreparationTime} minutes</Text>
+                            <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {order.eta} minutes</Text>
                             <Text className="text-md text-gray-600 mb-2">Total Price: ETB {order.totalAmount}</Text>
                         </View>
                         <View className="mt-6  gap-2 flex-row justify-between">

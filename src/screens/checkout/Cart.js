@@ -54,7 +54,7 @@ const Cart = ({ navigation }) => {
 
 
             <View>
-                <Text className='text-center text-xl mb-3'>Total Price : {getTotalPrice()} ETB</Text>
+                <Text className='text-center text-xl mb-3'>Total Price : {getTotalPrice().toFixed(2)} ETB</Text>
                 <TouchableOpacity onPress={()=> navigation.navigate('deliveryaddress')}>
                     <Text className='text-center w-40 mx-auto p-1 bg-green-600 text-white text-lg rounded-lg font-bold'>Continue </Text>
                 </TouchableOpacity>

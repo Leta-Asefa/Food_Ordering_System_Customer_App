@@ -13,9 +13,6 @@ const ConfirmOrder = ({ navigation, route }) => {
 
     const { authUser } = useAuthUserContext();
     const { cart, selectedRestaurant, clearCart, setSelectedRestaurant } = useCartContext()
-    const { longitude, latitude, address } = useLocationContext();
-    const [longestPreparationTime, setLongestPreparationTime] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
 
 
     if (!deliveryaddress) {
@@ -36,11 +33,8 @@ const ConfirmOrder = ({ navigation, route }) => {
         const registerAnOrder = async () => {
             setIsLoading(true); // Start loading
             let longestPreparationTime = 0
-            let totalPrice = 0
             const cartItems = cart.map((i) => {
                 longestPreparationTime = Math.max(i.item.preparationTime, longestPreparationTime);
-                totalPrice += i.item.price * i.quantity;
-
                 return {
                     item: i.item._id,
                     quantity: i.quantity,
@@ -48,13 +42,15 @@ const ConfirmOrder = ({ navigation, route }) => {
             }
             );
 
-            setTotalPrice(totalPrice)
-            setLongestPreparationTime(longestPreparationTime + Number(selectedRestaurant.durationValue))
+            const eta=longestPreparationTime+ Number(selectedRestaurant.durationValue)
+            console.log(eta, longestPreparationTime,selectedRestaurant.durationValue)
+            console.log(selectedRestaurant)
             const formData = {
                 items: cartItems,
                 shippingAddress: deliveryaddress,
                 userId: authUser.user._id,
-                restaurantId: selectedRestaurant.restaurant._id
+                restaurantId: selectedRestaurant.restaurant._id,
+                eta
             };
 
             try {
@@ -84,7 +80,7 @@ const ConfirmOrder = ({ navigation, route }) => {
     const handlePayment = async (method) => {
         if (method === "payNow") {
 
-            const formData = { amount: totalPrice, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
+            const formData = { amount: orderResponse.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
             const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -104,14 +100,22 @@ const ConfirmOrder = ({ navigation, route }) => {
         }
 
     }
-    const handleCancel = (method) => {
+    const handleCancel =async () => {
+
+        const response = await axios.post(`http://localhost:4000/order/${orderResponse._id}/status`, {status:'Cancelled'}, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
+
 
     }
 
 
 
     const renderItem = ({ item }) => (
-        <View className="flex-row justify-between py-3 px-4 bg-white shadow-md rounded-lg mb-2">
+        <View className="flex-row justify-between py-2 px-4 bg-white shadow-md rounded-lg mb-0">
             <Text className="text-sm font-medium text-gray-700">{item.item.name}  ({item.quantity}X)</Text>
             <Text className="text-sm text-gray-700 font-semibold">${(item.item.price * item.quantity).toFixed(2)}</Text>
         </View>
@@ -123,7 +127,11 @@ const ConfirmOrder = ({ navigation, route }) => {
         <View className="flex-1 p-4 bg-gray-50">
             <Text className="text-2xl text-center font-bold text-gray-800 mb-4">Order Confirmation</Text>
 
-            {orderResponse?.message ? (
+{
+isLoading? ( <Text>Loading ...</Text>):(
+
+
+            orderResponse?.message ? (
                 <View className="bg-white p-5 rounded-lg shadow-lg">
                     <Text className="text-xs text-gray-800 font-semibold mb-2">Order ID: {orderResponse?.orderId}</Text>
                     <View className='flex flex-row justify-center'>
@@ -134,22 +142,22 @@ const ConfirmOrder = ({ navigation, route }) => {
                             backgroundColor="white"
                         />
                     </View>
-                    <Text className="text-md text-gray-600 mb-4">Status : {orderResponse?.orderStatus}</Text>
-                    <Text className="text-md text-gray-600 mb-2">Customer: {authUser.user.username}</Text>
-                    <Text className="text-md text-gray-600 mb-2">Delivery Address: {deliveryaddress?.address}</Text>
+                    <Text className="text-xs text-gray-600 mb-2">Status : {orderResponse?.orderStatus}</Text>
+                    <Text className="text-xs text-gray-600 mb-2">Customer: {authUser.user.username}</Text>
+                    <Text className="text-xs text-gray-600 mb-2">Delivery Address: {deliveryaddress?.address}</Text>
 
 
-                    <Text className="text-lg text-gray-800 font-semibold mt-5 mb-3">Items:</Text>
+                    <Text className="text-lg text-gray-800 font-semibold mt-3 mb-1">Items:</Text>
                     <FlatList
                         data={cart}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.item._id.toString()}
-                        className='h-auto max-h-56'
+                        className='h-auto max-h-44'
                     />
 
                     <View className="border-t border-gray-200 mt-4 pt-4">
-                        <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {longestPreparationTime} minutes</Text>
-                        <Text className="text-md text-gray-600 mb-2">Total Price: ${totalPrice.toFixed(2)}</Text>
+                        <Text className="text-md text-gray-600 mb-2">Estimated Delivery Time: {orderResponse?.eta} minutes</Text>
+                        <Text className="text-md text-gray-600 mb-2">Total Price: ETB {orderResponse?.totalAmount}</Text>
                     </View>
                     <View className="mt-6 flex-row justify-between">
                         <TouchableOpacity
@@ -178,7 +186,10 @@ const ConfirmOrder = ({ navigation, route }) => {
                 </View>
             ) : (
                 <Text className="text-red-600 text-center">{orderResponse?.error || "Failed to confirm order"}</Text>
-            )}
+            ) )
+}
+
+
         </View>
     );
 };
