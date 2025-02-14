@@ -4,6 +4,7 @@ import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import axios from "axios";
 import OrderHistoryCard from "./OrderHistoryCard";
 import OrderHistoryHeader from "./OrderHistoryHeader";
+import { useSocketContext } from "../../context_apis/SocketContext";
 
 
 const OrderHistory = ({ navigation }) => {
@@ -11,6 +12,20 @@ const OrderHistory = ({ navigation }) => {
     const [displayedOrderGroup, setDisplayedOrderGroup] = useState({})
     const { authUser } = useAuthUserContext();
     const [isLoading, setIsLoading] = useState(false);
+    const { socket } = useSocketContext()
+
+    useEffect(() => {
+        if (socket) {
+
+            socket.on('order_history_updated', (new_order_history) =>
+                {
+                    console.log("socket io data recieved ", new_order_history)
+                    setOrders(new_order_history)
+                } 
+            )
+            return () => socket.off('order_history_updated')
+        }
+    }, [socket])
 
 
     useEffect(() => {
@@ -67,8 +82,8 @@ const OrderHistory = ({ navigation }) => {
 
 
     return (
-        <View className='flex-1 p-2 bg-white'>
-            <Text className='text-center py-3 text-xl font-bold'>Your order history</Text>
+        <View className='flex-1 p-2  bg-white'>
+            <Text className='text-center py-1 text-xl font-bold text-white bg-orange-500 mb-5'>Your order history</Text>
 
             <OrderHistoryHeader handleHeaderPress={handleHeaderPress} status={displayedOrderGroup.status} />
 

@@ -58,7 +58,6 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
 
 
     useEffect(() => {
-        console.log("use effect is called ")
 
         const fetch = async () => {
             let longestPreparationTime = 0
@@ -72,7 +71,6 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                 },
                 withCredentials: true,
             });
-            console.log('Response ETA ', response)
 
             setLongestPreparationTime(longestPreparationTime + Number(response.data.durationValue))
 
