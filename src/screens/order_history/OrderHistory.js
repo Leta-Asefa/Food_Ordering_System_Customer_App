@@ -12,14 +12,13 @@ const OrderHistory = ({ navigation }) => {
     const [displayedOrderGroup, setDisplayedOrderGroup] = useState({})
     const { authUser } = useAuthUserContext();
     const [isLoading, setIsLoading] = useState(false);
-    const { socket } = useSocketContext()
+    const socket= useSocketContext()
 
     useEffect(() => {
         if (socket) {
 
             socket.on('order_history_updated', (new_order_history) =>
                 {
-                    console.log("socket io data recieved ", new_order_history)
                     setOrders(new_order_history)
                 } 
             )
@@ -27,6 +26,9 @@ const OrderHistory = ({ navigation }) => {
         }
     }, [socket])
 
+    useEffect(()=>{
+        handleHeaderPress(displayedOrderGroup.status)
+    },[orders])
 
     useEffect(() => {
         console.log("in order history use effect");

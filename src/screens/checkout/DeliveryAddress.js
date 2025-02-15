@@ -6,9 +6,9 @@ import axios from "axios";
 import Entypo from 'react-native-vector-icons/Entypo'
 const DeliveryAddress = ({ navigation }) => {
 
-    const { address } = useLocationContext()
-    const [deliveryaddress, setDeliveryAddress] = useState('')
-    const [query, setQuery] = useState(address+ " ( current location )");
+    const { latitude,longitude,address } = useLocationContext()
+    const [deliveryaddress, setDeliveryAddress] = useState({address,latitude,longitude})
+    const [query, setQuery] = useState(address);
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const API_KEY = process.env.HERE_MAPS_API_KEY || 'vNw_RmL_TFApW6kTtIGUNItPw1CCdjoA-l0Qn_1Crtk';
