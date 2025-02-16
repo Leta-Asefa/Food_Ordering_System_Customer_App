@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FlatList, Image, Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { useLocationContext } from "../../context_apis/Location";
 import axios from "axios";
 import Entypo from 'react-native-vector-icons/Entypo'

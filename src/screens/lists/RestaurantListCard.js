@@ -5,6 +5,8 @@ import rating from '../../assets/rating.png'
 import distanceImage from '../../assets/distance.png'
 import call from '../../assets/call.png'
 import { useCartContext } from "../../context_apis/CartContext";
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
 
 const RestaurantListCard = ({ navigation, item }) => {
 
@@ -40,15 +42,15 @@ const RestaurantListCard = ({ navigation, item }) => {
     return (
 
 
-        <View className='flex flex-row justify-between items-center mx-2 my-1 py-1 px-2  bg-gray-200 rounded-xl'>
+        <View className='flex flex-row justify-between items-center mx-2 my-1   bg-gray-200 rounded-xl'>
 
             <Image
                 source={{ uri: String(item.restaurant.image) }}
                 className='w-24 h-24 rounded-lg'
                 resizeMode="cover"
             />
-            <View>
-                <Text className='text-sm font-bold w-40' numberOfLines={1} >{item.restaurant.name}</Text>
+            <View className='ml-5'>
+                <Text className='text-sm font-bold w-36' numberOfLines={1} >{item.restaurant.name}</Text>
                 <View >
                     <Text className='text-green-600 font-bold text-xs'>{item.restaurant.opened ? "opened" : "closed"}</Text>
                     <View className='flex flex-row items-center'>
@@ -65,17 +67,22 @@ const RestaurantListCard = ({ navigation, item }) => {
                     <Text className='text-xs'>{item.duration}</Text>
                 </View>
             </View>
-            <View className='space-y-2'>
-                <Text className='text-white font-bold text-center rounded-lg bg-red-600 px-1 text-xs'>Order here</Text>
-                <TouchableOpacity onPress={() => handleCall(item.restaurant.contact)}>
-                    <Text className='text-white font-bold text-center rounded-lg bg-green-600 px-1 text-xs'>Call</Text>
+
+            <View className='space-y-2 mr-8'>
+                <TouchableOpacity onPress={() => handleCall(item.restaurant.contact)} className='bg-green-600  px-2 py-1.5 flex-row  items-center  rounded-lg'>
+                    <Ionicons name="call" size={15} color="#fff" />
+
+                    <Text className='text-white font-bold text-center px-2'>Call</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                     setSelectedRestaurant(item)
-                    navigation.navigate('restaurant_detail', { restaurant: item.restaurant,distance:item.distance,duration:item.duration })
-                }}>
+                    navigation.navigate('restaurant_detail', { restaurant: item.restaurant, distance: item.distance, duration: item.duration })
+                }}
+                
+                className='bg-red-600  px-2 py-1.5 flex-row justify-between items-center  rounded-lg'>
 
-                    <Text className='text-white font-bold text-center rounded-lg bg-blue-600 px-1 text-xs'>About</Text>
+                    <Ionicons name="list" size={15} color="#fff" />
+                    <Text className='text-white font-bold text-center px-1.5'>Order </Text>
                 </TouchableOpacity>
 
             </View>
