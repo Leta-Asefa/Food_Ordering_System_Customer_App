@@ -9,7 +9,6 @@ import FoodListCard from './HomeFoodListCard';
 import RestaurantDetails from './RestaurantDetails';
 import HomeFoodListCard from './HomeFoodListCard';
 import axios from 'axios';
-import Geolocation from 'react-native-geolocation-service';
 import { useLocationContext } from '../../context_apis/Location';
 
 

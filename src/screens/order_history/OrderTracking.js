@@ -2,11 +2,25 @@ import { useEffect, useState } from "react";
 import { Image, Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import RouteMap from "./MapRoute";
+import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+
 const OrderTracking = ({ navigation, route }) => {
 
     const [order, setOrder] = useState(route?.params?.order || {});
     const [routeData, setRouteData] = useState({});
+    const routeCoordinates = [
+        { latitude: 9.0360, longitude: 38.7612 }, // Start: Gurd Shola
+        { latitude: 9.0349, longitude: 38.7639 }, // Right turn near Century Mall
+        { latitude: 9.0388, longitude: 38.7668 }, // Slight left turn towards CMC road
+        { latitude: 9.0400, longitude: 38.7790 }, // Right turn near CMC Michael Church
+        { latitude: 9.0439, longitude: 38.7728 }, // Left curve before Summit Avenue
+        { latitude: 9.0435, longitude: 38.7762 }, // Zigzag path near Ayat
+        { latitude: 9.0486, longitude: 38.7807 }, // Destination: Summit
+    ];
+    
+    const userLocation = { latitude: 9.0360, longitude: 38.7612 }; // Start: Gurd Shola
+    const destination = { latitude: 9.0486, longitude: 38.7807 }; // Destination: Summit
+    
 
     if (!order) {
         return (
@@ -26,7 +40,7 @@ const OrderTracking = ({ navigation, route }) => {
                 withCredentials: true,
             });
 
-            if(response.data.routes.length>0){
+            if (response.data.routes.length > 0) {
                 setRouteData(response.data)
             }
 
@@ -43,9 +57,26 @@ const OrderTracking = ({ navigation, route }) => {
     return (
         <View>
             <Text className='font-bold text-center text-xl'>Status : <Text className='text-green-600 '>{order.status}</Text></Text>
-           
-            {/* <RouteMap routeData={routeData} /> */}
-        
+
+            <View className='border-y-2 border-gray-300'>
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    mapType="standard"
+                    initialRegion={{
+                        latitude: userLocation.latitude,
+                        longitude: userLocation.longitude,
+                        latitudeDelta: 0.02,
+                        longitudeDelta: 0.02,
+                    }}
+                    className='w-full h-96'
+                >
+                    <Marker coordinate={userLocation} title="My Location" />
+                    <Marker coordinate={destination} title="Destination" />
+                    {routeCoordinates.length > 0 && (
+                        <Polyline coordinates={routeCoordinates} strokeWidth={5} strokeColor="blue" />
+                    )}
+                </MapView>
+            </View>
             <View className='rounded-lg'>
 
                 <View className='flex flex-row  space-x-3 px-5 py-1 mt-2'>
