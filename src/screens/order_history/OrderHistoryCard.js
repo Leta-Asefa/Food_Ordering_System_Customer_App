@@ -121,6 +121,13 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                     </View>
                 </View>
             </TouchableOpacity>
+            {
+
+                order.status === 'Processing' ? (
+                    <TouchableOpacity onPress={() => navigation.navigate('order_tracking', { order })}>
+                        <Text className='bg-red-400 text-center text-white font-semibold rounded-lg p-1.5'>Track Order</Text>
+                    </TouchableOpacity>) : ('')
+            }
 
             {/* Order Details Modal------------------------------------------------------------------------- */}
             <Modal

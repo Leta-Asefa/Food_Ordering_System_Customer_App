@@ -9,10 +9,10 @@ import RestaurantDetails from './screens/lists/RestaurantDetails';
 import Cart from './screens/checkout/Cart';
 import DeliveryAddress from './screens/checkout/DeliveryAddress';
 import Payment from './screens/checkout/Payment';
-import OrderTracking from './screens/checkout/OrderTracking';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ConfirmOrder from "./screens/checkout/ConfirmOrder";
 import OrderHistory from "./screens/order_history/OrderHistory";
+import OrderTracking from "./screens/order_history/OrderTracking";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
