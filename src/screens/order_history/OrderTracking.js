@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, Keyboard, ScrollView, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Linking, Text, TouchableOpacity, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -52,6 +52,23 @@ const OrderTracking = ({ navigation, route }) => {
 
     }, [order])
 
+      const handleCall = async (phoneNumber) => {
+            if (phoneNumber) {
+                const phoneUrl = `tel:${phoneNumber}`;
+    
+                const supported = await Linking.canOpenURL(phoneUrl);
+                if (supported) {
+                    await Linking.openURL(phoneUrl);
+                } else {
+                    Alert.alert('Error', 'Unable to open the dialer');
+                }
+    
+            } else {
+                Alert.alert('Error', 'No phone number provided');
+            }
+        }
+    
+
 
 
     return (
@@ -91,16 +108,19 @@ const OrderTracking = ({ navigation, route }) => {
 
                 <View className='flex flex-row justify-between items-center space-x-2 px-3 py-1 mx-1 mt-2 rounded-lg'>
 
-                    <Image source={require('../../assets/profilepic.jpg')} className='w-16 h-16 rounded-lg' />
-
+                <Image
+                source={{ uri: String(order.deliveryPersonId.image) }}
+                className='w-16 h-16 rounded-lg'
+                resizeMode="cover"
+            />
                     <View className='w-40'>
-                        <Text className='font-bold'>Solomon Burhan</Text>
-                        <Text className='text-xs'>Rating : 5</Text>
-                        <Text className='text-xs'>white Bycycle with red tyers</Text>
+                        <Text className='font-bold'>{order.deliveryPersonId.username}</Text>
+                        <Text className='text-xs'>Rating : {order.deliveryPersonId.rating}</Text>
+                        <Text className='text-xs'>{order.deliveryPersonId.vehicle}</Text>
                     </View>
 
                     <View>
-                        <TouchableOpacity className='14'>
+                        <TouchableOpacity className='14' onPress={()=>handleCall(order.deliveryPersonId.phoneNumber)}>
                             <FontAwesome name="phone" size={40} color="#000" />
                         </TouchableOpacity>
                     </View>

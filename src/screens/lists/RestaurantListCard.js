@@ -54,17 +54,17 @@ const RestaurantListCard = ({ navigation, item }) => {
                 <View >
                     <Text className='text-green-600 font-bold text-xs'>{item.restaurant.opened ? "opened" : "closed"}</Text>
                     <View className='flex flex-row items-center'>
-                        <Image source={distanceImage} className='w-4 h-4 mr-1 rounded-lg' />
-                        <Text className='text-xs'>{item.distance}</Text>
+                        <Ionicons name="location" size={15} color="#000" />
+                        <Text className='text-xs pl-1'>{item.distance}</Text>
                     </View>
                     <View className='flex flex-row items-center'>
-                        <Image source={rating} className='w-4 h-4 mr-1 rounded-lg' />
-                        <Text className='text-xs'>Rating : {item.restaurant.rating}</Text>
+                        <Ionicons name="star" size={15} color="#FFA500" />
+                        <Text className='text-xs pl-1'>{item.restaurant.rating}</Text>
                     </View>
                 </View>
                 <View className='flex flex-row items-center'>
-                    <Image source={time} className='w-4 h-4 mr-1 rounded-lg' />
-                    <Text className='text-xs'>{item.duration}</Text>
+                        <Ionicons name="time" size={15} color="#0096FF" />
+                    <Text className='text-xs pl-1'>{item.duration}</Text>
                 </View>
             </View>
 
@@ -78,8 +78,8 @@ const RestaurantListCard = ({ navigation, item }) => {
                     setSelectedRestaurant(item)
                     navigation.navigate('restaurant_detail', { restaurant: item.restaurant, distance: item.distance, duration: item.duration })
                 }}
-                
-                className='bg-red-600  px-2 py-1.5 flex-row justify-between items-center  rounded-lg'>
+
+                    className='bg-red-600  px-2 py-1.5 flex-row justify-between items-center  rounded-lg'>
 
                     <Ionicons name="list" size={15} color="#fff" />
                     <Text className='text-white font-bold text-center px-1.5'>Order </Text>
