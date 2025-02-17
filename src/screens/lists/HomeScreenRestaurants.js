@@ -127,7 +127,7 @@ export default function Restaurants({ navigation }) {
                     <TabBar
                         {...props}
                         indicatorStyle={styles.indicator}
-                        style={styles.tabBar}
+                        style={styles.tabBar}  
                         labelStyle={styles.label}
                         activeColor='#000'
                         inactiveColor='#666'
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#eee',
         borderRadius: 5,
         marginHorizontal: 10,
+        elevation:10
 
     },
     indicator: {
