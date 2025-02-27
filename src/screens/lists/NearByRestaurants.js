@@ -3,7 +3,6 @@ import RestaurantListCard from "./RestaurantListCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocationContext } from "../../context_apis/Location";
-import Spinner from "react-native-spinkit";
 
 const NearByRestaurants = ({ navigation }) => {
     const [restaurants, setRestaurants] = useState([]);
@@ -44,12 +43,6 @@ const NearByRestaurants = ({ navigation }) => {
         <>
             {isLoading ? (
                 <View className="flex-1 justify-center items-center bg-gray-100">
-                    <Spinner
-                        isVisible={true}
-                        size={100}
-                        type={'Wave'} // Choose from a variety of spinner types
-                        color="#000"
-                    />
                     <Text className="mt-4 text-lg font-semibold text-gray-700">
                         Fetching Restaurants...
                     </Text>

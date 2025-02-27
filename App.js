@@ -11,15 +11,15 @@ const App = () => {
   const Tab = createBottomTabNavigator();
 
   return (
+    <AuthUserContextProvider>
     <SocketContextProvider>
-      <AuthUserContextProvider>
         <LocationContextProvider>
           <CartProvider>
             <Navigation />
           </CartProvider>
         </LocationContextProvider>
-      </AuthUserContextProvider>
     </SocketContextProvider>
+      </AuthUserContextProvider>
   );
 };
 
