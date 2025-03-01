@@ -166,16 +166,16 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
                         </View>
 
 
-                        <View className="mt-6  gap-2 flex-row justify-between">
+                        <View className="mt-6  gap-2 flex-row justify-center">
                             <TouchableOpacity
-                                className="bg-blue-600 px-3 py-2 rounded-lg shadow-md"
+                                className={`bg-blue-600 px-3 py-2 rounded-lg shadow-md ${order.status==="Pending"?'visible':'hidden'}`}
                                 onPress={() => handlePayment("payNow")}
                             >
                                 <Text className="text-white text-center font-semibold">Pay Now</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
-                                className="bg-gray-300 px-3 py-2 rounded-lg shadow-md"
+                                className={`bg-gray-300 px-3 py-2 rounded-lg shadow-md ${order.status==='Pending'?'visible':'hidden'} `}
                                 onPress={() => handlePayment("payLater")}
                             >
                                 <Text className="text-gray-800 text-center font-semibold">Pay Later</Text>
@@ -183,7 +183,7 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
 
 
                             <TouchableOpacity
-                                className="bg-red-600  px-3 py-2 rounded-lg shadow-md"
+                                className={`bg-red-600  px-3 py-2 rounded-lg shadow-md ${order.status==="Processing"?'visible':'hidden'}`}
                                 onPress={() => handleCancel("payLater")}
                             >
                                 <Text className="text-white text-center font-semibold">Cancel Order</Text>

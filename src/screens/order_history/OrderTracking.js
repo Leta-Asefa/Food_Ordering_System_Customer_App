@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image, Linking, Text, TouchableOpacity, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -7,21 +7,30 @@ import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const OrderTracking = ({ navigation, route }) => {
 
+    const mapRef = useRef(null);
     const [order, setOrder] = useState(route?.params?.order || {});
     const [routeData, setRouteData] = useState({});
-    const routeCoordinates = [
-        { latitude: 9.0360, longitude: 38.7612 }, // Start: Gurd Shola
-        { latitude: 9.0349, longitude: 38.7639 }, // Right turn near Century Mall
-        { latitude: 9.0388, longitude: 38.7668 }, // Slight left turn towards CMC road
-        { latitude: 9.0400, longitude: 38.7790 }, // Right turn near CMC Michael Church
-        { latitude: 9.0439, longitude: 38.7728 }, // Left curve before Summit Avenue
-        { latitude: 9.0435, longitude: 38.7762 }, // Zigzag path near Ayat
-        { latitude: 9.0486, longitude: 38.7807 }, // Destination: Summit
-    ];
-
-    const userLocation = { latitude: 9.0360, longitude: 38.7612 }; // Start: Gurd Shola
-    const destination = { latitude: 9.0486, longitude: 38.7807 }; // Destination: Summit
-
+    const [routeCoordinates, setRouteCoordinates] = useState([
+        { latitude: 9.187595, longitude: 38.763946 }, // Start
+        { latitude: 9.186800, longitude: 38.764500 },
+        { latitude: 9.185900, longitude: 38.765000 },
+        { latitude: 9.185000, longitude: 38.765700 }, // Turn right
+        { latitude: 9.184500, longitude: 38.764900 },
+        { latitude: 9.183900, longitude: 38.764300 }, // Turn left
+        { latitude: 9.183000, longitude: 38.763800 },
+        { latitude: 9.182200, longitude: 38.763600 }, // Slight right
+        { latitude: 9.181400, longitude: 38.763900 },
+        { latitude: 9.180800, longitude: 38.764400 }, // Turn left
+        { latitude: 9.180200, longitude: 38.765000 },
+        { latitude: 9.179500, longitude: 38.765700 }, // Turn right
+        { latitude: 9.178800, longitude: 38.766200 },
+        { latitude: 9.178200, longitude: 38.766700 },
+        { latitude: 9.177600, longitude: 38.767300 } // Destination
+    ]);
+    
+    const userLocation = { latitude: 9.187595, longitude: 38.763946 }; // Start
+    const destination = { latitude: 9.177600, longitude: 38.767300 }; // End
+    
 
     if (!order) {
         return (
@@ -30,6 +39,17 @@ const OrderTracking = ({ navigation, route }) => {
             </View>
         );
     }
+
+    useEffect(() => {
+        if (mapRef.current && routeCoordinates.length > 0) {
+            console.log("Fitting to coordinates:", routeCoordinates);
+            mapRef.current.fitToCoordinates(routeCoordinates, {
+                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                animated: true,
+            });
+        }
+    }, [routeCoordinates]);
+
 
     useEffect(() => {
         async function fetch() {
@@ -77,7 +97,8 @@ const OrderTracking = ({ navigation, route }) => {
             <Text className='font-bold text-center text-xl'>Status : <Text className='text-green-600 '>{order.status}</Text></Text>
 
             <View className='border-y-2 border-gray-300'>
-                <MapView
+            <MapView
+                    ref={(ref) => (mapRef.current = ref)}
                     provider={PROVIDER_GOOGLE}
                     mapType="standard"
                     initialRegion={{
@@ -86,7 +107,15 @@ const OrderTracking = ({ navigation, route }) => {
                         latitudeDelta: 0.02,
                         longitudeDelta: 0.02,
                     }}
-                    className='w-full h-96'
+                    onMapReady={() => {
+                        if (mapRef.current && routeCoordinates.length > 0) {
+                            mapRef.current.fitToCoordinates(routeCoordinates, {
+                                edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+                                animated: true,
+                            });
+                        }
+                    }}
+                    className="w-full h-96"
                 >
                     <Marker coordinate={userLocation} title="My Location" />
                     <Marker coordinate={destination} title="Destination" />
