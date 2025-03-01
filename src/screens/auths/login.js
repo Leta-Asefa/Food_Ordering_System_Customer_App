@@ -51,13 +51,14 @@ export default function Login({ navigation }) {
       });
 
 
-      if (response.data.user._id) {
+      if (response.data.user?._id) {
         setAuthUser(response.data)
         navigation.navigate('bottomTabs')
       } else {
+        Alert.alert("please check your username and password again !")
         console.log('response got an error')
       }
-
+      
     }
     else {
 
