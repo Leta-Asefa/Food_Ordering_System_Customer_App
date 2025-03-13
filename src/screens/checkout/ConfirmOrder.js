@@ -80,7 +80,7 @@ const ConfirmOrder = ({ navigation, route }) => {
     const handlePayment = async (method) => {
         if (method === "payNow") {
 
-            const formData = { amount: orderResponse.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
+            const formData = { amount: orderResponse.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber,subAccountId:selectedRestaurant.restaurant.subAccountId }
             const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Text, Switch, TouchableOpacity, TextInput, FlatList } from "react-native";
+import { View, Text, Switch, TouchableOpacity, TextInput, FlatList, ScrollView } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -102,19 +102,19 @@ const CommonDeliveryLocations = () => {
 
             {/* Search Results List */}
             {searchResults.length > 0 && (
-                <FlatList
-                    data={searchResults}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            className="p-2 border-b border-gray-300"
-                            onPress={() => handleSelectLocation(selectedLocationId, item)}
-                        >
-                            <Text className="text-gray-700">{item.title}</Text>
-                        </TouchableOpacity>
-                    )}
-                    disableScrollViewPanResponder={true}
-                />
+               <ScrollView>
+                {
+                    searchResults.map((item,index)=>{
+                        return  <TouchableOpacity
+                        key={item.title+index}
+                        className="p-2 border-b border-gray-300"
+                        onPress={() => handleSelectLocation(selectedLocationId, item)}
+                    >
+                        <Text className="text-gray-700">{item.title}</Text>
+                    </TouchableOpacity>
+                    })
+                }
+               </ScrollView>
             )}
 
             {/* Map Section */}

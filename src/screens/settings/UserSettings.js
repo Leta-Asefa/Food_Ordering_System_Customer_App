@@ -14,7 +14,7 @@ const SettingsScreen = () => {
 
   return (
     <View className="flex-1 ">
-      <ScrollView>
+      <>
 
       {settingsOptions.map((item, index) => {
         const isActive = activeIndex === index;
@@ -33,7 +33,7 @@ const SettingsScreen = () => {
         );
       })}
 
-      </ScrollView>
+      </>
     </View>
   );
 };
