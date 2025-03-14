@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Text, View, ActivityIndicator, FlatList, TouchableOpacity } from "react-native";
+import { Text, View, ActivityIndicator, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import { CartContext, useCartContext } from "../../context_apis/CartContext";
 import { useLocationContext } from "../../context_apis/Location";
 import QRCode from "react-native-qrcode-svg";
+import { useSocketContext } from "../../context_apis/SocketContext";
 
 const ConfirmOrder = ({ navigation, route }) => {
     const [deliveryaddress, setDeliveryAddress] = useState(route?.params?.deliveryaddress || {});
@@ -13,6 +14,20 @@ const ConfirmOrder = ({ navigation, route }) => {
 
     const { authUser } = useAuthUserContext();
     const { cart, selectedRestaurant, clearCart, setSelectedRestaurant } = useCartContext()
+ const socket= useSocketContext()
+
+    useEffect(() => {
+        if (socket) {
+
+            socket.on('order_status_update', (message) =>
+                {
+                    Alert.alert(message.message,message.message)
+                } 
+            )
+            return () => socket.off('order_status_update')
+        }
+    }, [socket])
+
 
 
     if (!deliveryaddress) {
@@ -80,7 +95,7 @@ const ConfirmOrder = ({ navigation, route }) => {
     const handlePayment = async (method) => {
         if (method === "payNow") {
 
-            const formData = { amount: orderResponse.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber,subAccountId:selectedRestaurant.restaurant.subAccountId }
+            const formData = { amount: orderResponse.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber,subAccountId:selectedRestaurant.restaurant.subAccountId,orderId:orderResponse.orderId,userId:authUser.user._id }
             const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,7 +103,7 @@ const ConfirmOrder = ({ navigation, route }) => {
                 withCredentials: true,
             });
 
-
+console.log(response.data)
             navigation.navigate('payment', { checkouturl: response.data.checkout_url })
 
         }
