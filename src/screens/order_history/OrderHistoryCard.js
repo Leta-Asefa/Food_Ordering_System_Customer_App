@@ -15,7 +15,7 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
     const handlePayment = async (method) => {
         if (method === "payNow") {
 
-            const formData = { amount: order.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber }
+            const formData = { amount: order.totalAmount, firstName: authUser.user.username, phoneNumber: authUser.user.phoneNumber,subAccountId:order.restaurantId.subAccountId,orderId:order._id,userId:authUser.user._id }
             const response = await axios.post(`http://localhost:4000/payment/getOrderPaymentPage`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
