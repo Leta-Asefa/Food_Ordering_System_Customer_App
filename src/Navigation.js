@@ -81,6 +81,7 @@ const TabNavigation = () => {
             <Tab.Screen name='restaurants_list' component={RestaurantsStackNavigator} />
             <Tab.Screen name='order_history_stack' component={OrderHistoryStack} />
             <Tab.Screen name='settings' component={UserSettings} />
+            <Tab.Screen name='address' component={DeliveryAddress} />
 
         </Tab.Navigator>
 

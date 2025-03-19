@@ -27,7 +27,6 @@ export const FCMProvider = ({ children }) => {
     try {
       const token = await messaging().getToken(); // Ensure using getApp()
       if (token) {
-        console.log("FCM Token:", token);
         setFcmToken(token);
 
         // Send token to your backend

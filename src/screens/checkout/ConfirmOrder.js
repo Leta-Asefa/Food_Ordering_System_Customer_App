@@ -167,7 +167,7 @@ isLoading? ( <Text>Loading ...</Text>):(
                         data={cart}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.item._id.toString()}
-                        className='h-auto max-h-44'
+                        className='h-36'
                     />
 
                     <View className="border-t border-gray-200 mt-4 pt-4">

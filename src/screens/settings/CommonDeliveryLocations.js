@@ -26,7 +26,6 @@ const locations = [
 const HERE_API_KEY =
   process.env.HERE_MAPS_API_KEY ||
   'vNw_RmL_TFApW6kTtIGUNItPw1CCdjoA-l0Qn_1Crtk';
-const BACKEND_URL = 'http://localhost:4000/delivery/locations'; // Change this to your actual backend URL
 
 const CommonDeliveryLocations = () => {
   const [editing, setEditing] = useState(false);
@@ -257,7 +256,7 @@ const CommonDeliveryLocations = () => {
               <Icon
                 name={loc.icon}
                 size={30}
-                color={location ? 'blue' : 'gray'}
+                color={location ? 'orange' : 'gray'}
               />
               <Text className="text-sm mt-1 font-medium">{loc.name}</Text>
               <Text className="text-xs text-gray-500" numberOfLines={2}>
