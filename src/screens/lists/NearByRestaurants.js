@@ -9,6 +9,16 @@ const NearByRestaurants = ({ navigation }) => {
     const { latitude, longitude } = useLocationContext();
     const [isLoading, setIsLoading] = useState(true);
 
+    useEffect(() => {
+        // This code runs when the component mounts
+        console.log('Nearyby Component Mounted');
+    
+        // Cleanup function runs when the component is unmounted
+        return () => {
+            console.log(navigation);
+          console.log('Nearby Component Unmounted');
+        };
+      }, []); 
 
     async function getRestaurants() {
         try {

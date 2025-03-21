@@ -15,7 +15,8 @@ const PopularRestaurants = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const {latitude, longitude} = useLocationContext();
   const [isLoading, setIsLoading] = useState(true);
-  const {popularRestaurants, setPopularRestaurants} =useRestaurantsListContext();
+  const {popularRestaurants, setPopularRestaurants} =
+    useRestaurantsListContext();
 
   async function getRestaurants() {
     try {

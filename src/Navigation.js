@@ -24,22 +24,23 @@ const Tab = createBottomTabNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator 
+      screenOptions={{
+        headerShown: false,
+      }}
+      >
         <Stack.Screen
           name="login"
           component={Login}
-          options={{headerShown: false}}
         />
         <Stack.Screen
           name="signup"
           component={Signup}
-          options={{headerShown: false}}
         />
         <Stack.Screen name="payment" component={Payment} />
         <Stack.Screen
           name="bottomTabs"
           component={TabNavigation}
-          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -89,7 +90,7 @@ const TabNavigation = () => {
 const RestaurantsStackNavigator = () => {
   return (
     <RestaurantsListProvider>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator screenOptions={{headerShown: false,}}>
         <Stack.Screen name="restaurants" component={Restaurants} />
         <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
         <Stack.Screen name="cart" component={Cart} />

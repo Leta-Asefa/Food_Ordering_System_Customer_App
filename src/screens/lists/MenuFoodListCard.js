@@ -1,14 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Image, Modal, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FoodDetails from "./FoodDetails";
-import { CartContext, useCartContext } from "../../context_apis/CartContext";
+import { useCartContext } from "../../context_apis/CartContext";
 
 const MenuFoodListCard = ({ item }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const { addToCart, cart ,isOnCart} = useCartContext()
-    const cleaned = null
+    const { addToCart, isOnCart} = useCartContext()
 
     if (!item) {
         return (
