@@ -91,8 +91,9 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
     return (
         <>
             {/* Order Card */}
+            <View className='mb-2'> 
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <View className="bg-gray-300 px-8 py-2 rounded-md mb-2 border border-gray-300">
+                <View className="bg-gray-300 px-8 py-2 rounded-b-none rounded-t-md mb-0 border border-gray-300">
 
                     <Text className='text-center'>
                         Order Id: <Text className="font-semibold text-xs text-center">{order._id}</Text>
@@ -125,9 +126,11 @@ const OrderHistoryCard = ({ order, date, time, navigation }) => {
 
                 order.status === 'Processing' ? (
                     <TouchableOpacity onPress={() => navigation.navigate('order_tracking', { order })}>
-                        <Text className='bg-red-400 text-center text-white font-semibold rounded-lg p-1.5'>Track Order</Text>
+                        <Text className='bg-gray-200 text-center text-black font-semibold rounded-t-none rounded-b-md p-1.5 mb-2'>Track Order</Text>
                     </TouchableOpacity>) : ('')
             }
+
+           </View>
 
             {/* Order Details Modal------------------------------------------------------------------------- */}
             <Modal

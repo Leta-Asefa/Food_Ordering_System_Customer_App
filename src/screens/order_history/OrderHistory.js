@@ -85,7 +85,7 @@ const OrderHistory = ({ navigation }) => {
 
     return (
         <View className='flex-1 p-2  bg-white'>
-            <Text className='text-center py-1 text-xl font-bold text-white bg-orange-500 mb-5'>Your order history</Text>
+            <Text className='text-center py-1 text-xl font-bold text-black bg-gray-200 mb-5'>Your order history</Text>
 
             <OrderHistoryHeader handleHeaderPress={handleHeaderPress} status={displayedOrderGroup.status} />
 
