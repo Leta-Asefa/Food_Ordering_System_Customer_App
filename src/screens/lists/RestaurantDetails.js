@@ -15,6 +15,7 @@ import DrinkList from './DrinkList';
 import {useCartContext} from '../../context_apis/CartContext';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MenuFoodListCard from './MenuFoodListCard';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -25,8 +26,6 @@ const RestaurantDetails = ({navigation, route}) => {
   const [images, setImages] = useState([]);
   const [menu, setMenu] = useState([]);
   const [restaurant, setRestaurant] = useState(route?.params?.restaurant); // Store restaurant in state
-  console.log('Route : ', route);
-  console.log('Item : ', restaurant);
 
   if (!restaurant) {
     console.log('Delivery address is not set yet');
@@ -48,6 +47,7 @@ const RestaurantDetails = ({navigation, route}) => {
   
       return () => backHandler.remove(); // Cleanup when component unmounts
   }, []);
+
 
 
   useEffect(() => {
@@ -120,13 +120,13 @@ const RestaurantDetails = ({navigation, route}) => {
     console.log(route.key);
     switch (route.key) {
       case 'fasting':
-        return <FoodList item={menu.fasting} navigation={navigation} />;
+        return <FoodList item={menu.fasting} navigation={navigation}  />;
       case 'non_fasting':
-        return <FoodList item={menu.nonfasting} navigation={navigation} />;
+        return <FoodList item={menu.nonfasting} navigation={navigation}  />;
       case 'drink':
-        return <DrinkList item={menu.drink} navigation={navigation} />;
+        return <DrinkList item={menu.drink} navigation={navigation}  />;
       case 'catering':
-        return <FoodList item={menu.catering} navigation={navigation} />;
+        return <FoodList item={menu.catering} navigation={navigation}  />;
       default:
         return null;
     }

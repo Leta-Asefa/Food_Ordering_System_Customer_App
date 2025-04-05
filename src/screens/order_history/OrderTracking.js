@@ -10,26 +10,10 @@ const OrderTracking = ({ navigation, route }) => {
     const mapRef = useRef(null);
     const [order, setOrder] = useState(route?.params?.order || {});
     const [routeData, setRouteData] = useState({});
-    const [routeCoordinates, setRouteCoordinates] = useState([
-        { latitude: 9.187595, longitude: 38.763946 }, // Start
-        { latitude: 9.186800, longitude: 38.764500 },
-        { latitude: 9.185900, longitude: 38.765000 },
-        { latitude: 9.185000, longitude: 38.765700 }, // Turn right
-        { latitude: 9.184500, longitude: 38.764900 },
-        { latitude: 9.183900, longitude: 38.764300 }, // Turn left
-        { latitude: 9.183000, longitude: 38.763800 },
-        { latitude: 9.182200, longitude: 38.763600 }, // Slight right
-        { latitude: 9.181400, longitude: 38.763900 },
-        { latitude: 9.180800, longitude: 38.764400 }, // Turn left
-        { latitude: 9.180200, longitude: 38.765000 },
-        { latitude: 9.179500, longitude: 38.765700 }, // Turn right
-        { latitude: 9.178800, longitude: 38.766200 },
-        { latitude: 9.178200, longitude: 38.766700 },
-        { latitude: 9.177600, longitude: 38.767300 } // Destination
-    ]);
+    const [routeCoordinates, setRouteCoordinates] = useState([]);
     
-    const userLocation = { latitude: 9.187595, longitude: 38.763946 }; // Start
-    const destination = { latitude: 9.177600, longitude: 38.767300 }; // End
+    const [userLocation,setUserLocation] = useState({})
+    const [destination,setDestination] = useState({})
     
 
     if (!order) {
@@ -42,13 +26,13 @@ const OrderTracking = ({ navigation, route }) => {
 
     useEffect(() => {
         if (mapRef.current && routeCoordinates.length > 0) {
-            console.log("Fitting to coordinates:", routeCoordinates);
             mapRef.current.fitToCoordinates(routeCoordinates, {
                 edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
                 animated: true,
             });
         }
-    }, [routeCoordinates]);
+    }, [routeCoordinates]); // Runs every time routeCoordinates updates
+
 
 
     useEffect(() => {
@@ -61,8 +45,12 @@ const OrderTracking = ({ navigation, route }) => {
                 withCredentials: true,
             });
 
-            if (response.data.routes.length > 0) {
-                setRouteData(response.data)
+            console.log(response.data);
+
+            if (response.data) {
+                setRouteCoordinates(response.data.routeCoordinates)
+                setUserLocation(response.data.userLocation)
+            
             }
 
         }
@@ -98,7 +86,7 @@ const OrderTracking = ({ navigation, route }) => {
 
             <View className='border-y-2 border-gray-300'>
             <MapView
-                    ref={(ref) => (mapRef.current = ref)}
+                    ref={mapRef}
                     provider={PROVIDER_GOOGLE}
                     mapType="standard"
                     initialRegion={{

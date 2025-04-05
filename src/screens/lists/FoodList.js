@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 const FoodList = ({navigation,item}) => {
 
     const renderFood = ({ item }) => (
-        <MenuFoodListCard  item={item} navigation={navigation} />
+        <MenuFoodListCard item={item} navigation={navigation} />
     );
 
 

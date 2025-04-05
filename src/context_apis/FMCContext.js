@@ -3,13 +3,23 @@ import { Alert, PermissionsAndroid, Platform } from "react-native";
 import { messaging ,app} from "./firebaseConfig";
 import axios from "axios";
 import { useAuthUserContext } from "./AuthUserContext";
-
+import notifee from '@notifee/react-native';
 // Create Context
 export const FCMContext = createContext();
 
 export const FCMProvider = ({ children }) => {
   const [fcmToken, setFcmToken] = useState(null);
   const { authUser } = useAuthUserContext();
+
+  useEffect(() => {
+    (async () => {
+      await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+      });
+    })();
+  }, []);
+  
 
   // Request notification permission for Android 13+
   const requestPermission = async () => {
@@ -45,8 +55,17 @@ export const FCMProvider = ({ children }) => {
   // Handle incoming notifications
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert(remoteMessage.notification?.title, remoteMessage.notification?.body);
       console.log("Foreground Message:", remoteMessage);
+
+      await notifee.displayNotification({
+        title: remoteMessage.notification?.title,
+        body: remoteMessage.notification?.body,
+        android: {
+          channelId: 'default',
+          smallIcon: 'ic_launcher', // Ensure this icon exists in your resources
+        },
+      });
+      
     });
 
     return unsubscribe;
@@ -65,6 +84,7 @@ export const FCMProvider = ({ children }) => {
     const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log("User tapped notification (background):", remoteMessage);
       Alert.alert(remoteMessage.notification?.title, remoteMessage.notification?.body);
+
     });
   
     // Handle notification tap when the app was completely closed (quit state)

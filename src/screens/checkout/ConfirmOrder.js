@@ -16,6 +16,8 @@ const ConfirmOrder = ({ navigation, route }) => {
     const { cart, selectedRestaurant, clearCart, setSelectedRestaurant } = useCartContext()
  const socket= useSocketContext()
 
+ console.log("SelectedRestaurant : ",selectedRestaurant);
+
     useEffect(() => {
         if (socket) {
 
