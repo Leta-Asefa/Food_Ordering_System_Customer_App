@@ -23,6 +23,7 @@ import HomeFoodListCard from './HomeFoodListCard';
 import axios from 'axios';
 import {useLocationContext} from '../../context_apis/Location';
 import {useCartContext} from '../../context_apis/CartContext';
+import FavoriteRestaurants from './FavoriteRestaurants';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -85,7 +86,7 @@ export default function Restaurants({navigation}) {
       case 'popular':
         return <PopularRestaurants navigation={navigation} />;
       case 'favourite':
-        return <RestaurantDetails navigation={navigation} />;
+        return <FavoriteRestaurants navigation={navigation} />;
       default:
         return null;
     }

@@ -1,5 +1,5 @@
 import {
-    BackHandler,
+  BackHandler,
   Dimensions,
   Image,
   StyleSheet,
@@ -16,17 +16,20 @@ import {useCartContext} from '../../context_apis/CartContext';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MenuFoodListCard from './MenuFoodListCard';
+import {useAuthUserContext} from '../../context_apis/AuthUserContext';
+import {useRestaurantsListContext} from '../../context_apis/RestaurantsList';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
 const RestaurantDetails = ({navigation, route}) => {
   const [index, setIndex] = useState(0);
+  const {authUser, setAuthUser} = useAuthUserContext();
   const [visible, setVisible] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [images, setImages] = useState([]);
   const [menu, setMenu] = useState([]);
   const [restaurant, setRestaurant] = useState(route?.params?.restaurant); // Store restaurant in state
-
+  const {toggleFavouriteRestaurant} = useRestaurantsListContext();
   if (!restaurant) {
     console.log('Delivery address is not set yet');
     return (
@@ -35,20 +38,24 @@ const RestaurantDetails = ({navigation, route}) => {
       </View>
     );
   }
+  const [isFavorite, setIsFavorite] = useState(
+    authUser.user.favouriteRestaurants.includes(restaurant._id),
+  );
   const {duration, distance} = route?.params; //guess what would happen if you take this line above the if(!restaurant) conidition :)
 
-   useEffect(() => {
-      const backAction = () => {
-         navigation.navigate('restaurants')
-          return true; // Prevent default behavior
-      };
-  
-      const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
-  
-      return () => backHandler.remove(); // Cleanup when component unmounts
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('restaurants');
+      return true; // Prevent default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove(); // Cleanup when component unmounts
   }, []);
-
-
 
   useEffect(() => {
     const getPictures = async () => {
@@ -120,23 +127,61 @@ const RestaurantDetails = ({navigation, route}) => {
     console.log(route.key);
     switch (route.key) {
       case 'fasting':
-        return <FoodList item={menu.fasting} navigation={navigation}  />;
+        return <FoodList item={menu.fasting} navigation={navigation} />;
       case 'non_fasting':
-        return <FoodList item={menu.nonfasting} navigation={navigation}  />;
+        return <FoodList item={menu.nonfasting} navigation={navigation} />;
       case 'drink':
-        return <DrinkList item={menu.drink} navigation={navigation}  />;
+        return <DrinkList item={menu.drink} navigation={navigation} />;
       case 'catering':
-        return <FoodList item={menu.catering} navigation={navigation}  />;
+        return <FoodList item={menu.catering} navigation={navigation} />;
       default:
         return null;
     }
   };
 
+  const handleAddFavorite = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/user/favourite_restaurant/${authUser.user._id}/${restaurant._id}`,
+      );
+
+      if (!response?.data?.message) {
+        // if message="error " doesn't exist
+        setIsFavorite(response.data.isFavorite);
+        const newFavoriteList = response.data.isFavorite
+          ? [...authUser.user.favouriteRestaurants, restaurant._id.toString()]
+          :authUser.user.favouriteRestaurants.filter(
+            id => id !== restaurant._id.toString(),
+          )
+
+
+          console.log("new fav list ",newFavoriteList);
+          setAuthUser({ ...authUser, user: { ...authUser.user, favouriteRestaurants: newFavoriteList } });
+       
+
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+      setSearchResults([]);
+    }
+  };
+
   return (
     <View className="flex-1">
-      <Text className="text-center text-2xl mt-2 font-bold ">
-        {restaurant.name}
-      </Text>
+      <View className="flex flex-row justify-between items-center px-2">
+        <Text></Text>
+        <Text className="text-center text-2xl mt-2 font-bold">
+          {restaurant.name}{' '}
+        </Text>
+        <TouchableOpacity onPress={handleAddFavorite}>
+          <Icon
+            name={`${isFavorite ? 'favorite' : 'favorite-outline'}`} // Use the icon name here
+            size={24}
+            color="orange"
+            className="w-5 h-5 ml-2"
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={() => openViewer(0)} className="relative">
         <Image
           source={{uri: String(restaurant.image)}}

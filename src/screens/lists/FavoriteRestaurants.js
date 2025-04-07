@@ -10,35 +10,39 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useLocationContext} from '../../context_apis/Location';
 import {useRestaurantsListContext} from '../../context_apis/RestaurantsList';
+import {useAuthUserContext} from '../../context_apis/AuthUserContext';
 
-const PopularRestaurants = ({navigation}) => {
+const FavoriteRestaurants = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
-  const {latitude, longitude} = useLocationContext();
   const [isLoading, setIsLoading] = useState(true);
-  const {popularRestaurants, setPopularRestaurants} =
-    useRestaurantsListContext();
+  const {authUser} = useAuthUserContext();
+  const {latitude,longitude}=useLocationContext()
+  const {favouriteRestaurants, setFavouriteRestaurants} =  useRestaurantsListContext();
 
   async function getRestaurants() {
     try {
       setIsLoading(true);
-      console.log(popularRestaurants);
-      if (popularRestaurants.length === 0) {
-        const response = await axios.get(
-          `http://localhost:4000/restaurant/all/popular/${longitude}/${latitude}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
+    
+      const response = await axios.post(
+        `http://localhost:4000/restaurant/favorite/${latitude}/${longitude}`,
+        {restaurantsIdList: authUser.user.favouriteRestaurants},
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+          withCredentials: true,
+        },
+      );
 
-        setRestaurants(response.data);
-        setPopularRestaurants(response.data); // Update state with fetched restaurants
-      }
-      setRestaurants(popularRestaurants);
+      if (response?.data?.restaurants) {
+        setRestaurants(response.data.restaurants);
+        setFavouriteRestaurants(response.data.restaurants);
+      } 
+
+ 
+
     } catch (error) {
-      console.error('Error fetching nearby restaurants: ', error);
+      console.error('Error fetching favorite restaurants: ', error);
     } finally {
       setIsLoading(false); // Set loading to false when data is fetched or error occurs
     }
@@ -46,7 +50,7 @@ const PopularRestaurants = ({navigation}) => {
 
   useEffect(() => {
     getRestaurants();
-  }, [latitude, longitude]); // Dependencies: re-run when latitude or longitude changes or when the user moves
+  }, []); // Dependencies: re-run when latitude or longitude changes or when the user moves
 
   const renderRestaurants = ({item}) => {
     return <RestaurantListCard navigation={navigation} item={item} />;
@@ -57,7 +61,7 @@ const PopularRestaurants = ({navigation}) => {
       {isLoading ? (
         <View className="flex-1 justify-center items-center bg-gray-100">
           <Text className="mt-4 text-lg font-semibold text-gray-700">
-            Fetching Popular Restaurants...
+            Fetching Favorite Restaurants...
           </Text>
         </View>
       ) : (
@@ -82,4 +86,4 @@ const PopularRestaurants = ({navigation}) => {
   );
 };
 
-export default PopularRestaurants;
+export default FavoriteRestaurants;

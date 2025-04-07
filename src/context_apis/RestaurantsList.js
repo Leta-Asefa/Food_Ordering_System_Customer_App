@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
-
+import React, {createContext, useContext, useState} from 'react';
 
 const RestaurantsList = createContext();
 
@@ -8,18 +7,31 @@ export const useRestaurantsListContext = () => {
   return useContext(RestaurantsList);
 };
 
+const RestaurantsListProvider = ({children}) => {
+  const [popularRestaurants, setPopularRestaurants] = useState([]);
+  const [favouriteRestaurants, setFavouriteRestaurants] = useState([]);
 
-const RestaurantsListProvider = ({ children }) => {
-
-  const [popularRestaurants,setPopularRestaurants]=useState([])
-  const [favouriteRestaurants,setFavouriteRestaurants]=useState([])
-
+  const toggleFavouriteRestaurant = restaurantId => {
+    setFavouriteRestaurants(prevFavourites => {
+      prevFavourites.map(restaurant => {
+        if (restaurant.id === restaurantId) return;
+        else return restaurant;
+      });
+    });
+  };
 
   return (
-    <RestaurantsList.Provider value={{popularRestaurants,setPopularRestaurants,favouriteRestaurants,setFavouriteRestaurants }}>
+    <RestaurantsList.Provider
+      value={{
+        popularRestaurants,
+        setPopularRestaurants,
+        favouriteRestaurants,
+        setFavouriteRestaurants,
+        toggleFavouriteRestaurant,
+      }}>
       {children}
     </RestaurantsList.Provider>
   );
 };
 
-export { RestaurantsList, RestaurantsListProvider };
+export {RestaurantsList, RestaurantsListProvider};
