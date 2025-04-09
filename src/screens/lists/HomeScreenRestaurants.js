@@ -12,11 +12,11 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import {TabBar, TabView} from 'react-native-tab-view';
 import NearByRestaurants from './NearByRestaurants';
 import PopularRestaurants from './PopularRestaurants';
-import {foodList, restaurants} from '../../utilities_and_constants/constants';
 import PromotionListCard from './PromotionListCard';
 import RestaurantDetails from './RestaurantDetails';
 import HomeFoodListCard from './HomeFoodListCard';
@@ -29,6 +29,7 @@ const initialLayout = {width: Dimensions.get('window').width};
 
 export default function Restaurants({navigation}) {
   const [index, setIndex] = useState(0);
+  const [foodList, setFoodList] = useState([]);
   const [promotionList, setPromotionList] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -79,6 +80,31 @@ export default function Restaurants({navigation}) {
     loadUser();
   }, []);
 
+  useEffect(() => {
+    // Sync authUser to async storage whenever it changes
+    const loadUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/item/price/low`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          },
+        );
+
+        console.log(response.data.items);
+
+        if (response?.data?.items) setFoodList(response.data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadUser();
+  }, []);
+
   const renderScene = ({route}) => {
     switch (route.key) {
       case 'nearby':
@@ -97,7 +123,7 @@ export default function Restaurants({navigation}) {
   );
 
   const renderFoodItems = ({item}) => (
-    <HomeFoodListCard food={item} navigation={navigation} />
+    <HomeFoodListCard key={item._id} food={item} navigation={navigation} />
   );
 
   const fetchSearchResults = async query => {
@@ -139,7 +165,10 @@ export default function Restaurants({navigation}) {
         setSearchResults([]);
         console.log('navigating...', response.data);
 
-        setSelectedRestaurant({restaurant: response.data.restaurant,durationValue:response.data.durationValue});
+        setSelectedRestaurant({
+          restaurant: response.data.restaurant,
+          durationValue: response.data.durationValue,
+        });
         navigation.navigate('restaurant_detail', {
           restaurant: response.data.restaurant,
           distance: response.data.distance,
@@ -202,8 +231,29 @@ export default function Restaurants({navigation}) {
           </View>
         )}
 
-        {/* Promotion Banner (Discounts ...) Restarurants*/}
-        <View className="bg-white">
+      
+        {/* Our own foods specially burgures */}
+
+        <View className="bg-white mt-1">
+          {foodList.length === 0 ? (
+            <View className='flex flex-col justify-center items-center'>
+              <Text className='text-xs text-gray-400'>Loading ...</Text>
+              <ActivityIndicator size="large" color="#f97316" />
+              <Text className='text-xs text-gray-400'>Top 10 low price food and drinks</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={foodList}
+              renderItem={renderFoodItems}
+              keyExtractor={item => item._id}
+              horizontal
+              className=""
+            />
+          )}
+        </View>
+
+  {/* Promotion Banner (Discounts ...) Restarurants*/}
+  <View className="bg-orange-100">
           <FlatList
             data={promotionList}
             renderItem={renderPromotionItems}
@@ -212,18 +262,7 @@ export default function Restaurants({navigation}) {
             className=""
           />
         </View>
-        {/* Our own foods specially burgures */}
 
-        <View className="bg-white">
-          <Text className="text-right text-xs pr-2">scroll to left</Text>
-          <FlatList
-            data={foodList}
-            renderItem={renderFoodItems}
-            keyExtractor={item => item.id}
-            horizontal
-            className=""
-          />
-        </View>
 
         {/*Restaurant filter tap options ( nearby , popular, new ) */}
 
