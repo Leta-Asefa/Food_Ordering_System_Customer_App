@@ -15,14 +15,12 @@ const PopularRestaurants = ({navigation}) => {
   const [restaurants, setRestaurants] = useState([]);
   const {latitude, longitude} = useLocationContext();
   const [isLoading, setIsLoading] = useState(true);
-  const {popularRestaurants, setPopularRestaurants} =
-    useRestaurantsListContext();
 
   async function getRestaurants() {
     try {
       setIsLoading(true);
-      console.log(popularRestaurants);
-      if (popularRestaurants.length === 0) {
+      console.log("fetching ... popular restaurants");
+
         const response = await axios.get(
           `http://localhost:4000/restaurant/all/popular/${longitude}/${latitude}`,
           {
@@ -32,13 +30,12 @@ const PopularRestaurants = ({navigation}) => {
             withCredentials: true,
           },
         );
+        console.log("Popular restaurants ", response.data);
 
         setRestaurants(response.data);
-        setPopularRestaurants(response.data); // Update state with fetched restaurants
-      }
-      setRestaurants(popularRestaurants);
+      console.log("fetching completed !");
     } catch (error) {
-      console.error('Error fetching nearby restaurants: ', error);
+      console.error('Error fetching popular restaurants: ', error);
     } finally {
       setIsLoading(false); // Set loading to false when data is fetched or error occurs
     }

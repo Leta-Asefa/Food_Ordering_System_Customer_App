@@ -94,9 +94,10 @@ export default function Restaurants({navigation}) {
           },
         );
 
-        console.log(response.data.items);
 
-        if (response?.data?.items) setFoodList(response.data.items);
+        if (response?.data?.items)
+           setFoodList(response.data.items);
+          
       } catch (error) {
         console.log(error);
       }
