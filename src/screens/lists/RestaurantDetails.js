@@ -2,6 +2,7 @@ import {
   BackHandler,
   Dimensions,
   Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,6 +19,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MenuFoodListCard from './MenuFoodListCard';
 import {useAuthUserContext} from '../../context_apis/AuthUserContext';
 import {useRestaurantsListContext} from '../../context_apis/RestaurantsList';
+import RestaurantRatings from './RestaurantRatings';
 
 const initialLayout = {width: Dimensions.get('window').width};
 
@@ -29,7 +31,10 @@ const RestaurantDetails = ({navigation, route}) => {
   const [images, setImages] = useState([]);
   const [menu, setMenu] = useState([]);
   const [restaurant, setRestaurant] = useState(route?.params?.restaurant); // Store restaurant in state
-  const {toggleFavouriteRestaurant} = useRestaurantsListContext();
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+
+
+
   if (!restaurant) {
     console.log('Delivery address is not set yet');
     return (
@@ -150,15 +155,15 @@ const RestaurantDetails = ({navigation, route}) => {
         setIsFavorite(response.data.isFavorite);
         const newFavoriteList = response.data.isFavorite
           ? [...authUser.user.favouriteRestaurants, restaurant._id.toString()]
-          :authUser.user.favouriteRestaurants.filter(
-            id => id !== restaurant._id.toString(),
-          )
+          : authUser.user.favouriteRestaurants.filter(
+              id => id !== restaurant._id.toString(),
+            );
 
-
-          console.log("new fav list ",newFavoriteList);
-          setAuthUser({ ...authUser, user: { ...authUser.user, favouriteRestaurants: newFavoriteList } });
-       
-
+        console.log('new fav list ', newFavoriteList);
+        setAuthUser({
+          ...authUser,
+          user: {...authUser.user, favouriteRestaurants: newFavoriteList},
+        });
       }
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -169,7 +174,16 @@ const RestaurantDetails = ({navigation, route}) => {
   return (
     <View className="flex-1">
       <View className="flex flex-row justify-between items-center px-2">
-        <Text></Text>
+        <TouchableOpacity
+          onPress={() => setReviewModalVisible(true)}
+          className="mr-2">
+          <Icon
+            name='comment' // Use the icon name here
+            size={24}
+            color="orange"
+            className="w-5 h-5 ml-2"
+          />
+        </TouchableOpacity>
         <Text className="text-center text-2xl mt-2 font-bold">
           {restaurant.name}{' '}
         </Text>
@@ -278,6 +292,30 @@ const RestaurantDetails = ({navigation, route}) => {
           />
         )}
       />
+
+ {/* Modal */}
+ <Modal
+      visible={reviewModalVisible}
+      animationType="slide"
+      onRequestClose={() => setReviewModalVisible(false)}
+    >
+      <View className="flex-1 bg-white">
+        {/* Close Button */}
+        <TouchableOpacity
+          onPress={() => setReviewModalVisible(false)}
+          className="absolute top-4 right-4 z-10 bg-gray-200 p-2 rounded-full"
+        >
+          <Text className="text-black font-bold">X</Text>
+        </TouchableOpacity>
+
+        {/* RestaurantRatings Component */}
+        <RestaurantRatings restaurantId={restaurant._id} userId={authUser.user._id} />
+      </View>
+    </Modal>
+
+
+
+
     </View>
   );
 };

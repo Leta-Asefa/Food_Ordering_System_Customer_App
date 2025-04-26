@@ -1,48 +1,99 @@
-import { Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {useState} from 'react';
+import {
+  Image,
+  ImageBackground,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import ItemRatings from './ItemRatings';
+import {useAuthUserContext} from '../../context_apis/AuthUserContext';
 
 const FoodDetails = ({food}) => {
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const {authUser} = useAuthUserContext();
 
-   
+  return (
+    <ScrollView>
+      <View className="px-5 py-4 flex-1 bg-white">
+      {/* Title */}
+      <Text className="text-center font-bold text-xl text-gray-800 mb-4">
+        {food.name} ({food.price} ETB)
+      </Text>
 
+      {/* Image */}
+      <Image
+        source={{ uri: String(food.image) }}
+        className="w-full h-48 rounded-2xl mb-4"
+        resizeMode="cover"
+      />
 
-    return (
-        <View className='px-5 flex-1'>
-            <Text className='text-center font-bold text-lg'>{food.name} ( {food.price} ETB )</Text>
-            <Image
-                    source={{ uri: String(food.image) }}
-                    className='w-full h-40 rounded-lg'
-                    resizeMode="cover"
-                />
-            <Text className='text-center mb-2'>{food.description}</Text>
+      {/* Description */}
+      <Text className="text-center text-gray-600 mb-6">{food.description}</Text>
 
-            <ScrollView>
+      {/* Preparation Time */}
+      <View className="flex-row items-center mb-3">
+        <Icon name="timer" size={20} color="#6B7280" />
+        <Text className="ml-2 text-gray-700">
+          <Text className="font-semibold">Preparation Time: </Text>
+          {food.preparationTime}
+        </Text>
+      </View>
 
+      {/* Fasting Food */}
+      <View className="flex-row items-center mb-3">
+        <Icon name="fastfood" size={20} color="#6B7280" />
+        <Text className="ml-2 text-gray-700">
+          <Text className="font-semibold">Fasting Food: </Text>
+          {food.isFasting ? 'Yes' : 'No'}
+        </Text>
+      </View>
 
-                <Text key="a" className=''> <Text className='font-bold'>Preparaton Time : </Text>{food.preparationTime}</Text>
-                <Text key="g" className=''> <Text className='font-bold'>Is it Fasting Food : </Text>{food.isFasting?'Yes':"No"}</Text>
-                <Text key='b' className=''><Text className='font-bold'>Allergy Information : </Text>It contains {food.allergensInformation.map(allergy => allergy + " , ")}</Text>
+      {/* Allergy Information */}
+      <View className="flex-row items-start mb-5">
+        <Icon name="report-problem" size={20} color="#EF4444" />
+        <Text className="ml-2 text-gray-700">
+          <Text className="font-semibold">Allergy Info: </Text>
+          It contains {food.allergensInformation.join(', ')}
+        </Text>
+      </View>
 
-                <Text key="c" className='font-bold text-center mt-3 underline'>Nutritional Information (per 100g)</Text>
-                <Text key="d"><Text className='font-bold'>Protien : </Text>{food.nutritionalInformation.protein}g</Text>
-                <Text key="e"><Text className='font-bold'>Carbohydrate : </Text>{food.nutritionalInformation.totalCarbohydrates}g</Text>
-                <Text key='f'><Text className='font-bold'>Fat : </Text>{food.nutritionalInformation.totalFat}g</Text>
+      {/* Nutritional Information Title */}
+      <Text className="text-center font-bold text-lg text-gray-800 mb-3 underline">
+        Nutritional Information (per 100g)
+      </Text>
 
-                <Text className='font-bold text-center underline mb-1'>Customer's Comments</Text>
-
-                {
-                    food.review.map((review,index) => {
-                        return <View key={index.toString()} className='bg-gray-200 mb-2 p-1 rounded-md'>
-                            <Text className='text-center '>{review.review}</Text>
-                            <Text className='text-center text-xs font-bold'>{review.user.username}</Text>
-                        </View>
-                    })
-                }
-
-
-            </ScrollView>
+      {/* Nutrition Stats */}
+      <View className="space-y-2">
+        <View className="flex-row items-center">
+          <Icon name="fitness-center" size={20} color="#10B981" />
+          <Text className="ml-2 text-gray-700">
+            <Text className="font-semibold">Protein: </Text>
+            {food.nutritionalInformation.protein}g
+          </Text>
         </View>
-
-    );
+        <View className="flex-row items-center">
+          <Icon name="local-pizza" size={20} color="#F59E0B" />
+          <Text className="ml-2 text-gray-700">
+            <Text className="font-semibold">Carbohydrates: </Text>
+            {food.nutritionalInformation.totalCarbohydrates}g
+          </Text>
+        </View>
+        <View className="flex-row items-center">
+          <Icon name="opacity" size={20} color="#3B82F6" />
+          <Text className="ml-2 text-gray-700">
+            <Text className="font-semibold">Fat: </Text>
+            {food.nutritionalInformation.totalFat}g
+          </Text>
+        </View>
+      </View>
+    </View>
+      <ItemRatings itemId={food._id} userId={authUser.user._id} />
+    </ScrollView>
+  );
 };
 
 export default FoodDetails;

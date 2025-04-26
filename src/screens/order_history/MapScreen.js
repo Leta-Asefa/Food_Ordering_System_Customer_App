@@ -10,6 +10,7 @@ import MapView, {Polyline, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useSocketContext} from '../../context_apis/SocketContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
 const {width, height} = Dimensions.get('window');
 
 const MapScreen = ({routeCoordinates, userLocation, destination}) => {

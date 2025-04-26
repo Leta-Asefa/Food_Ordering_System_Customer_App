@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Modal from 'react-native-modal';
 import QRCode from 'react-native-qrcode-svg';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import MapView, {Polyline, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useLocationContext} from '../../context_apis/Location';
 import axios from 'axios';
 import MapScreen from './MapScreen';
+import DeliveryRatings from './DeliveryRatings';
+import { useAuthUserContext } from '../../context_apis/AuthUserContext';
 
 const OrderTracking = ({navigation, route}) => {
   const [order, setOrder] = useState(route?.params?.order || {});
@@ -21,6 +25,8 @@ const OrderTracking = ({navigation, route}) => {
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [userLocation, setUserLocation] = useState({});
   const [destination, setDestination] = useState({});
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const {authUser}=useAuthUserContext()
 
   if (!order) {
     return (
@@ -130,7 +136,14 @@ const OrderTracking = ({navigation, route}) => {
             <TouchableOpacity
               className="14"
               onPress={() => handleCall(order.deliveryPersonId.phoneNumber)}>
-              <FontAwesome name="phone" size={40} color="#22c55e" />
+              <FontAwesome name="phone" size={30} color="#22c55e" />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              className="14"
+              onPress={() => setReviewModalVisible(true)}
+              >
+              <Icon name="reviews" size={30} color="orange" />
             </TouchableOpacity>
           </View>
         </View>
@@ -149,6 +162,35 @@ const OrderTracking = ({navigation, route}) => {
           />
         </View>
       </View>
+
+      <Modal
+            isVisible={reviewModalVisible}
+            onBackdropPress={() => setReviewModalVisible(false)}
+            onBackButtonPress={() => setReviewModalVisible(false)}
+            avoidKeyboard={true}
+            backdropOpacity={0}
+            style={{margin: 0}}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: 'white',
+                zIndex: 9999,
+                elevation: 20,
+              }}>
+              <TouchableOpacity
+                onPress={() => setReviewModalVisible(false)}
+                className="bg-gray-50 flex flex-row justify-end pr-5">
+                <FontAwesome name="close" size={35} color="#f00" />
+              </TouchableOpacity>
+              <DeliveryRatings deliveryPersonId={order.deliveryPersonId._id} userId={authUser.user._id}/>
+            </View>
+          </Modal>
+
+
+
+
+
+
     </View>
   );
 };
