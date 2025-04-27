@@ -1,4 +1,5 @@
 import {
+  Alert,
   BackHandler,
   Dimensions,
   Image,
@@ -32,9 +33,10 @@ const RestaurantDetails = ({navigation, route}) => {
   const [menu, setMenu] = useState([]);
   const [restaurant, setRestaurant] = useState(route?.params?.restaurant); // Store restaurant in state
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
-
-
-
+  const {clearCart,cart} = useCartContext();
+  useEffect(() => {
+    clearCart();
+  }, []);
   if (!restaurant) {
     console.log('Delivery address is not set yet');
     return (
@@ -178,7 +180,7 @@ const RestaurantDetails = ({navigation, route}) => {
           onPress={() => setReviewModalVisible(true)}
           className="mr-2">
           <Icon
-            name='comment' // Use the icon name here
+            name="comment" // Use the icon name here
             size={24}
             color="orange"
             className="w-5 h-5 ml-2"
@@ -269,11 +271,6 @@ const RestaurantDetails = ({navigation, route}) => {
         <Text className="text-center font-bold text-xl bg-gray-200 mx-2 rounded-md">
           Menu
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('cart')}>
-          <Text className="text-center font-bold text bg-red-500 text-white w-24 mx-auto  rounded-md">
-            Checkout
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <TabView
@@ -293,29 +290,35 @@ const RestaurantDetails = ({navigation, route}) => {
         )}
       />
 
- {/* Modal */}
- <Modal
-      visible={reviewModalVisible}
-      animationType="slide"
-      onRequestClose={() => setReviewModalVisible(false)}
-    >
-      <View className="flex-1 bg-white">
-        {/* Close Button */}
-        <TouchableOpacity
-          onPress={() => setReviewModalVisible(false)}
-          className="absolute top-4 right-4 z-10 bg-gray-200 p-2 rounded-full"
-        >
-          <Text className="text-black font-bold">X</Text>
-        </TouchableOpacity>
+      {/* Modal */}
+      <Modal
+        visible={reviewModalVisible}
+        animationType="slide"
+        onRequestClose={() => setReviewModalVisible(false)}>
+        <View className="flex-1 bg-white">
+          {/* Close Button */}
+          <TouchableOpacity
+            onPress={() => setReviewModalVisible(false)}
+            className="absolute top-4 right-4 z-10 bg-gray-200 p-2 rounded-full">
+            <Text className="text-black font-bold">X</Text>
+          </TouchableOpacity>
 
-        {/* RestaurantRatings Component */}
-        <RestaurantRatings restaurantId={restaurant._id} userId={authUser.user._id} />
-      </View>
-    </Modal>
+          {/* RestaurantRatings Component */}
+          <RestaurantRatings
+            restaurantId={restaurant._id}
+            userId={authUser.user._id}
+          />
+        </View>
+      </Modal>
 
-
-
-
+      <TouchableOpacity
+        className="bg-red-500 rounded-full flex-row items-center p-2 justify-center absolute right-5 bottom-5"
+        onPress={() => cart.length===0? Alert.alert('Empty Cart !',"Dear Customer, You don't  select any item"): navigation.navigate('cart')}>
+        <Icon name="shopping-cart-checkout" size={20} color="white" />
+        {/* <Text className="text-white font-bold ml-2">
+    Checkout
+  </Text> */}
+      </TouchableOpacity>
     </View>
   );
 };

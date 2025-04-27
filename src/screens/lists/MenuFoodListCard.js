@@ -36,7 +36,7 @@ const MenuFoodListCard = ({item}) => {
           <Text className="text-xs font-bold ">{item.name}</Text>
           <Text className="text-xs">{item.price} ETB</Text>
           <Text className="text-xs text-green-600 font-bold">
-            {item.preparationTime} to prepare
+            {item.preparationTime} min to prepare
           </Text>
         </View>
 

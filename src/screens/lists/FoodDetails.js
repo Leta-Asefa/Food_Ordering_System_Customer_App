@@ -39,7 +39,7 @@ const FoodDetails = ({food}) => {
         <Icon name="timer" size={20} color="#6B7280" />
         <Text className="ml-2 text-gray-700">
           <Text className="font-semibold">Preparation Time: </Text>
-          {food.preparationTime}
+          {food.preparationTime} min
         </Text>
       </View>
 

@@ -237,11 +237,17 @@ export default function Restaurants({navigation}) {
 
         <View className="bg-white mt-1">
           {foodList.length === 0 ? (
-            <View className='flex flex-col justify-center items-center'>
-              <Text className='text-xs text-gray-400'>Loading ...</Text>
-              <ActivityIndicator size="large" color="#f97316" />
-              <Text className='text-xs text-gray-400'>Top 10 low price food and drinks</Text>
-            </View>
+          <View className="flex flex-col items-center justify-center space-y-3 py-10">
+          <ActivityIndicator size="large" color="#f97316" />
+          
+          <Text className="text-sm font-semibold text-gray-500">
+            Loading your favorite dishes...
+          </Text>
+          
+          <Text className="text-xs text-gray-400">
+          Today's  Top 10 low price food and drinks
+          </Text>
+        </View>
           ) : (
             <FlatList
               data={foodList}

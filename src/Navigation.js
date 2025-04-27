@@ -17,6 +17,7 @@ import UserSettings from './screens/settings/UserSettings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import UserInfo from './screens/partials/UserInfo';
 import {RestaurantsListProvider} from './context_apis/RestaurantsList';
+import ForgotPassword from './screens/auths/forgotPassword';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,6 +37,10 @@ const Navigation = () => {
         <Stack.Screen
           name="signup"
           component={Signup}
+        />
+        <Stack.Screen
+          name="forgot_password"
+          component={ForgotPassword}
         />
         <Stack.Screen name="payment" component={Payment} />
         <Stack.Screen
