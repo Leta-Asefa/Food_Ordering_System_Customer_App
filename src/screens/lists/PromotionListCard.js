@@ -44,11 +44,11 @@ const PromotionListCard = ({navigation,promotion}) => {
             </Text>
           </View>
   
-          <View className="bg-white/70 px-3 py-2 rounded-lg">
+          {/* <View className="bg-white/70 px-3 py-2 rounded-lg">
             <Text className="text-gray-900 text-xs font-semibold text-center" numberOfLines={2}>
               {promotion.description} ({promotion.restaurantId.name})
             </Text>
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     </View>

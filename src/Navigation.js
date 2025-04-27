@@ -25,28 +25,15 @@ const Tab = createBottomTabNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator 
-      screenOptions={{
-        headerShown: false,
-      }}
-      >
-        <Stack.Screen
-          name="login"
-          component={Login}
-        />
-        <Stack.Screen
-          name="signup"
-          component={Signup}
-        />
-        <Stack.Screen
-          name="forgot_password"
-          component={ForgotPassword}
-        />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="login" component={Login} />
+        <Stack.Screen name="signup" component={Signup} />
+        <Stack.Screen name="forgot_password" component={ForgotPassword} />
         <Stack.Screen name="payment" component={Payment} />
-        <Stack.Screen
-          name="bottomTabs"
-          component={TabNavigation}
-        />
+        <Stack.Screen name="bottomTabs" component={TabNavigation} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -84,10 +71,24 @@ const TabNavigation = () => {
       <Tab.Screen
         name="restaurants_list"
         component={RestaurantsStackNavigator}
+        options={{
+          tabBarLabel: 'Restaurants',
+        }}
       />
-      <Tab.Screen name="order_history_stack" component={OrderHistoryStack} />
-      <Tab.Screen name="settings" component={UserSettings} />
-      <Tab.Screen name="address" component={DeliveryAddress} />
+      <Tab.Screen
+        name="order_history_stack"
+        component={OrderHistoryStack}
+        options={{
+          tabBarLabel: 'Order History', // <--- tab name shown to user
+        }}
+      />
+      <Tab.Screen
+        name="settings"
+        component={UserSettings}
+        options={{
+          tabBarLabel: 'Settings', // <--- tab name shown to user
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -95,7 +96,7 @@ const TabNavigation = () => {
 const RestaurantsStackNavigator = () => {
   return (
     <RestaurantsListProvider>
-      <Stack.Navigator screenOptions={{headerShown: false,}}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="restaurants" component={Restaurants} />
         <Stack.Screen name="restaurant_detail" component={RestaurantDetails} />
         <Stack.Screen name="cart" component={Cart} />
