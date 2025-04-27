@@ -30,22 +30,30 @@ const PromotionListCard = ({navigation,promotion}) => {
 
 
   return (
-    <TouchableOpacity onPress={()=>handlePromotionPress(promotion)}>
-      <View className='w-[350px]  my-2 mx-2 bg-white rounded-lg overflow-hidden'>
-        <ImageBackground
-          source={{uri: String(promotion.image)}}
-          className="h-32 w-full rounded-lg">
-          <View className=" h-32 flex flex-col justify-between">
-            <Text className="text-white  bg-opacity-25 bg-orange-500 text-xs text-center font-bold w-[350px] mx-auto">
+    <TouchableOpacity onPress={() => handlePromotionPress(promotion)} className='ml-3'>
+    <View className="w-[350px] my-3 mx-auto bg-white rounded-2xl overflow-hidden shadow-md">
+      <ImageBackground
+        source={{ uri: String(promotion.image) }}
+        className="h-32 w-full"
+        imageStyle={{ borderRadius: 16 }}
+      >
+        <View className="h-full w-full flex justify-between p-3 bg-black/20 rounded-2xl">
+          <View className="bg-orange-500/80 px-2 py-1 rounded-full self-start">
+            <Text className="text-white text-xs font-bold">
               {promotion.title}
             </Text>
-            <Text className="text-center text-xs bg-orange-500 font-semibold bg-opacity-25 text-white text-ellipsis">
+          </View>
+  
+          <View className="bg-white/70 px-3 py-2 rounded-lg">
+            <Text className="text-gray-900 text-xs font-semibold text-center" numberOfLines={2}>
               {promotion.description} ({promotion.restaurantId.name})
             </Text>
           </View>
-        </ImageBackground>
-      </View>
-    </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
+  </TouchableOpacity>
+  
   );
 };
 

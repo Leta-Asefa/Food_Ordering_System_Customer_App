@@ -25,73 +25,69 @@ const MenuFoodListCard = ({item}) => {
   }
 
   return (
-    <View className="bg-gray-200 mx-2">
-      <View className=" h-auto flex flex-row justify-between items-center bg-gray-50 mx-2 my-1 rounded-lg">
-        <Image
-          source={{uri: String(item.image)}}
-          className="w-14 h-14 rounded-lg"
-          resizeMode="cover"
-        />
-        <View className="flex-grow pl-4">
-          <Text className="text-xs font-bold ">{item.name}</Text>
-          <Text className="text-xs">{item.price} ETB</Text>
-          <Text className="text-xs text-green-600 font-bold">
-            {item.preparationTime} min to prepare
+    <View className="bg-white mx-4 my-2 p-3 rounded-2xl shadow-md">
+    <View className="flex flex-row items-center">
+      <Image
+        source={{ uri: String(item.image) }}
+        className="w-16 h-16 rounded-xl"
+        resizeMode="cover"
+      />
+      <View className="flex-grow pl-4">
+        <Text className="text-sm font-semibold text-gray-800">{item.name}</Text>
+        <Text className="text-xs text-gray-500 mt-1">{item.price} ETB</Text>
+        <Text className="text-xs text-green-500 font-semibold mt-1">
+          {item.preparationTime} min to prepare
+        </Text>
+      </View>
+  
+      <View className="flex flex-col space-y-2">
+        <TouchableOpacity
+          className={`${
+            isOnCart(item._id) ? 'bg-red-500' : 'bg-green-500'
+          } flex flex-row items-center px-3 py-1 rounded-full`}
+          onPress={() => {
+            addToCart({ item, quantity: 1 });
+          }}
+        >
+          {isOnCart(item._id) ? (
+            <FontAwesome name="remove" size={14} color="#fff" />
+          ) : (
+            <FontAwesome name="plus" size={14} color="#fff" />
+          )}
+          <Text className="text-white text-xs font-semibold ml-2">
+            {isOnCart(item._id) ? 'Remove' : 'Add'}
           </Text>
-        </View>
-
-        <View className="flex flex-col space-y-1">
-          <TouchableOpacity
-            className={`${
-              isOnCart(item._id) ? 'bg-red-600' : 'bg-green-600'
-            } flex flex-row justify-center items-center px-2 py-1 text-xs rounded-md`}
-            onPress={() => {
-              addToCart({item, quantity: 1});
-            }}>
-            {isOnCart(item._id) ? (
-              <FontAwesome name="remove" size={15} color="#fff" />
-            ) : (
-              <FontAwesome name="plus" size={15} color="#fff" />
-            )}
-            {isOnCart(item._id) ? (
-              <Text className=" text-white text-xs ml-1 font-bold">Remove</Text>
-            ) : (
-              <Text className=" text-white text-xs ml-1 font-bold">
-                Add To Cart
-              </Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text className="text-center bg-blue-600 text-white text-xs rounded-md font-bold py-1">
-              Detail . . .
-            </Text>
-          </TouchableOpacity>
-          <Modal
-            isVisible={modalVisible}
-            onBackdropPress={() => setModalVisible(false)}
-            onBackButtonPress={() => setModalVisible(false)}
-            avoidKeyboard={true}
-            backdropOpacity={0}
-            style={{margin: 0}}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'white',
-                zIndex: 9999,
-                elevation: 20,
-              }}>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                className="bg-gray-50 flex flex-row justify-end pr-5">
-                <FontAwesome name="close" size={35} color="#f00" />
-              </TouchableOpacity>
-              <FoodDetails food={item} />
-            </View>
-          </Modal>
-        </View>
+        </TouchableOpacity>
+  
+        <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        className="bg-gray-100 p-0 rounded-full flex flex-row items-center justify-center"
+      >
+        <FontAwesome name="ellipsis-h" size={18} color="#555" className='w-16 mx-auto'/>
+      </TouchableOpacity>
       </View>
     </View>
+  
+    <Modal
+      isVisible={modalVisible}
+      onBackdropPress={() => setModalVisible(false)}
+      onBackButtonPress={() => setModalVisible(false)}
+      avoidKeyboard={true}
+      backdropOpacity={0.3}
+      style={{ margin: 0 }}
+    >
+      <View className="flex-1 bg-white rounded-t-2xl overflow-hidden">
+        <TouchableOpacity
+          onPress={() => setModalVisible(false)}
+          className="absolute right-4 top-4 z-50"
+        >
+          <FontAwesome name="close" size={28} color="#f00" />
+        </TouchableOpacity>
+        <FoodDetails food={item} />
+      </View>
+    </Modal>
+  </View>
+  
   );
 };
 

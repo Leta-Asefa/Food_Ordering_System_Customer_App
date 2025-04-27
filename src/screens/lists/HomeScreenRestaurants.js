@@ -260,7 +260,7 @@ export default function Restaurants({navigation}) {
         </View>
 
   {/* Promotion Banner (Discounts ...) Restarurants*/}
-  <View className="bg-orange-100">
+  <View className="bg-orange-50">
           <FlatList
             data={promotionList}
             renderItem={renderPromotionItems}

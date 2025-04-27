@@ -21,57 +21,66 @@ const Cart = ({navigation}) => {
   };
 
   return (
-    <View className="flex-1">
-      <Text className="text-center text-2xl mt-3 font-bold bg-gray-100 p-3">
-        Your Orders
+    <View className="flex-1 bg-[#f9fafb]">
+    <Text className="text-center text-3xl font-extrabold text-gray-800 mt-5 mb-4">
+      🛒 Your Cart
+    </Text>
+  
+    <ScrollView className="px-4">
+      {cart.map((cart, index) => (
+        <View
+          key={index.toString()}
+          className="flex flex-row items-center bg-white rounded-2xl shadow-sm p-3 mb-3"
+        >
+          <Image
+            source={{ uri: String(cart.item.image) }}
+            className="w-16 h-16 rounded-xl"
+            resizeMode="cover"
+          />
+  
+          <View className="flex-grow pl-4">
+            <Text className="text-base font-semibold text-gray-800 text-ellipsis w-36" numberOfLines={1}>
+              {cart.item.name}
+            </Text>
+            <Text className="text-sm text-gray-500 mt-1">{cart.item.price} ETB</Text>
+          </View>
+  
+          <View className="flex flex-row items-center space-x-3">
+            <TouchableOpacity
+              className="bg-gray-100 p-2 rounded-full"
+              onPress={() => handleMinus(cart.item._id, cart.quantity)}
+            >
+              <FontAwesome name="minus" size={20} color="#ef4444" />
+            </TouchableOpacity>
+  
+            <Text className="font-bold text-lg text-gray-700">{cart.quantity}</Text>
+  
+            <TouchableOpacity
+              className="bg-gray-100 p-2 rounded-full"
+              onPress={() => handlePlus(cart.item._id, cart.quantity)}
+            >
+              <FontAwesome name="plus" size={20} color="#10b981" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      ))}
+    </ScrollView>
+  
+    <View className="p-5 bg-white border-t border-gray-200">
+      <Text className="text-center text-xl font-bold text-gray-800 mb-4">
+        Total: {getTotalPrice().toFixed(2)} ETB
       </Text>
-
-      <ScrollView className="">
-        {cart.map((cart, index) => {
-          return (
-            <View
-              key={index.toString()}
-              className="flex flex-row justify-between space-x-2 items-center p-2 bg-gray-200 mt-1 mx-2 rounded-lg">
-              <Image
-                source={{uri: String(cart.item.image)}}
-                className="w-14 h-14"
-              />
-              <View>
-                <Text className="w-44">{cart.item.name}</Text>
-                <Text className="w-44">{cart.item.price} ETB</Text>
-              </View>
-              <View className="flex flex-row justify-between space-x-2">
-                <TouchableOpacity
-                  className="bg-white p-1 rounded"
-                  onPress={() => handleMinus(cart.item._id, cart.quantity)}>
-                  <FontAwesome name="minus" size={25} color="#f00" />
-                </TouchableOpacity>
-
-                <Text className="font-bold text-lg">{cart.quantity} </Text>
-
-                <TouchableOpacity
-                  className="bg-white p-1 rounded"
-                  onPress={() => handlePlus(cart.item._id, cart.quantity)}>
-                  <FontAwesome name="plus" size={25} color="#0f0" />
-                </TouchableOpacity>
-              </View>
-            </View>
-          );
-        })}
-      </ScrollView>
-
-      <View>
-        <Text className="text-center text-xl mb-3">
-          Total Price : {getTotalPrice().toFixed(2)} ETB
+      <TouchableOpacity
+        onPress={() => navigation.navigate('deliveryaddress')}
+        className="bg-orange-500 py-3 rounded-xl mx-10"
+      >
+        <Text className="text-center text-white text-lg font-bold">
+          Proceed to Checkout
         </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('deliveryaddress')}>
-          <Text className="bg-orange-500 p-2 font-bold text-center text-xl rounded-lg text-white w-44 mx-auto mb-3">
-            Continue
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     </View>
+  </View>
+  
   );
 };
 
