@@ -78,10 +78,10 @@ const CommonDeliveryLocations = () => {
       Alert.alert('Error', 'Please select a location type first!');
       return;
     }
-
+  
     let commonDeliveryLocation = {};
-
-    // Handle API response format
+    let lat, lng;
+  
     if (location.position) {
       commonDeliveryLocation = {
         latitude: location.position.lat,
@@ -91,17 +91,19 @@ const CommonDeliveryLocations = () => {
         country: location.address.countryName || '',
         postalCode: location.address.postalCode || '',
       };
+      lat = location.position.lat;
+      lng = location.position.lng;
     } else if (location.latitude && location.longitude) {
       lat = location.latitude;
       lng = location.longitude;
-
+  
       try {
         const response = await fetch(
           `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${lng}&apiKey=${HERE_API_KEY}`,
         );
         const data = await response.json();
-        const item = data.items[0]; // First result
-
+        const item = data.items[0];
+  
         if (item) {
           commonDeliveryLocation = {
             address: item.address.label,
@@ -117,21 +119,21 @@ const CommonDeliveryLocations = () => {
         Alert.alert('Error', 'Could not fetch address details.');
         return;
       }
-
-      if (typeof lat !== 'number' || typeof lng !== 'number') {
-        Alert.alert('Invalid Location', 'Could not fetch valid coordinates.');
-        return;
-      }
     }
-
+  
+    if (typeof lat !== 'number' || typeof lng !== 'number') {
+      Alert.alert('Invalid Location', 'Could not fetch valid coordinates.');
+      return;
+    }
+  
     setSelectedLocations(prev => ({
       ...prev,
       [id]: commonDeliveryLocation,
     }));
-
+  
     setSearchQuery('');
     setSearchResults([]);
-
+  
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         latitude: lat,
@@ -141,7 +143,7 @@ const CommonDeliveryLocations = () => {
       });
     }
   };
-
+  
   // 🔹 Send Data to Backend
   const handleUpdate = async () => {
     const transformedData = Object.keys(selectedLocations).map(key => {
