@@ -41,13 +41,13 @@ const OrderHistoryHeader = ({ handleHeaderPress, status }) => {
       </TouchableOpacity>
 
       <TouchableOpacity className={`bg-gray-300 rounded-t-md flex-row items-center px-2
-                   ${status === 'cancelled' ? 'border-b-2 border-gray-900' : ''}`}
-        onPress={()=>handleHeaderPress('cancelled')}>
+                   ${status === 'refunded' ? 'border-b-2 border-gray-900' : ''}`}
+        onPress={()=>handleHeaderPress('refunded')}>
         <MaterialCommunityIcons
           name="cancel"
           size={13}
           color={'#000'} />
-        <Text className='p-1 text-center text-xs  w-auto  text-black flex-row items-center font-semibold'>Cancelled</Text>
+        <Text className='p-1 text-center text-xs  w-auto  text-black flex-row items-center font-semibold'>Refunded</Text>
       </TouchableOpacity>
 
 

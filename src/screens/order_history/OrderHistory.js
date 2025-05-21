@@ -5,7 +5,7 @@ import axios from "axios";
 import OrderHistoryCard from "./OrderHistoryCard";
 import OrderHistoryHeader from "./OrderHistoryHeader";
 import { useSocketContext } from "../../context_apis/SocketContext";
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const OrderHistory = ({ navigation }) => {
     const [orders, setOrders] = useState([]);
@@ -30,30 +30,26 @@ const OrderHistory = ({ navigation }) => {
         handleHeaderPress(displayedOrderGroup.status)
     },[orders])
 
+    const getOrderHistory = async () => {
+        try {
+            setIsLoading(true);
+            const response = await axios.get(`http://localhost:4000/order/user/${authUser?.user?._id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
+            setOrders(response.data);
+            setDisplayedOrderGroup({ orders: response.data.processing, status: "processing" })
+        } catch (error) {
+            console.error("Error on fetching order history", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         console.log("in order history use effect");
-
-        async function getOrderHistory() {
-            console.log("function called ");
-
-            try {
-                setIsLoading(true); // Start loading
-                const response = await axios.get(`http://localhost:4000/order/user/${authUser?.user?._id}`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
-                });
-                console.log('Order History:', response.data.cancelled);
-                setOrders(response.data); // Handle response
-                setDisplayedOrderGroup({ orders: response.data.processing, status: "processing" })
-            } catch (error) {
-                console.error("Error on fetching order history", error);
-            } finally {
-                setIsLoading(false); // Stop loading
-            }
-        }
-
         getOrderHistory();
     }, []);
 
@@ -75,8 +71,8 @@ const OrderHistory = ({ navigation }) => {
             setDisplayedOrderGroup({ orders: orders.processing, status: 'processing' })
         else if (status === 'delivered')
             setDisplayedOrderGroup({ orders: orders.delivered, status: 'delivered' })
-        else if (status === 'cancelled')
-            setDisplayedOrderGroup({ orders: orders.cancelled, status: 'cancelled' })
+        else if (status === 'refunded')
+            setDisplayedOrderGroup({ orders: orders.refunded, status: 'refunded' })
 
 
     }
@@ -85,7 +81,12 @@ const OrderHistory = ({ navigation }) => {
 
     return (
         <View className='flex-1 p-2  bg-white'>
-            <Text className='text-center py-1 text-xl font-bold text-black bg-gray-200 mb-5'>Your order history</Text>
+            <View className='flex-row items-center justify-between bg-gray-200 mb-5'>
+                <Text className='text-center py-1 text-xl font-bold text-black w-72'>Your order history</Text>
+                <TouchableOpacity onPress={getOrderHistory} style={{marginRight: 8, marginTop: 2}}>
+                    <FontAwesome name="refresh" size={22} color="#333" />
+                </TouchableOpacity>
+            </View>
 
             <OrderHistoryHeader handleHeaderPress={handleHeaderPress} status={displayedOrderGroup.status} />
 

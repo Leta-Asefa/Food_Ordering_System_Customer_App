@@ -36,11 +36,25 @@ export default function Signup({navigation}) {
     .map(() => useRef(new Animated.Value(1)).current);
 
   const handleSendOtp = async () => {
+    // Phone number validation
     if (!phone) {
       Alert.alert('Error', 'Please enter your phone number.');
       return;
     }
-
+    if (!/^([97])\d{8}$/.test(phone)) {
+      Alert.alert('Error', 'Phone number must start with 9 or 7 and be 9 digits long.');
+      return;
+    }
+    // Username validation
+    if (!username.trim()) {
+      Alert.alert('Error', 'Username cannot be empty.');
+      return;
+    }
+    // Password validation
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters long.');
+      return;
+    }
     if (password !== confirmPassword) {
         Alert.alert('Error', 'Passwords do not match. Please check again.');
         return;
