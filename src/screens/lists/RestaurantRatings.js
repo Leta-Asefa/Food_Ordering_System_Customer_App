@@ -6,6 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  ToastAndroid,
+  Image,
 } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +29,7 @@ const RestaurantRatings = ({restaurantId, userId}) => {
       const res = await axios.get(
         `http://localhost:4000/restaurant_rating/${restaurantId}/all`,
       );
+      console.log('rating structure ', res.data);
       setRatings(res.data);
     } catch (error) {
       console.error('Error fetching ratings:', error);
@@ -36,8 +39,14 @@ const RestaurantRatings = ({restaurantId, userId}) => {
   };
 
   const submitReview = async () => {
-    if (!newReview.trim() || newRating === 0) return;
-
+    if (!newReview.trim() || newRating === 0) {
+      ToastAndroid.showWithGravity(
+        'Make sure both review and rating are filled',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+      return;
+    }
     try {
       setSubmitting(true);
       await axios.post(
@@ -63,12 +72,11 @@ const RestaurantRatings = ({restaurantId, userId}) => {
       <View className="flex-row">
         {[1, 2, 3, 4, 5].map(i => (
           <TouchableOpacity key={i} onPress={() => onPress && onPress(i)}>
-          
             <Icon
               name="star"
               size={24}
               color={i <= count ? '#facc15' : '#d1d5db'} // ✅ Correct color prop
-              />
+            />
           </TouchableOpacity>
         ))}
       </View>
@@ -85,20 +93,27 @@ const RestaurantRatings = ({restaurantId, userId}) => {
             ratings.map(r => (
               <View key={r._id} className="border-b border-gray-200 pb-3 mb-3">
                 {renderStars(r.rating)}
-                {r.review ? (
+                {r?.review ? (
                   <Text className="mt-1 text-gray-700">{r.review}</Text>
                 ) : (
                   <Text className="mt-1 text-gray-400 italic">
                     No review text
                   </Text>
                 )}
-                <View className=" mt-1">
-                <Text className="text-xs text-gray-400 mt-1">
-                  {new Date(r.createdAt).toLocaleDateString()}
-                </Text>
-                <Text className="text-xs text-gray-400">
-                 ( {r.user.username} )
-                </Text>
+                <View className=" mt-1 flex flex-row items-center justify-between space-x-5">
+                  <Image
+                    source={r?.user?.image ? { uri: String(r.user.image) } : require('../../assets/default_profile_pic.png')}
+                    resizeMode="center"
+                    className="w-10 h-10 rounded-full"
+                    />
+                  <View >
+                    <Text className="text-xs text-gray-400 mt-1">
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </Text>
+                    <Text className="text-xs text-gray-400 ">
+                      ( {r?.user?.username} )
+                    </Text>
+                    </View>
                 </View>
                 
               </View>
@@ -116,7 +131,7 @@ const RestaurantRatings = ({restaurantId, userId}) => {
         <Text className="text-lg font-semibold mb-2">Write a Review</Text>
         {renderStars(newRating, index => setNewRating(index))}
         <TextInput
-          className="border border-gray-300 rounded-lg p-2 mt-2 mb-4"
+          className="border border-gray-300 rounded-lg p-2 mt-2 mb-4 text-black"
           placeholder="Write your review..."
           value={newReview}
           onChangeText={setNewReview}

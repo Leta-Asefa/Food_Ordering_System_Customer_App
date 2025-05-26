@@ -251,7 +251,7 @@ const RestaurantDetails = ({navigation, route}) => {
             className="w-5 h-5"
           />
           <Text className="w-auto text-xs">
-            Customer's Rating : {restaurant.rating}
+            Customer's Rating : {String(restaurant.rating).slice(0, 4)}
           </Text>
         </View>
 

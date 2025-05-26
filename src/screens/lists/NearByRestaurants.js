@@ -9,16 +9,7 @@ const NearByRestaurants = ({ navigation }) => {
     const { latitude, longitude } = useLocationContext();
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        // This code runs when the component mounts
-        console.log('Nearyby Component Mounted');
-    
-        // Cleanup function runs when the component is unmounted
-        return () => {
-            console.log(navigation);
-          console.log('Nearby Component Unmounted');
-        };
-      }, []); 
+
 
     async function getRestaurants() {
         try {
@@ -51,6 +42,15 @@ const NearByRestaurants = ({ navigation }) => {
 
     return (
         <>
+        {
+            restaurants.length === 0 && !isLoading ? (
+                <View className="flex-1 justify-center items-center bg-gray-50">
+                    <Text className="mt-4 text-lg font-semibold text-gray-700">
+                        GPS is trying to get your location ....
+                    </Text>
+                </View>
+            ) : null
+        }
             {isLoading ? (
                 <View className="flex-1 justify-center items-center bg-gray-100">
                     <Text className="mt-4 text-lg font-semibold text-gray-700">

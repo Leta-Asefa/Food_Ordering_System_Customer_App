@@ -62,7 +62,7 @@ const RestaurantListCard = ({ navigation, item }) => {
                 </View>
                 <View className='flex flex-row items-center'>
                     <Ionicons name="star" size={15} color="#FFA500" />
-                    <Text className='text-xs pl-1'>{item.restaurant.rating}</Text>
+                    <Text className='text-xs pl-1'>{String(item.restaurant.rating).slice(0, 4)}</Text>
                 </View>
                 <View className='flex flex-row items-center'>
                     <Ionicons name="time" size={15} color="#0096FF" />
