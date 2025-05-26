@@ -10,10 +10,12 @@ import {
   Alert,
   Pressable,
   Animated,
+  ToastAndroid,
 } from 'react-native';
-import backgroud from '../../assets/background.png';
+import backgroud from '../../assets/background.jpg';
 import axios from 'axios';
 import Modal from 'react-native-modal';
+import {useAuthUserContext} from '../../context_apis/AuthUserContext';
 
 export default function Signup({navigation}) {
   const [phone, setPhone] = useState('');
@@ -24,7 +26,7 @@ export default function Signup({navigation}) {
     useState(false);
   const [otp, setOtp] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const {setAuthUser} = useAuthUserContext();
   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const [isUsernameFocused, setIsUsernameFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
@@ -38,28 +40,49 @@ export default function Signup({navigation}) {
   const handleSendOtp = async () => {
     // Phone number validation
     if (!phone) {
-      Alert.alert('Error', 'Please enter your phone number.');
+      ToastAndroid.showWithGravity(
+        'Please enter your phone number.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+
       return;
     }
     if (!/^([97])\d{8}$/.test(phone)) {
-      Alert.alert('Error', 'Phone number must start with 9 or 7 and be 9 digits long.');
+      ToastAndroid.showWithGravity(
+        'Phone number must start with 9 or 7 and be 9 digits long.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       return;
     }
     // Username validation
     if (!username.trim()) {
-      Alert.alert('Error', 'Username cannot be empty.');
+      ToastAndroid.showWithGravity(
+        'Username cannot be empty.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       return;
     }
     // Password validation
     if (password.length < 8) {
-      Alert.alert('Error', 'Password must be at least 8 characters long.');
+      ToastAndroid.showWithGravity(
+        'Password must be at least 8 characters long.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       return;
     }
     if (password !== confirmPassword) {
-        Alert.alert('Error', 'Passwords do not match. Please check again.');
-        return;
-      }
-
+      ToastAndroid.showWithGravity(
+        'Passwords do not match. Please check again.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+      return;
+    }
+    console.log('sending otp to +251', phone);
     try {
       await axios.post(
         'http://localhost:4000/twilio/sendOtp',
@@ -75,18 +98,30 @@ export default function Signup({navigation}) {
       startTimer();
     } catch (error) {
       console.log(error.response?.data || error);
-      Alert.alert('Error', 'Failed to send OTP. Please try again.');
+      ToastAndroid.showWithGravity(
+        'Failed to send OTP. Please try again.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
     }
   };
 
   const handleVerifyOtpAndSignup = async () => {
     if (otp.length !== 6) {
-      Alert.alert('Error', 'Please enter a valid 6-digit OTP.');
+      ToastAndroid.showWithGravity(
+        'Please enter a valid 6-digit OTP.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match. Please check again.');
+      ToastAndroid.showWithGravity(
+        'Passwords do not match. Please check again.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       return;
     }
 
@@ -121,16 +156,23 @@ export default function Signup({navigation}) {
         Alert.alert('Error', response.data.error);
         return;
       }
-
+      
       console.log(response.data);
-      Alert.alert('Success', 'Account created successfully!');
+      ToastAndroid.showWithGravity(
+        'Account created successfully!',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
       setPhone('');
       setUsername('');
       setPassword('');
       setConfirmPassword('');
 
       setModalVisible(false);
-      navigation.navigate('login');
+      if (response.data.user?._id) {
+        setAuthUser(response.data);
+        navigation.navigate('bottomTabs');
+      }
     } catch (error) {
       console.log(error.response?.data || error);
       Alert.alert('Error', 'Invalid OTP or signup failed.');
@@ -151,10 +193,18 @@ export default function Signup({navigation}) {
         },
       );
       startTimer();
-      Alert.alert('Success', 'OTP resent successfully!');
+      ToastAndroid.showWithGravity(
+        'OTP resent successfully!',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
     } catch (error) {
       console.log(error.response?.data || error);
-      Alert.alert('Error', 'Failed to resend OTP. Please try again.');
+      ToastAndroid.showWithGravity(
+        'Failed to resend OTP. Please try again.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
     }
   };
 
@@ -209,7 +259,7 @@ export default function Signup({navigation}) {
             Delivery
           </Text>
 
-          <View className="bg-white opacity-90 w-full rounded-3xl">
+          <View className="bg-white opacity-100 border border-black w-full rounded-t-3xl">
             <View className="p-5 pb-0">
               <Text className="text-orange-500 text-xl font-bold text-center">
                 Sign up
@@ -228,6 +278,7 @@ export default function Signup({navigation}) {
                 value={phone}
                 onFocus={() => setIsPhoneFocused(true)}
                 onBlur={() => setIsPhoneFocused(false)}
+                maxLength={9}
                 onChangeText={setPhone}
               />
 
@@ -281,7 +332,7 @@ export default function Signup({navigation}) {
               />
 
               <TouchableOpacity
-                className="w-40 mx-auto bg-orange-500 mt-3 rounded-lg p-1"
+                className="w-40 mx-auto bg-orange-500 my-2 rounded-lg p-1"
                 onPress={handleSendOtp}>
                 <Text className="text-center text-white text-2xl font-bold">
                   Send SMS
@@ -289,8 +340,8 @@ export default function Signup({navigation}) {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('login')}>
-                <Text className="text-orange-950 underline text-center mt-2">
-                  Go to Login Screen
+                <Text className="text-orange-950 underline text-center mb-8">
+                  Already have an account ? Login Screen
                 </Text>
               </TouchableOpacity>
             </View>

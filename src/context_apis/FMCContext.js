@@ -36,14 +36,17 @@ export const FCMProvider = ({ children }) => {
   const getFCMToken = async () => {
     try {
       const token = await messaging().getToken(); // Ensure using getApp()
+      console.log("Getting token ",token)
       if (token) {
         setFcmToken(token);
-
+        
+        console.log("setting/set token ",token)
         // Send token to your backend
         await axios.post("http://localhost:4000/fcm/save", {
           userId: authUser?.user?._id,
           fcmToken: token,
         });
+        
       } else {
         console.log("Failed to get FCM token.");
       }

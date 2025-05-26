@@ -17,7 +17,7 @@ const UserInfo = () => {
         </Text>
         <TouchableOpacity onPress={() => navigation.navigate('settings')}>
           <Image
-            source={{uri: String(authUser.user.image)}}
+            source={{uri: String(authUser?.user?.image)}}
             className="w-5 h-5 rounded-lg"
             resizeMode="cover"
           />

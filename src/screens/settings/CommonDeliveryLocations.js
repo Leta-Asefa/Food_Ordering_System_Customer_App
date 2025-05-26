@@ -273,7 +273,7 @@ const CommonDeliveryLocations = () => {
       {editing && (
         <TouchableOpacity
           onPress={handleUpdate}
-          className="bg-blue-500 py-2 rounded-lg mt-4">
+          className="bg-orange-500 py-2 rounded-lg mt-4">
           <Text className="text-white text-center font-semibold">Update</Text>
         </TouchableOpacity>
       )}

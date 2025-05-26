@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput, Switch, Alert, TouchableWithoutFeedback, Keyboard, ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, TextInput, Switch, Alert, TouchableWithoutFeedback, Keyboard, ScrollView, ToastAndroid } from "react-native";
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import { launchImageLibrary } from "react-native-image-picker"; // Import image picker
 import axios from "axios";
@@ -78,12 +78,26 @@ const Profile = () => {
 
   const updateUserInfo = async () => {
 
+    if (!/^([97])\d{8}$/.test(form.phoneNumber)) {
+      ToastAndroid.showWithGravity(
+        'Phone number must start with 9 or 7 and be 9 digits long.',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
+      return;
+    }
+
+
     try {
       const response = await axios.put(`http://localhost:4000/user/${authUser.user._id}`, {
         username: form.username,
         phoneNumber: form.phoneNumber,
-        vehicle: form.vehicle
       });
+
+      if (response.data.error) {
+        Alert.alert('Error', response.data.error);
+        return;
+      }
 
       if (response.data.message) {
         setEditable(false)
@@ -180,16 +194,7 @@ const Profile = () => {
               keyboardType="phone-pad"
               value={form.phoneNumber}
               onChangeText={(text) => setForm({ ...form, phoneNumber: text })}
-              editable={editable}
-            />
-
-            {/* Vehicle Input */}
-            <TextInput
-              className="border border-gray-300 bg-white p-3 rounded-md text-gray-800"
-              placeholder="Enter Vehicle"
-              placeholderTextColor="gray"
-              value={form.vehicle}
-              onChangeText={(text) => setForm({ ...form, vehicle: text })}
+              maxLength={9}
               editable={editable}
             />
 
