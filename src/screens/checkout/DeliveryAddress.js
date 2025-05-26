@@ -118,12 +118,12 @@ console.log("Text ",text);
      
 
       <View className="flex-wrap flex-row justify-between mt-24">
-        {authUser.user.commonDeliveryLocations.map(location => {
+        {authUser?.user?.commonDeliveryLocations.map(location => {
           const isSelected = location.name === deliveryaddress?.name;
 
           return (
             <TouchableOpacity
-              key={location._id}
+              key={location?._id}
               onPress={() => {
                 setDeliveryAddress(location);
                 setQuery(location.address);

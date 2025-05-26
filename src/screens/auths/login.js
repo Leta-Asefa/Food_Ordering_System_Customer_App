@@ -63,10 +63,10 @@ export default function Login({navigation}) {
         <View className=" flex-1 flex-col items-center justify-between">
           <Text className="text-black font-bold text-2xl text-center mt-5">
             Welcome To
-            <Text className="text-orange-500">Let's Eat </Text>Delivery
+            <Text className="text-orange-500"> Let's Eat </Text>Delivery
           </Text>
 
-          <View className="bg-white border border-black opacity-100 rounded-t-3xl w-full">
+          <View className="bg-white opacity-90 rounded-t-3xl w-full">
             <View className="p-5">
               <Text className=" text-orange-500 text-xl font-bold text-center">
                 {' '}

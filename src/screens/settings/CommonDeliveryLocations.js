@@ -8,6 +8,7 @@ import {
   FlatList,
   ScrollView,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,7 +35,7 @@ const CommonDeliveryLocations = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLocationId, setSelectedLocationId] = useState(null); // Track selected icon
   const mapRef = useRef(null);
-  const {authUser} = useAuthUserContext();
+  const {authUser,setAuthUser} = useAuthUserContext();
 
   useEffect(() => {
     const reversedData = authUser.user.commonDeliveryLocations.reduce((acc, item) => {
@@ -167,8 +168,20 @@ const CommonDeliveryLocations = () => {
           commonDeliveryLocations: transformedData,
         },
       );
+      // Update local authUser state with new commonDeliveryLocations
+      setAuthUser(prev => ({
+        ...prev,
+        user: {
+          ...prev.user,
+          commonDeliveryLocations: transformedData,
+        },
+      }));
       if (response.data.message) {
-        Alert.alert('Success', 'Locations updated successfully!');
+        ToastAndroid.showWithGravity(
+          'Locations are updated successfully!',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+        );
         setEditing(false);
       }
     } catch (error) {

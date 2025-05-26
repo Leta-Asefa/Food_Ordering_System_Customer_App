@@ -259,7 +259,7 @@ export default function Signup({navigation}) {
             Delivery
           </Text>
 
-          <View className="bg-white opacity-100 border border-black w-full rounded-t-3xl">
+          <View className="bg-white opacity-90 w-full rounded-t-3xl">
             <View className="p-5 pb-0">
               <Text className="text-orange-500 text-xl font-bold text-center">
                 Sign up

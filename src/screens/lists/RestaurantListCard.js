@@ -1,5 +1,4 @@
 import { ActivityIndicator, Image, Linking, Text, TouchableOpacity, View } from "react-native";
-import BackgroundImage from '../../assets/background.png'
 import time from '../../assets/time.png'
 import rating from '../../assets/rating.png'
 import distanceImage from '../../assets/distance.png'

@@ -86,7 +86,6 @@ export const FCMProvider = ({ children }) => {
     // Handle notification tap when the app was in the background
     const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp((remoteMessage) => {
       console.log("User tapped notification (background):", remoteMessage);
-      Alert.alert(remoteMessage.notification?.title, remoteMessage.notification?.body);
 
     });
   
@@ -96,7 +95,6 @@ export const FCMProvider = ({ children }) => {
       .then((remoteMessage) => {
         if (remoteMessage) {
           console.log("Notification caused app to open (quit state):", remoteMessage);
-          Alert.alert(remoteMessage.notification?.title, remoteMessage.notification?.body);
         }
       });
   
