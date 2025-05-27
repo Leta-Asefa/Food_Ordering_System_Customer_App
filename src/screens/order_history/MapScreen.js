@@ -68,7 +68,7 @@ const MapScreen = ({routeCoordinates, userLocation, destination}) => {
   }, [JSON.stringify(routeCoordinates)]);
 
   return (
-    <View className="h-[360px] w-full">
+    <View className=" w-full">
       <MapView
         ref={mapRef}
         provider={PROVIDER_GOOGLE}

@@ -83,6 +83,7 @@ const OrderTracking = ({navigation, route}) => {
       const supported = await Linking.canOpenURL(phoneUrl);
       if (supported) {
         await Linking.openURL(phoneUrl);
+        return
       } else {
         Alert.alert('Error', 'Unable to open the dialer');
       }
@@ -92,7 +93,7 @@ const OrderTracking = ({navigation, route}) => {
   };
 
   return (
-    <View>
+    <View className='flex-1 flex-col h-screen relative'>
       <Text className="font-bold text-center text-xl">
         Status : <Text className="text-green-600 ">{order.status}</Text>
       </Text>
@@ -103,9 +104,10 @@ const OrderTracking = ({navigation, route}) => {
           destination={destination}
           userLocation={userLocation}
         />
+<View className='absolute bottom-0 left-0 bg-gray-100 opacity-75 rounded-3xl border-t border-l border-r border-gray-400 rounded-b-none  w-full'>
 
-      <View className="rounded-lg border-t border-black">
-        <View className="flex flex-row  space-x-3 px-5 py-1 mt-2">
+      <View className="rounded-3xl rounded-b-none bg-gray-100">
+        <View className="flex flex-row  space-x-3 px-5 py-1 mt-2 ">
           <View className="w-16">
             <FontAwesome name="clock-o" size={40} color="#000" />
           </View>
@@ -117,36 +119,42 @@ const OrderTracking = ({navigation, route}) => {
           </View>
         </View>
 
-        <View className="flex flex-row justify-between items-center space-x-2 px-3 py-1 mx-1 mt-2 rounded-lg">
-          <Image
-            source={{uri: String(order.deliveryPersonId.image)}}
-            className="w-16 h-16 rounded-lg"
-            resizeMode="cover"
-          />
-          <View className="w-40">
-            <Text className="font-bold">{order.deliveryPersonId.username}</Text>
-            <View className="flex flex-row items-center ">
-              <Ionicons name="star" size={15} color="#FFA500" />
-              <Text className="text-xs">{order.deliveryPersonId.rating}</Text>
+        {order?.deliveryPersonId && Object.keys(order.deliveryPersonId).length > 0 ? (
+          <View className="flex flex-row justify-between items-center space-x-2 px-3 py-1 mx-1 mt-2 rounded-lg">
+            <Image
+              source={{uri: String(order?.deliveryPersonId?.image)}}
+              className="w-16 h-16 rounded-lg"
+              resizeMode="cover"
+            />
+            <View className="w-40">
+              <Text className="font-bold">{order?.deliveryPersonId?.username}</Text>
+              <View className="flex flex-row items-center ">
+                <Ionicons name="star" size={15} color="#FFA500" />
+                <Text className="text-xs">{order?.deliveryPersonId?.rating}</Text>
+              </View>
+              <Text className="text-xs">{order?.deliveryPersonId?.vehicle}</Text>
             </View>
-            <Text className="text-xs">{order.deliveryPersonId.vehicle}</Text>
-          </View>
 
-          <View>
-            <TouchableOpacity
-              className="14"
-              onPress={() => handleCall(order.deliveryPersonId.phoneNumber)}>
-              <FontAwesome name="phone" size={30} color="#22c55e" />
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                className="14"
+                onPress={() => handleCall(order?.deliveryPersonId?.phoneNumber)}>
+                <FontAwesome name="phone" size={30} color="#22c55e" />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              className="14"
-              onPress={() => setReviewModalVisible(true)}
-              >
-              <Icon name="reviews" size={30} color="orange" />
-            </TouchableOpacity>
+              <TouchableOpacity
+                className="14"
+                onPress={() => setReviewModalVisible(true)}
+                >
+                <Icon name="reviews" size={30} color="orange" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View className="flex flex-row justify-center items-center py-4">
+            <Text className="text-red-500 font-semibold">No delivery person is assigned</Text>
+          </View>
+        )}
       </View>
 
       <View className="p-2 bg-gray-200 rounded-lg">
@@ -162,6 +170,7 @@ const OrderTracking = ({navigation, route}) => {
           />
         </View>
       </View>
+</View>
 
       <Modal
             isVisible={reviewModalVisible}
@@ -182,7 +191,7 @@ const OrderTracking = ({navigation, route}) => {
                 className="bg-gray-50 flex flex-row justify-end pr-5">
                 <FontAwesome name="close" size={35} color="#f00" />
               </TouchableOpacity>
-              <DeliveryRatings deliveryPersonId={order.deliveryPersonId._id} userId={authUser.user._id}/>
+              <DeliveryRatings deliveryPersonId={order?.deliveryPersonId?._id} userId={authUser.user._id}/>
             </View>
           </Modal>
 

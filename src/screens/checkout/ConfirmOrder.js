@@ -203,7 +203,7 @@ const ConfirmOrder = ({navigation, route}) => {
             className="h-36"
           />
 
-          <View className="border-t border-gray-200 mt-4 pt-4">
+          <View className="border-t border-gray-200 mt-2 pt-4">
             <Text className="text-md text-gray-600 mb-2">
               Estimated Delivery Time: {orderResponse?.eta} minutes
             </Text>
@@ -211,7 +211,7 @@ const ConfirmOrder = ({navigation, route}) => {
               Total Price: ETB {orderResponse?.totalAmount}
             </Text>
           </View>
-          <View className="mt-6 flex-row justify-between">
+          <View className="mt-6 flex-row justify-center gap-5">
             <TouchableOpacity
               className="bg-blue-600 px-3 py-2 rounded-lg shadow-md"
               onPress={() => handlePayment('payNow')}>
@@ -228,13 +228,7 @@ const ConfirmOrder = ({navigation, route}) => {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              className="bg-red-600  px-3 py-2 rounded-lg shadow-md"
-              onPress={() => handleCancel('payLater')}>
-              <Text className="text-white text-center font-semibold">
-                Cancel Order
-              </Text>
-            </TouchableOpacity>
+            
           </View>
         </View>
       ) : (

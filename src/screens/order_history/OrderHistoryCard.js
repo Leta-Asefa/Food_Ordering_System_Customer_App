@@ -120,9 +120,9 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
         'http://localhost:4000/payment/initiateRefund',
         formData,
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {'Content-Type': 'application/json'},
           withCredentials: true,
-        }
+        },
       );
       if (response.data.message) {
         ToastAndroid.showWithGravity(
@@ -192,7 +192,7 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             <View className="flex-row items-center justify-center mb-1">
               <MaterialIcons name="restaurant" size={20} color="#4B5563" />
               <Text className="ml-2 text-base font-bold text-gray-700">
-                {order.restaurantId.name}
+                {order?.restaurantId?.name}
               </Text>
             </View>
 
@@ -231,32 +231,66 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             <Text className="text-center text-[10px] text-gray-400 mt-2">
               Thank you for choosing us!
             </Text>
-            <TouchableOpacity onPress={requestRefund}>
-              <Text className='bg-gray-500 text-center rounded-md mt-2'>Request Refund</Text>
-            </TouchableOpacity>
+
             <Modal
               animationType="fade"
               transparent={true}
               visible={refundModalVisible}
-              onRequestClose={() => setRefundModalVisible(false)}
-            >
-              <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'rgba(0,0,0,0.4)'}}>
-                <View style={{backgroundColor:'white', padding:20, borderRadius:10, width:'80%'}}>
-                  <Text style={{fontWeight:'bold', fontSize:16, marginBottom:10}}>Refund Reason</Text>
+              onRequestClose={() => setRefundModalVisible(false)}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(0,0,0,0.4)',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    padding: 20,
+                    borderRadius: 10,
+                    width: '80%',
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: 16,
+                      marginBottom: 10,
+                    }}>
+                    Refund Reason
+                  </Text>
                   <TextInput
                     placeholder="Enter refund reason..."
                     value={refundReason}
                     onChangeText={setRefundReason}
                     multiline
                     maxLength={200}
-                    style={{borderWidth:1, borderColor:'#ccc', borderRadius:4, padding:8, marginBottom:12, color:'#222', minHeight:60}}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      borderRadius: 4,
+                      padding: 8,
+                      marginBottom: 12,
+                      color: '#222',
+                      minHeight: 60,
+                    }}
                   />
-                  <View style={{flexDirection:'row', justifyContent:'flex-end'}}>
-                    <TouchableOpacity onPress={() => setRefundModalVisible(false)} style={{marginRight:10}}>
-                      <Text style={{color:'#888'}}>Cancel</Text>
+                  <View
+                    style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <TouchableOpacity
+                      onPress={() => setRefundModalVisible(false)}
+                      style={{marginRight: 10}}>
+                      <Text style={{color: '#888'}}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={submitRefundRequest} style={{backgroundColor:'green', paddingHorizontal:16, paddingVertical:8, borderRadius:4}}>
-                      <Text style={{color:'white'}}>Submit</Text>
+                    <TouchableOpacity
+                      onPress={submitRefundRequest}
+                      style={{
+                        backgroundColor: 'green',
+                        paddingHorizontal: 16,
+                        paddingVertical: 8,
+                        borderRadius: 4,
+                      }}>
+                      <Text style={{color: 'white'}}>Submit</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -283,12 +317,16 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}
-        >
-          <View className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}>
+          <View className="bg-white  max-w-md p-3 m-3 rounded-lg shadow-lg">
             {/* Order ID */}
-            <Text className="text-xs text-gray-500 font-medium mb-3">
+            <Text className="text-xs text-gray-500 text-center font-bold  mb-3">
               Order ID:{' '}
               <Text className="text-gray-800 font-semibold">{order._id}</Text>
             </Text>
@@ -350,7 +388,7 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             </View>
 
             {/* Buttons */}
-            <View className="flex-row flex-wrap justify-center gap-3">
+            <View className="flex flex-row justify-between px-5">
               {order.status === 'Pending' && (
                 <>
                   <TouchableOpacity
@@ -374,15 +412,15 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
               {order.status === 'Processing' && (
                 <>
                   <TouchableOpacity
-                    className="bg-red-600 px-5 py-2 rounded-md shadow-md mr-5"
-                    onPress={() => handleCancel('payLater')}>
+                    className="bg-red-600 px-5 py-2 rounded-md shadow-md mr-1"
+                    onPress={requestRefund}>
                     <Text className="text-white font-semibold text-sm">
-                      Cancel Order
+                      Request Refund
                     </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    className="bg-green-600 px-5 py-2 rounded-md shadow-md ml-5"
+                    className="bg-green-600 px-5 py-2 rounded-md shadow-md ml-1"
                     onPress={() =>
                       navigation.navigate('order_tracking', {order})
                     }>
@@ -390,6 +428,7 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
                       Track Order
                     </Text>
                   </TouchableOpacity>
+                 
                 </>
               )}
             </View>

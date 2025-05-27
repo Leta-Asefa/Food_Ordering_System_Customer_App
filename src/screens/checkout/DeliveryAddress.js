@@ -108,7 +108,7 @@ console.log("Text ",text);
           onChangeText={handleSearch}
           placeholder="location name ..."
           placeholderTextColor={'#aaa'}
-          className="h-10 border border-gray-500  pl-2 flex-1 rounded-lg"
+          className="h-10 border border-gray-500  pl-2 flex-1 rounded-lg text-black"
         />
       </View>
 

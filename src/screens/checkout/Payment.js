@@ -1,15 +1,31 @@
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, BackHandler, Text, View } from "react-native";
 import WebView from "react-native-webview";
 import { useContext, useEffect, useState } from "react";
 import { CartContext, useCartContext } from "../../context_apis/CartContext";
 import { useAuthUserContext } from "../../context_apis/AuthUserContext";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
 
-const Payment = ({ navigation,route }) => {
+const Payment = ({ route }) => {
 
   const [checkoutUrl, setCheckoutUrl] = useState(route?.params?.checkouturl || null)
   const [loading, setLoading] = useState(true);
 
+  const navigation = useNavigation();
+ 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.navigate('bottomTabs'); // Navigate to cart screen on back press
+      return true; // Prevent default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove(); // Cleanup when component unmounts
+  }, []);
 
   if (!checkoutUrl) {
     console.log("Delivery address is not set yet");
