@@ -388,28 +388,37 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             </View>
 
             {/* Buttons */}
-            <View className="flex flex-row justify-between px-5">
+            <View className="flex flex-row justify-between px-1 space-x-2">
               {order.status === 'Pending' && (
                 <>
                   <TouchableOpacity
-                    className="bg-blue-600 px-5 py-2 rounded-md shadow-md"
+                    className="bg-gray-300 px-5 py-2 rounded-md shadow-md mr-2"
+                    onPress={() => handlePayment('payLater')}>
+                    <Text className="text-gray-800 font-semibold text-sm">
+                      Pay Later
+                    </Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    className="bg-blue-600 px-5 py-2 rounded-md shadow-md mr-2"
                     onPress={() => handlePayment('payNow')}>
                     <Text className="text-white font-semibold text-sm">
                       Pay Now
                     </Text>
                   </TouchableOpacity>
 
+
                   <TouchableOpacity
-                    className="bg-gray-300 px-5 py-2 rounded-md shadow-md"
-                    onPress={() => handlePayment('payLater')}>
-                    <Text className="text-gray-800 font-semibold text-sm">
-                      Pay Later
+                    className="bg-red-600 px-5 py-2 rounded-md shadow-md"
+                    onPress={() => handleCancel()}>
+                    <Text className="text-white font-semibold text-sm">
+                      Cancel
                     </Text>
                   </TouchableOpacity>
                 </>
               )}
 
-              {order.status === 'Processing' && (
+              {(order.status === 'Processing' || order.status==='OnTransit') && (
                 <>
                   <TouchableOpacity
                     className="bg-red-600 px-5 py-2 rounded-md shadow-md mr-1"

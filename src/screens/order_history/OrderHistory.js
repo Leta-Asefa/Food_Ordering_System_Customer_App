@@ -71,8 +71,8 @@ const OrderHistory = ({ navigation }) => {
             setDisplayedOrderGroup({ orders: orders.processing, status: 'processing' })
         else if (status === 'delivered')
             setDisplayedOrderGroup({ orders: orders.delivered, status: 'delivered' })
-        else if (status === 'refunded')
-            setDisplayedOrderGroup({ orders: orders.refunded, status: 'refunded' })
+        else if (status === 'cancelled')
+            setDisplayedOrderGroup({ orders: orders.cancelled, status: 'cancelled' })
 
 
     }
