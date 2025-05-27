@@ -298,10 +298,10 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             </Modal>
           </View>
         </TouchableOpacity>
-        {order.status === 'Processing' ? (
+        {(order.status === 'Processing'||order.status==='OnTransit') ? (
           <TouchableOpacity
             onPress={() => navigation.navigate('order_tracking', {order})}>
-            <Text className="bg-gray-200 text-center text-black font-semibold rounded-t-none rounded-b-md p-1.5 mb-3">
+            <Text className="bg-gray-200 text-center text-black font-semibold rounded-t-none rounded-b-md p-1.5 mb-4">
               Track Order
             </Text>
           </TouchableOpacity>
@@ -324,7 +324,7 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             alignItems: 'center',
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}>
-          <View className="bg-white  max-w-md p-3 m-3 rounded-lg shadow-lg">
+          <View className="bg-white  max-w-md  p-3 m-3 rounded-lg shadow-lg">
             {/* Order ID */}
             <Text className="text-xs text-gray-500 text-center font-bold  mb-3">
               Order ID:{' '}
@@ -398,7 +398,7 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
                       Pay Later
                     </Text>
                   </TouchableOpacity>
-                  
+
                   <TouchableOpacity
                     className="bg-blue-600 px-5 py-2 rounded-md shadow-md mr-2"
                     onPress={() => handlePayment('payNow')}>
