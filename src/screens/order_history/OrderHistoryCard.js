@@ -184,6 +184,72 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
 
   return (
     <>
+      {/* Refund Modal - moved to top level to avoid keyboard/modal stacking issues */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={refundModalVisible}
+        onRequestClose={() => setRefundModalVisible(false)}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+          }}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 10,
+              width: '80%',
+            }}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 16,
+                marginBottom: 10,
+              }}>
+              Refund Reason
+            </Text>
+            <TextInput
+              placeholder="Enter refund reason..."
+              value={refundReason}
+              onChangeText={setRefundReason}
+              multiline
+              maxLength={200}
+              style={{
+                borderWidth: 1,
+                borderColor: '#ccc',
+                borderRadius: 4,
+                padding: 8,
+                marginBottom: 12,
+                color: '#222',
+                minHeight: 60,
+              }}
+            />
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <TouchableOpacity
+                onPress={() => setRefundModalVisible(false)}
+                style={{marginRight: 10}}>
+                <Text style={{color: '#888'}}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={submitRefundRequest}
+                style={{
+                  backgroundColor: 'green',
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 4,
+                }}>
+                <Text style={{color: 'white'}}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
       {/* Order Card */}
       <View className="mb-2">
         <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -231,71 +297,6 @@ const OrderHistoryCard = ({order, date, time, navigation}) => {
             <Text className="text-center text-[10px] text-gray-400 mt-2">
               Thank you for choosing us!
             </Text>
-
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={refundModalVisible}
-              onRequestClose={() => setRefundModalVisible(false)}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                    padding: 20,
-                    borderRadius: 10,
-                    width: '80%',
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: 16,
-                      marginBottom: 10,
-                    }}>
-                    Refund Reason
-                  </Text>
-                  <TextInput
-                    placeholder="Enter refund reason..."
-                    value={refundReason}
-                    onChangeText={setRefundReason}
-                    multiline
-                    maxLength={200}
-                    style={{
-                      borderWidth: 1,
-                      borderColor: '#ccc',
-                      borderRadius: 4,
-                      padding: 8,
-                      marginBottom: 12,
-                      color: '#222',
-                      minHeight: 60,
-                    }}
-                  />
-                  <View
-                    style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                    <TouchableOpacity
-                      onPress={() => setRefundModalVisible(false)}
-                      style={{marginRight: 10}}>
-                      <Text style={{color: '#888'}}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={submitRefundRequest}
-                      style={{
-                        backgroundColor: 'green',
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
-                        borderRadius: 4,
-                      }}>
-                      <Text style={{color: 'white'}}>Submit</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </Modal>
           </View>
         </TouchableOpacity>
         {(order.status === 'Processing'||order.status==='OnTransit') ? (
