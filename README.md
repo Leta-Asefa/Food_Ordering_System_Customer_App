@@ -14,9 +14,7 @@
 - Scheduled deliveries
 
 ### 💳 Secure Payments
-- Credit/Debit cards (PCI compliant)
-- Digital wallets (Apple/Google Pay)
-- Cash on delivery
+- Chapa
 
 ### 🚚 Real-Time Tracking
 - Live driver GPS tracking
